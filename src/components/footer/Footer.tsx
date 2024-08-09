@@ -1,10 +1,8 @@
-import React from "react";
 import {
   FaFacebook,
   FaGithub,
-  FaInstagram,
   FaTwitter,
-  FaTwitch,
+  FaLinkedin,
 } from "react-icons/fa";
 
 const sections = [
@@ -24,11 +22,10 @@ const sections = [
 ];
 
 const items = [
-  { name: "Facebook", icon: FaFacebook, link: "https://www.facebook.com/" },
-  { name: "Instagram", icon: FaInstagram, link: "https://www.instagram.com/" },
+  { name: "Facebook", icon: FaFacebook, link: "https://web.facebook.com/profile.php?id=100050264947375" },
+  { name: "Linkedin", icon: FaLinkedin, link: "https://www.linkedin.com/in/dev-mehedi-hasan/" },
   { name: "Twitter", icon: FaTwitter, link: "https://twitter.com/" },
-  { name: "Twitch", icon: FaTwitch, link: "https://www.twitch.tv/" },
-  { name: "Github", icon: FaGithub, link: "https://github.com/" },
+  { name: "Github", icon: FaGithub, link: "https://github.com/Joy5k" },
 ];
 
 const Footer = () => {
@@ -65,7 +62,7 @@ const Footer = () => {
       </div>
 
       <div className="flex flex-col max-w-[1240px] px-2 py-4 mx-auto justify-between sm:flex-row text-center text-gray-500">
-        <p className="py-4">2022 Workflow, LLC. All rights reserved</p>
+        <p className="py-4">2024 Mehedi Hasan. All rights reserved</p>
         <div className="flex justify-between sm:w-[300px] pt-4 text-2xl">
           {items.map((x, index) => {
             return <x.icon key={index} className="hover:text-white" />;
