@@ -16,7 +16,7 @@ const Campaign=()=>{
     }, []);
 return (
     <div>
-        <div className='flex justify-between items-center'>
+        <div className='flex flex-col md:flex-row  justify-between items-center'>
             <p className='text-4xl text-white font-semibold ml-10 my-10'>Deal of The Day</p>
             <div className='flex justify-between gap-4 '>
                 <button className='text-white border border-primary border-dashed rounded-full p-2'>20% off</button>
@@ -24,11 +24,11 @@ return (
                 <button className='text-white border border-primary border-dashed rounded-full p-2'>20% off</button>
             </div>
         </div>
-        <div className='flex justify-evenly px-4'>
-            <div className='flex justify-stretch w-6/12 border border-dashed border-gray-800 p-8'>
+        <div className='flex flex-col md:flex-row justify-evenly px-4'>
+            <div className='flex flex-col md:flex-row mb-4 w-full md:w-6/12 border border-dashed border-gray-800 p-8'>
                 <img src={router} className='w-72 h-fit' alt="" />
                 <div>
-                    <p className='text-4xl font-semibold text-white ml-8 mt-10 mb-4 '>virtual router</p>
+                    <p className='text-4xl font-semibold text-white ml-3 md:ml-8 mt-10 mb-4 '>virtual router</p>
                     <p className='text-yellow-400 text-lg font-semibold ml-8'>Price:56$</p>
                    <div>
                    <div className="flex justify-start items-center mt-10 ml-6">
