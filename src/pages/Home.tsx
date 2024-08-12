@@ -1,6 +1,7 @@
 
 import banner from '../assets/banner4.png'
 import CategorySlider from '../components/catergorySlider/categorySlider';
+import PopularProduct from '../components/popularProduct/popularProduct';
 const HomePage=()=>{
 
     return(
@@ -19,7 +20,7 @@ const HomePage=()=>{
           </div>
         </div>
          <CategorySlider></CategorySlider>
-
+        <PopularProduct></PopularProduct>
      </div>
     )
 }
