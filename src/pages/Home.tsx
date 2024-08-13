@@ -3,6 +3,7 @@ import banner from '../assets/banner4.png'
 import Advertise from '../components/advertise/Advertise';
 import Campaign from '../components/Campaign/Campaign';
 import CategorySlider from '../components/catergorySlider/categorySlider';
+import Features from '../components/features/Features';
 import PopularProduct from '../components/popularProduct/PopularProduct';
 const HomePage=()=>{
 
@@ -25,6 +26,7 @@ const HomePage=()=>{
         <PopularProduct></PopularProduct>
         <Advertise></Advertise>
         <Campaign></Campaign>
+        <Features></Features>
      </div>
     )
 }

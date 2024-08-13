@@ -18,10 +18,10 @@ return (
     <div>
         <div className='flex flex-col md:flex-row  justify-between items-center'>
             <p className='text-4xl text-white font-semibold ml-10 my-10'>Deal of The Day</p>
-            <div className='flex justify-between gap-4 '>
-                <button className='text-white border border-primary border-dashed rounded-full p-2'>20% off</button>
-                <button className='text-white border border-primary border-dashed rounded-full p-2'>20% off</button>
-                <button className='text-white border border-primary border-dashed rounded-full p-2'>20% off</button>
+            <div className='flex justify-between gap-4 mr-1 md:mr-10 '>
+                <button className='text-white border border-primary border-dashed rounded-full p-2 hover:bg-gray-900'>20% off</button>
+                <button className='text-white border border-primary border-dashed rounded-full p-2 hover:bg-gray-900'>23% off</button>
+                <button className='text-white border border-primary border-dashed rounded-full p-2 hover:bg-gray-900'>27% off</button>
             </div>
         </div>
         <div className='flex flex-col md:flex-row justify-evenly px-4'>
@@ -33,7 +33,7 @@ return (
                    <div>
                    <div className="flex justify-start items-center mt-10 ml-6">
       <div className="text-gray-600 text-5xl font-bold ">
-        {Math.floor(time / 60).toString().padStart(2, '0')}:
+        End:{Math.floor(time / 60).toString().padStart(2, '0')}:
         {(time % 60).toString().padStart(2, '0')}
       </div>
     </div>
@@ -52,7 +52,7 @@ return (
             <div className=' border-gray-800'>
              <div className='flex p-4 border border-dashed mb-3 rounded-md border-gray-800'>
                 <img src={router} className='w-32 h-fit' alt="" />
-                <div className='ml-4 p-6'>
+                <div className='ml-4 px-6'>
                     <p className='text-lg text-white font-semibold font-mono'>Bluetooth Speaker</p>
                     <p className='text-primary font-mono font-semibold'>Price:34$</p>
                     <div className=' flex justify-evenly  text-xl mt-6 -ml-7 bg-transparent'>
