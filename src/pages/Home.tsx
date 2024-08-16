@@ -1,6 +1,7 @@
 
 import banner from '../assets/banner4.png'
 import Advertise from '../components/advertise/Advertise';
+import Brand from '../components/brand/Brand';
 import Campaign from '../components/Campaign/Campaign';
 import CategorySlider from '../components/catergorySlider/categorySlider';
 import CustomerReview from '../components/customerReview/CustomerReview';
@@ -29,6 +30,7 @@ const HomePage=()=>{
         <Campaign></Campaign>
         <Features></Features>
         <CustomerReview></CustomerReview>
+        <Brand></Brand>
      </div>
     )
 }
