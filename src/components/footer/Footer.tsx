@@ -4,6 +4,7 @@ import {
   FaTwitter,
   FaLinkedin,
 } from "react-icons/fa";
+import { TfiHeadphoneAlt } from "react-icons/tfi";
 
 const sections = [
   
@@ -31,6 +32,21 @@ const items = [
 const Footer = () => {
   return (
     <div className="w-full mt-24 bg-black text-gray-300 ">
+      <div className="flex flex-col items-center md:flex-row lg:flex-row justify-evenly bg-slate-500 p-12 rounded-xl w-fit gap-9 mx-auto">
+        <p className="text-4xl text-primary font-bold bg-transparent">Subscribe newsletter
+        </p>
+        <div className="bg-transparent">
+        <input type="text" className=" p-[12px] rounded-l-lg border border-dashed text-white bg-transparent" placeholder="Enter Your Email"/>
+<button className="bg-primary text-white p-[13px] rounded-r-xl">Subscribe</button>
+        </div>
+     <div className="flex justify-center gap-3 bg-transparent">
+     <TfiHeadphoneAlt className="text-6xl bg-transparent" />
+
+    <p className="bg-transparent"><span className="text-gray-200 bg-transparent">Call us 24/7:</span> <br />
+    +880 1601588531
+</p>
+     </div>
+      </div>
       <div className="max-w-[1240px] mx-auto grid grid-cols-2 md:grid-cols-6 border-b-2 border-gray-600 py-8">
         {sections.map((section, index) => (
           <div key={index}>
@@ -50,14 +66,7 @@ const Footer = () => {
           <p className="py-4">
             The latest products and news sent to your inbox weekly.
           </p>
-          <form className="flex flex-col sm:flex-row">
-            <input
-              className="w-full px-2 mr-4 rounded-md mb-4"
-              type="email"
-              placeholder="Enter email.."
-            />
-            <button className="p-4  mb-4 bg-yellow-500 rounded-md ">Subscribe</button>
-          </form>
+          
         </div>
       </div>
 
