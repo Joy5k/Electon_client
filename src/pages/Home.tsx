@@ -1,6 +1,7 @@
 
 import banner from '../assets/banner4.png'
 import Advertise from '../components/advertise/Advertise';
+import BlogEvents from '../components/BlogEvents/BlogEvents';
 import Brand from '../components/brand/Brand';
 import Campaign from '../components/Campaign/Campaign';
 import CategorySlider from '../components/catergorySlider/categorySlider';
@@ -31,6 +32,7 @@ const HomePage=()=>{
         <Features></Features>
         <CustomerReview></CustomerReview>
         <Brand></Brand>
+        <BlogEvents></BlogEvents>
      </div>
     )
 }
