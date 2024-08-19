@@ -63,11 +63,13 @@ const PopularProduct = () => {
         {products.map((product) => (
           <div key={product.id} className="bg-black border border-gray-800 p-4 rounded-md w-64 mx-auto">
             <div>
+              <Link to="/product/12321232" > 
               <img src={product.image} className="w-60 h-60 rounded-sm" alt="popular_image" />
+              </Link>
             </div>
             <div className="text-md mt-10 flex justify-between items-center mr-4">
               <div>
-                <Link to="/" className="text-gray-300 font-semibold hover:text-primary mb-4">{product.name}</Link>
+                <Link to="/product/12321232" className="text-gray-300 text-xl font-semibold hover:text-primary mb-4">{product.name}</Link>
                 <p className="mt-2 text-primary font-semibold">Price: ${product.price}</p>
               </div>
               <button
