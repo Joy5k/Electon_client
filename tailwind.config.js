@@ -10,7 +10,10 @@ export default {
         primary: '#eab308',
         secondary: '#1f2937',
        
-      }
+      },
+      fontFamily: {
+        mono: ['"Fira Code"', 'monospace'], // Add your desired mono font here
+      },
     },
   },
   plugins: [],
