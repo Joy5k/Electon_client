@@ -28,16 +28,17 @@ const router = createBrowserRouter([
         path: "checkout",
         element: <Checkout />
       },
-      {
-        path: "register",
-        element: <Register />
-      },
-      {
-        path: "login",
-        element: <Login />
-      }
+     
     ]
   },
+  {
+    path: "register",
+    element: <Register />
+  },
+  {
+    path: "login",
+    element: <Login />
+  }
 ]);
 
 export default router;
