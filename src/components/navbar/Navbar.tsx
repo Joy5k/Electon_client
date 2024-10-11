@@ -24,8 +24,9 @@ const Navbar=()=>{
   {/* Hidden on small screens, visible on medium and larger screens */}
   <div className="hidden md:block lg:block">
     <div className="px-8 flex justify-between p-3 border-b border-dashed">
-      <div className="">
-        <p>Need help? Call us: +8801601588531</p>
+      <div className="flex justify-start gap-2">
+        <p>Need help? Call us: +8801601588531</p>||
+        <Link to="/chat" className="hover:text-primary">Help center</Link>
       </div>
 
       <div className="flex justify-between gap-6">
