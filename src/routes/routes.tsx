@@ -6,6 +6,7 @@ import About from "../pages/About";
 import HomePage from "../pages/Home";
 import Booking from "../pages/Booking";
 import Checkout from "../pages/CheckOut";
+import Chat from "../pages/chat/chat";
 
 const router = createBrowserRouter([
   {
@@ -28,6 +29,11 @@ const router = createBrowserRouter([
         path: "checkout",
         element: <Checkout />
       },
+      {
+        path: "chat",
+        element: <Chat />
+      },
+     
      
     ]
   },

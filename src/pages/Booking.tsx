@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 
 interface Product {
   img: string;
@@ -161,9 +162,9 @@ const Booking: React.FC = () => {
               <span>Total:</span>
               <span>${total.toFixed(2)}</span>
             </div>
-            <button className="w-full px-4 py-2 bg-green-500 text-white rounded">
+           <Link to="/checkout">  <button className="w-full px-4 py-2 bg-green-500 text-white rounded">
               Proceed to Checkout
-            </button>
+            </button></Link>
           </div>
         </div>
       </div>

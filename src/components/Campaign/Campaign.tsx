@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import  { useState, useEffect } from 'react';
 
 import { FaShoppingBag } from 'react-icons/fa'
 import router from '../../assets/images/router.jpg'

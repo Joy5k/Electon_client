@@ -26,7 +26,7 @@ const baseQuery = fetchBaseQuery({
 
 const baseQueryWithRefreshToken:BaseQueryFn<FetchArgs,BaseQueryApi,DefinitionType> = async (arg, api,extraOptions
 ):Promise<any> => {
-  let result = await baseQuery(arg, api, extraOptions);
+  let result:any = await baseQuery(arg, api, extraOptions);
 
   if (result?.error?.status === 404) {
     toast.error(result?.error?.data.massage)

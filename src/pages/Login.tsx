@@ -1,10 +1,7 @@
 
-import { verifyToken } from "../utils/verifyToken";
-import { Link, useNavigate } from "react-router-dom";
-import { toast } from "sonner";
+import { Link } from "react-router-dom";
 
 const Login = () => {
-  const navigate = useNavigate();
   
   return (
     <div>
