@@ -49,31 +49,32 @@ const Chat: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col h-screen bg-gray-100 p-4">
+    <div className="flex flex-col h-screen bg-white p-4  relative">
       {/* Chat Header */}
-      <div className="bg-primary text-white p-4 rounded-t-lg shadow">
-        <h2 className="text-3xl">Messenger</h2>
+      <div className="bg-primary text-white p-4 rounded-t-lg ">
+        <h2 className="text-3xl bg-transparent">Messenger</h2>
       </div>
 
       {/* Chat Messages */}
       <div className="flex-grow bg-transparent">
-        <div className="flex-grow bg-white overflow-y-auto p-4 shadow-md rounded-b-lg">
-        {messages.map((msg) => (
-  <div
-    key={msg.id}
-    className={`mb-2 w-fit p-2 rounded-full ${
-      msg.user === username ? 'bg-blue-500 self-end' : 'bg-primary'
-    }`}
-  >
-    <strong className="text-white mr-1 bg-transparent">{msg.user}</strong>: <span className='bg-transparent'> {msg.text}</span>
-  </div>
-))}
-        </div>
+  <div className="flex-grow bg-white overflow-y-auto p-4  rounded-b-lg right-0" style={{ maxHeight: '350px' }}>
+    {messages.map((msg) => (
+      <div
+        key={msg.id}
+        className={`mb-2 w-fit p-2 rounded-full ${
+          msg.user === username ? 'bg-blue-500 self-end' : 'bg-primary'
+        }`}
+      >
+        <strong className="text-white mr-1 bg-transparent">{msg.user}</strong>: <span className='bg-transparent'>{msg.text}</span>
       </div>
+    ))}
+  </div>
+</div>
+
       
 
       {/* Input Field */}
-      <div className="bg-primary p-4 flex">
+      <div className="bg-primary p-4 flex fixed bottom-0 left-0 right-0 ">
         <input
           type="text"
           value={username}
@@ -100,6 +101,7 @@ const Chat: React.FC = () => {
           Send
         </button>
       </div>
+      
     </div>
   );
 };
