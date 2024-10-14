@@ -1,18 +1,30 @@
+import Cookies from 'js-cookie';
 
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useLoginMutation } from "../redux/features/auth/authApi";
-import { useState } from "react";
-import { verifyToken } from "../utils/verifyToken";
-import { useAppDispatch } from "../redux/hooks";
-import { setUser } from "../redux/features/auth/authSlice";
+import { useEffect, useState } from "react";
+// import { verifyToken } from "../utils/verifyToken";
+// import { useAppDispatch } from "../redux/hooks";
+// import { setUser } from "../redux/features/auth/authSlice";
 import { toast } from "sonner";
 
 const Login = () => {
+  const navigate=useNavigate()
   const [login]=useLoginMutation()
   const [email,setEmail]=useState("")
   const [password,setPassword]=useState("")
-  const dispatch = useAppDispatch();
+  // const dispatch = useAppDispatch();
   const [authError,setAuthError]=useState("")
+
+  const token= localStorage.getItem("token")
+  const refreshToken=Cookies.get("refreshToken")
+useEffect(()=>{
+
+if(token||refreshToken){
+  navigate("/")
+}
+},[token,refreshToken])
+
   const handleLogin=async(e:any)=>{
     e.preventDefault()
     try {
@@ -25,10 +37,10 @@ const Login = () => {
         setAuthError(res.message)
         return
       }
-      const user = verifyToken(res.data.accessToken)
-      dispatch(setUser({ user: user, token: res.data.accessToken }))
+      // const user = verifyToken(res.data.accessToken)
+      // dispatch(setUser({user:user,token:res.data.accessToken}))
       toast.success("Logged in",{id:email,duration:2000})
- 
+      localStorage.setItem("token",res.data.accessToken)
  } catch (err:any) {
 
   toast.error(err?.message,{id:email, duration:2000})

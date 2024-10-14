@@ -5,6 +5,7 @@ import { Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuIt
 import { Bars3Icon, XMarkIcon,ShoppingCartIcon } from '@heroicons/react/24/outline'
 import { FaLocationDot, FaTruck } from "react-icons/fa6"
 import { MdOutlineFavoriteBorder } from "react-icons/md"
+import Cookies from 'js-cookie';
 
 const navigation = [
   { name: 'Home', href: '/', current: true },
@@ -17,6 +18,20 @@ function classNames(...classes:any[]) {
   return classes.filter(Boolean).join(' ')
 }
 const Navbar=()=>{
+ 
+  const token=localStorage.getItem("token") 
+  
+
+  
+  const handleSignOut = () => {
+    // Remove the refreshToken cookie
+    Cookies.remove('refreshToken');
+    
+    // Remove token from local storage
+    localStorage.removeItem('token');
+  };
+
+
     return (
         <div>
   
@@ -159,11 +174,19 @@ const Navbar=()=>{
           Settings
         </a>
       </MenuItem>
-      <MenuItem>
-        <a href="#" className="block px-4 py-2 text-sm text-white  hover:text-primary">
-          Sign out
+      {
+        token ?  <MenuItem>
+        <a onClick={handleSignOut} href="" className="block px-4 py-2 text-sm text-white  hover:text-primary">
+         logout
+        </a>
+      </MenuItem> : <MenuItem>
+        <a href="/login" className="block px-4 py-2 text-sm text-white  hover:text-primary">
+         login
         </a>
       </MenuItem>
+      }
+     
+     
     </MenuItems>
   </Menu>
         </div>
