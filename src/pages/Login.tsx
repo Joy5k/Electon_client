@@ -3,17 +3,17 @@ import Cookies from 'js-cookie';
 import { Link, useNavigate } from "react-router-dom";
 import { useLoginMutation } from "../redux/features/auth/authApi";
 import { useEffect, useState } from "react";
-// import { verifyToken } from "../utils/verifyToken";
-// import { useAppDispatch } from "../redux/hooks";
-// import { setUser } from "../redux/features/auth/authSlice";
+import { useAppDispatch } from "../redux/hooks";
+import { setUser } from "../redux/features/auth/authSlice";
 import { toast } from "sonner";
+
 
 const Login = () => {
   const navigate=useNavigate()
   const [login]=useLoginMutation()
   const [email,setEmail]=useState("")
   const [password,setPassword]=useState("")
-  // const dispatch = useAppDispatch();
+  const dispatch = useAppDispatch();
   const [authError,setAuthError]=useState("")
 
   const token= localStorage.getItem("token")
@@ -38,9 +38,16 @@ if(token||refreshToken){
         return
       }
       // const user = verifyToken(res.data.accessToken)
-      // dispatch(setUser({user:user,token:res.data.accessToken}))
+      dispatch(setUser({token:res.data.accessToken}))
       toast.success("Logged in",{id:email,duration:2000})
       localStorage.setItem("token",res.data.accessToken)
+      const redirectPath = localStorage.getItem('redirectPath');
+      if (redirectPath) {
+        localStorage.removeItem('redirectPath'); // Clear redirect path
+        navigate(redirectPath); // Redirect to the intended path
+      } else {
+        navigate('/defaultPath'); // Redirect to a default page if no redirect path
+      }
  } catch (err:any) {
 
   toast.error(err?.message,{id:email, duration:2000})

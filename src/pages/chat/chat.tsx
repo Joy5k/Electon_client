@@ -1,6 +1,8 @@
 // src/components/Chat.tsx
-import React, { useEffect, useState } from 'react';
+import  { useEffect, useState } from 'react';
 import useSocket from './useSocket';
+import { verifyToken } from '../../utils/verifyToken';
+import { useNavigate } from 'react-router-dom';
 
 // Make 'id' optional to accommodate incoming messages that already have an 'id'
 interface Message {
@@ -9,13 +11,24 @@ interface Message {
   user: string;
 }
 
-const Chat: React.FC = () => {
+const Chat = () => {
+  const navigate=useNavigate()
   const socket = useSocket();
   const [messages, setMessages] = useState<Message[]>([]);
   const [message, setMessage] = useState<string>('');
-  const [username, setUsername] = useState<string>('');
+  const [userEmail, setUserEmail] = useState<string>('');
+  
+ 
 
   useEffect(() => {
+    const token=localStorage.getItem("token")
+    if(!token){
+      localStorage.setItem('redirectPath', window.location.pathname);
+      navigate('/login');
+      return
+    }
+    const user=verifyToken(token) as {email:string}
+    setUserEmail(user.email)
     if (!socket) return;
 
     // Listen for incoming messages
@@ -29,12 +42,12 @@ const Chat: React.FC = () => {
   }, [socket]);
 
   const sendMessage = () => {
-    if (message.trim() && username.trim()) {
+    if (message.trim()) {
       // Create a new message with a unique ID
       const newMessage: Message = {
         id: Date.now().toString(), // Simple unique ID
         text: message,
-        user: username,
+        user: userEmail,
       };
 
       // Add the message to the local state
@@ -62,7 +75,7 @@ const Chat: React.FC = () => {
       <div
         key={msg.id}
         className={`mb-2 w-fit p-2 rounded-full ${
-          msg.user === username ? 'bg-blue-500 self-end' : 'bg-primary'
+          msg.user === userEmail ? 'bg-blue-500 self-end' : 'bg-primary'
         }`}
       >
         <strong className="text-white mr-1 bg-transparent">{msg.user}</strong>: <span className='bg-transparent'>{msg.text}</span>
@@ -75,13 +88,6 @@ const Chat: React.FC = () => {
 
       {/* Input Field */}
       <div className="bg-primary p-4 flex fixed bottom-0 left-0 right-0 ">
-        <input
-          type="text"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-          placeholder="Your Name"
-          className="mr-2 p-2 w-1/4 rounded border bg-yellow-100 border-gray-300 text-black"
-        />
         <input
           type="text"
           value={message}
