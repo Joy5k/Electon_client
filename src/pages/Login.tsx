@@ -23,7 +23,7 @@ useEffect(()=>{
 if(token||refreshToken){
   navigate("/")
 }
-},[token,refreshToken])
+},[navigate,token,refreshToken])
 
   const handleLogin=async(e:any)=>{
     e.preventDefault()
