@@ -1,23 +1,60 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useRegisterMutation } from "../redux/features/auth/authApi";
+import { toast } from "sonner";
+import Spinner from "../components/Spinner/Spinner";
+
+
+const user = {
+  firstName: "",
+  lastName: "",
+  age: 18,
+  password: "",
+  email: "",
+  gender: "",
+  phoneNumber: ""
+};
+
 
 const Register = () => {
-    const [formValues, setFormValues] = useState({ gender: '' });
-
+    const [formValues, setFormValues] = useState(user);
+    const navigate=useNavigate()
+    const [error,setError]=useState("") 
+    const [registerUser,{isLoading,isError}]=useRegisterMutation()
     const handleInputValues = (e: React.ChangeEvent<HTMLInputElement>) => {
+      setError("")
+      e.preventDefault()
         setFormValues({
             ...formValues,
             [e.target.name]: e.target.value,
         });
         console.log(`Updated form values:`, formValues);
     };
-    
+
+    const handleUserRegistration=async()=>{
+
+console.log({formValues})
+      try {
+        const result:any=await registerUser(formValues)
+        console.log(result.data?.success)
+        if( result.data.success){
+          toast.success(result.data?.message)
+          navigate("/")
+        }else if(isError||result.error.data?.message){
+          console.log(result.error.data?.message)
+          setError(result.error.data?.message)
+        }
+        console.log(result)
+      } catch (error:any) {
+        setError(error?.message || "An error occurred") 
+      }
+    }
     
     return (
         <div>
         <div className="bg-gray-800  rounded-md p-10 w-full md:w-[530px] mx-auto h-fit m-10">
           <h5 className="text-3xl font-bold text-center font-mono my-5 bg-transparent">Register</h5>
-          <form className="flex flex-col bg-transparent">
+          <form  className="flex flex-col bg-transparent">
             <div className="flex flex-col md:flex-row lg:flex-row justify-center bg-transparent my-4">
            <div  className="bg-transparent">
            <label htmlFor="" className="bg-transparent">First Name</label>
@@ -52,11 +89,18 @@ const Register = () => {
 </div>
 
 <div className="flex flex-col md:flex-row lg:flex-row justify-center gap-5 bg-transparent my-3">
-           <div  className="bg-transparent">
-           <label htmlFor="" className="bg-transparent ">Address</label>
-            <input onChange={(e)=>handleInputValues(e)} className="bg-gray-500 p-2 px-3 rounded-md  border border-gray-800 text-white mt-2" type="text" name="address" id="" placeholder="Dhaka,Bangladesh"  />
-           
-           </div>
+<div className="bg-transparent">
+  <label htmlFor="age" className="bg-transparent">Age</label>
+  <input 
+    onChange={(e) => handleInputValues(e)} 
+    className="bg-gray-500 p-2 px-3 rounded-md border border-gray-800 text-white mt-2" 
+    type="number" 
+    name="age" 
+    id="age" 
+    placeholder="28"
+  />
+</div>
+
 
             <div className="bg-transparent">
           
@@ -72,7 +116,13 @@ const Register = () => {
             <input onChange={(e)=>handleInputValues(e)} className="bg-gray-500 p-2 px-3 rounded-md   border border-gray-800 text-white mt-2" type="email" name="email" id="" placeholder="Enter Your Email" required />
             <label htmlFor="" className="mt-4 bg-transparent font-mono">Password</label>
             <input onChange={(e)=>handleInputValues(e)} className="bg-gray-500 p-2 px-3 rounded-md   border border-gray-800 text-black mt-2" type="password" name="password" id="" placeholder="Enter Your Password" required />
-          <button className="bg-primary hover:bg-yellow-600 text-white p-3 rounded-md mt-12"> Register</button>
+            {
+              error && <p className="mt-4 bg-transparent font-mono text-red-600">{error}</p>
+            }
+            {
+              isLoading ? <Spinner></Spinner> :           <button onClick={handleUserRegistration} className="bg-primary hover:bg-yellow-600 text-white p-3 rounded-md mt-12"> Register</button>
+
+            }
           <p className="bg-transparent mt-8">Already have an account? <Link to="/login" className="bg-transparent underline hover:text-primary  ">Login</Link></p>
           </form>
         </div>
