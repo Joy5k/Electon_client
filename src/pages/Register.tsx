@@ -20,7 +20,7 @@ const Register = () => {
     const [formValues, setFormValues] = useState(user);
     const navigate=useNavigate()
     const [error,setError]=useState("") 
-    const [registerUser,{isLoading,isError}]=useRegisterMutation()
+    const [registerUser,{isLoading}]=useRegisterMutation()
     const handleInputValues = (e: React.ChangeEvent<HTMLInputElement>) => {
       setError("")
       e.preventDefault()
@@ -31,24 +31,40 @@ const Register = () => {
         console.log(`Updated form values:`, formValues);
     };
 
-    const handleUserRegistration=async()=>{
-
-console.log({formValues})
+    const handleUserRegistration = async () => {
       try {
-        const result:any=await registerUser(formValues)
-        console.log(result.data?.success)
-        if( result.data.success){
-          toast.success(result.data?.message)
-          navigate("/")
-        }else if(isError||result.error.data?.message){
-          console.log(result.error.data?.message)
-          setError(result.error.data?.message)
+        // Send user information to the DB
+        const result: any = await registerUser(formValues);
+    
+        // Check if result contains an error
+        if (result?.error?.data?.message) {
+          const errorMessage = result.error.data?.message;
+          
+          // If the error message is "User already created", navigate to the login page
+          if (errorMessage.includes("User already created")) {
+            setError(errorMessage);
+            toast.error("Already registered! Please login"); // Optional: show a toast error
+            navigate("/login");        // Navigate to login page
+          } else {
+            setError(errorMessage);    // Set any other error message
+          }
+    
+        } else if (result?.data?.success) {
+          // If the result indicates success, navigate
+          toast.success(result.data?.message);
+          navigate("/");
+        } else {
+          // If result doesn't match the expected success or error, handle it
+          setError("Unexpected response structure");
         }
-        console.log(result)
-      } catch (error:any) {
-        setError(error?.message || "An error occurred") 
+      } catch (error: any) {
+        // Handle any other errors that are thrown
+        console.log(error);
+        setError(error?.message || "An error occurred");
       }
-    }
+    };
+    
+    
     
     return (
         <div>
