@@ -15,44 +15,59 @@ const Login = () => {
   const [password,setPassword]=useState("")
   const dispatch = useAppDispatch();
   const [authError,setAuthError]=useState("")
-
   const token= localStorage.getItem("token")
   const refreshToken=Cookies.get("refreshToken")
-useEffect(()=>{
 
+  //navigate if the user already logged in
+useEffect(()=>{
 if(token||refreshToken){
   navigate("/")
 }
 },[navigate,token,refreshToken])
 
-  const handleLogin=async(e:any)=>{
-    e.preventDefault()
-    try {
-      const userInfo = {
-         email,
-        password
-      }
-      const res = await login(userInfo).unwrap();
-      if(!res.success){
-        setAuthError(res.message)
-        return
-      }
-      // const user = verifyToken(res.data.accessToken)
-      dispatch(setUser({token:res.data.accessToken}))
-      toast.success("Logged in",{id:email,duration:2000})
-      localStorage.setItem("token",res.data.accessToken)
-      const redirectPath = localStorage.getItem('redirectPath');
-      if (redirectPath) {
-        localStorage.removeItem('redirectPath'); // Clear redirect path
-        navigate(redirectPath); // Redirect to the intended path
-      } else {
-        navigate('/defaultPath'); // Redirect to a default page if no redirect path
-      }
- } catch (err:any) {
+const handleLogin = async (e: React.FormEvent) => {
+  e.preventDefault();  // Prevent form submission reload
+  try {
+    const userInfo = { email, password };
+    
+    // Perform the login mutation and unwrap the result
+    const res = await login(userInfo).unwrap();
 
-  toast.error(err?.message,{id:email, duration:2000})
- }
+    // Check if the response indicates success
+    if (!res.success) {
+      setAuthError(res.message); // Set the error message in state
+      toast.error(res.message, { id: email, duration: 2000 });  // Display error toast
+      return;  // Exit the function early, no success case
+    }
+
+    // Successful login: update the user state and navigate
+    dispatch(setUser({ token: res.data.accessToken }));
+    toast.success("Logged in", {
+      id: email,
+      duration: 2000,
+    
+    });
+    localStorage.setItem("token", res.data.accessToken);  // Store the token in local storage
+
+    // Redirect the user to the appropriate page
+    const redirectPath = localStorage.getItem('redirectPath');
+    if (redirectPath) {
+      localStorage.removeItem('redirectPath'); // Clear redirect path
+      navigate(redirectPath); // Redirect to the intended path
+    } else {
+      navigate('/'); // Redirect to default page
+    }
+  } catch (err: any) {
+    console.log(err?.data?.message);
+    setAuthError(err?.data?.message); // Set auth error state
+    toast.error(err?.data?.message || 'An error occurred', {
+      id: email,
+      duration: 2000,
+     
+    });
   }
+};
+
   return (
     <div>
       <div className="bg-gray-800  rounded-md p-10 w-full md:w-[400px] mx-auto h-[500px] m-10">
@@ -62,9 +77,9 @@ if(token||refreshToken){
           <input onChange={(e)=>setEmail(e.target.value)} className="bg-gray-500 p-2 px-3 rounded-full  border border-gray-800 text-white mt-2" type="email" name="" id="" placeholder="Enter Your Email" required />
           <label htmlFor="" className="mt-4 bg-transparent font-mono">Password</label>
           <input onChange={(e)=>setPassword(e.target.value)} className="bg-gray-500 p-2 px-3 rounded-full  border border-gray-800 text-black mt-2" type="password" name="" id="" placeholder="Enter Your Password" required />
-         {authError&& <p className="text-red-500">{authError}</p> }
-        <span className="underline bg-transparent mt-5 -mb-5 text-sm hover:cursor-pointer">Forget Password</span>
-        <button type="submit" className="bg-primary text-white p-3 rounded-full mt-8"> Login</button>
+         {authError&& <p className= "bg-transparent mt-2 -mb-2 text-red-500">{authError}</p> }
+        <span className="underline bg-transparent mt-5 -mb-5 text-sm hover:cursor-pointer hover:text-primary">Forget Password</span>
+        <button type="submit" className="bg-primary text-white p-3 rounded-full mt-8 hover:bg-yellow-600"> Login</button>
         <p className="bg-transparent mt-8">Didn't have account? <Link to="/register" className="bg-transparent underline hover:text-primary ">Register</Link></p>
         </form>
       </div>

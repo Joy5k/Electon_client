@@ -15,7 +15,13 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
       <RouterProvider router={router}>
     </RouterProvider>
       </PersistGate>
-      <Toaster />
+      <Toaster toastOptions={{
+        style:{
+            background:"black",
+          color:"red"
+        }
+        }}
+      />
    </Provider>
   </React.StrictMode>
 );
