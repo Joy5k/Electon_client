@@ -7,6 +7,7 @@ import HomePage from "../pages/Home";
 import Booking from "../pages/Booking";
 import Checkout from "../pages/CheckOut";
 import Chat from "../pages/chat/chat";
+import Profile from "../pages/profile/profile";
 
 const router = createBrowserRouter([
   {
@@ -32,6 +33,10 @@ const router = createBrowserRouter([
       {
         path: "chat",
         element: <Chat />
+      },
+      {
+        path: "profile",
+        element: <Profile />
       },
      
      
