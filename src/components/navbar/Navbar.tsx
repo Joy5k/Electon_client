@@ -67,7 +67,7 @@ const Navbar=()=>{
     <form className="flex flex-col sm:flex-row mr-4" >
       <input
         className="w-full p-2 md:rounded-md  outline-none border border-r-0 md:rounded-r-none"
-        type="email"
+        type="text"
         placeholder="Search Your Product"
       />
       <button className="bg-yellow-500 md:rounded-r-md px-2">Search</button>
@@ -117,7 +117,7 @@ const Navbar=()=>{
 <form className="flex flex-col sm:flex-row">
             <input
               className="w-full p-2  rounded-md  outline-none border border-r-0 rounded-r-none"
-              type="email"
+              type="text"
               placeholder="Search Your Product"
             />
             <button className=" bg-yellow-500 rounded-r-md px-2 ">Search</button>
