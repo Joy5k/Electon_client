@@ -64,7 +64,11 @@ function Profile() {
 
             {/* description section */}
             <section >
-
+              <div>
+                <div>
+                  
+                </div>
+              </div>
             </section>
         </div>
     </div>
