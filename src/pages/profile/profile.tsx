@@ -66,7 +66,10 @@ function Profile() {
             <section >
               <div>
                 <div>
-                  
+                <label className="mt-10" htmlFor="">About me</label>
+            <input className="mt-1 border border-gray-500 h-8 rounded-lg bg-gray-900" type="text" name="aboutMe" id="" />
+            <label className="mt-10" htmlFor="">Facebook</label>
+            <input className="mt-1 border border-gray-500 h-8 rounded-lg bg-gray-900" type="text" name="facebook" id="" />
                 </div>
               </div>
             </section>
