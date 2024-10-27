@@ -52,7 +52,7 @@ const Booking: React.FC = () => {
 
   return (
     <div className="container mx-auto p-4 my-10">
-      <div className="flex flex-col md:flex-row lg:flex-row space-x-8">
+      <div className="flex flex-col md:flex-row lg:flex-row sm:space-x-8">
         {/* Product Booking Table */}
         <div  className=' overflow-x-auto' >
           <table className="w-[785px] bg-white border rounded-md ">

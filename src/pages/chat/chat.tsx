@@ -39,7 +39,7 @@ const Chat = () => {
     return () => {
       socket.off('message');
     };
-  }, [socket]);
+  }, [navigate,socket]);
 
   const sendMessage = () => {
     if (message.trim()) {
@@ -87,7 +87,7 @@ const Chat = () => {
       
 
       {/* Input Field */}
-      <div className="bg-primary p-4 flex fixed bottom-0 left-0 right-0 ">
+      <div className= "absolute bg-primary p-4 flex  bottom-0 left-0 right-0 ">
         <input
           type="text"
           value={message}
