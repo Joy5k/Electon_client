@@ -146,7 +146,7 @@ const Profile = () => {
               value={formData.aboutMe}
               onChange={handleInputChange}
               disabled={!isEditing}
-              className="mt-1 border border-gray-500 h-full w-full p-2 rounded-lg bg-gray-900"
+              className="mt-4 border border-gray-500 h-full w-full p-2 rounded-lg bg-gray-900"
             />
           </div>
         </section>
