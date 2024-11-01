@@ -44,6 +44,7 @@ const Profile = () => {
               src="https://static.vecteezy.com/system/resources/thumbnails/005/346/410/small_2x/close-up-portrait-of-smiling-handsome-young-caucasian-man-face-looking-at-camera-on-isolated-light-gray-studio-background-photo.jpg"
               alt="Profile Picture"
             />
+            <input type="file" name="image" id="" />
             <div className="flex justify-center flex-col w-full mt-10">
               <label htmlFor="firstName" className="mr-3 mb-1">First Name</label>
               <input
