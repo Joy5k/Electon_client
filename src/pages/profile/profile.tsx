@@ -3,6 +3,7 @@ import { useState } from "react";
 const Profile = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
 
   // Form data state
   const [formData, setFormData] = useState({
@@ -31,7 +32,13 @@ const Profile = () => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
-
+ // Handle image upload and preview
+ const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const file = e.target.files?.[0];
+  if (file) {
+    setImagePreview(URL.createObjectURL(file));
+  }
+};
   return (
     <div className="mx-3">
       <div className="flex justify-center flex-col md:flex-row lg:flex-row md:p-4 lg:p-6">
@@ -40,11 +47,22 @@ const Profile = () => {
         <section className="border p-4">
           <div className="flex flex-col justify-center items-center">
             <img
-              className="rounded-lg w-36"
-              src="https://static.vecteezy.com/system/resources/thumbnails/005/346/410/small_2x/close-up-portrait-of-smiling-handsome-young-caucasian-man-face-looking-at-camera-on-isolated-light-gray-studio-background-photo.jpg"
+              className="rounded-lg max-w-full w-52 h-36"
+              src={imagePreview ? imagePreview : ""}
               alt="Profile Picture"
             />
-            <input className="p-2 bg-blue-950 cursor-pointer" type="file" name="image" id="" placeholder="Upload Image" />
+           {/* // <!-- Image Upload --> */}
+    <input
+    onChange={(e)=>handleImageUpload(e)}
+      className="p-2 bg-blue-950 text-white rounded-lg cursor-pointer mt-2 w-full max-w-xs"
+      type="file"
+      name="image"
+      placeholder="Upload Image"
+    />
+    {/* Image upload button  */}
+    {
+      imagePreview && <button className="bg-primary w-full p-2 rounded-lg mt-3 hover:transition-colors hover:bg-yellow-600">Save</button>
+    }
             <div className="flex justify-center flex-col w-full mt-10">
               <label htmlFor="firstName" className="mr-3 mb-1">First Name</label>
               <input
