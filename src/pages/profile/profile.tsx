@@ -108,9 +108,8 @@ const handleSaveImage = async () => {
 //handle the user profile update 
 const handleUserProfileUpdate = async () => {
   try {
-     const response = await userUpdate(formData).unwrap(); // `unwrap()` handles response directly from RTK Query
+     await userUpdate(formData).unwrap(); // `unwrap()` handles response directly from RTK Query
      toast.success("Profile updated successfully!");
-     console.log(response);
      setIsEditing(false);
   } catch (error) {
      toast.error("Update failed. Please try again.");
@@ -197,7 +196,7 @@ const handleUserProfileUpdate = async () => {
         name="email"
         value={formData.email}
         onChange={handleInputChange}
-        disabled={!isEditing}
+        disabled
         placeholder={userData?.data?.email}
         className="mt-1 border rounded-md border-gray-800 h-8  bg-gray-950 px-1"
       />
@@ -208,7 +207,7 @@ const handleUserProfileUpdate = async () => {
         name="phoneNumber"
         value={formData.phoneNumber}
         onChange={handleInputChange}
-        disabled
+        disabled={!isEditing}
         placeholder={userData?.data?.phoneNumber}
         className="mt-1 border rounded-md border-gray-800 h-8  bg-gray-950 px-1"
       />
