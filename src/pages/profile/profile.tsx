@@ -1,11 +1,10 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import axios from 'axios';
 import { ImgBBResponseData } from "../../types";
 import { useGetUserQuery, useUpdateUserMutation } from "../../redux/features/userManagement/userManagement";
 
 const Profile = () => {
-  const [showPassword, setShowPassword] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [imageUploading, setImageUploadLoading] = useState<boolean>(false);
@@ -13,8 +12,6 @@ const Profile = () => {
   const [userUpdate,{isLoading:updatingUserInfo}]=useUpdateUserMutation()
 
   const {data:userData}=useGetUserQuery({})
-console.log(userData)
-
 
   // Form data state
   const [formData, setFormData] = useState({
@@ -27,12 +24,26 @@ console.log(userData)
     facebook: "",
     instagram: "",
     twitter: "",
-    aboutMe: "Lorem ipsum dolor sit amet consectetur adipisicing elit...",
+    aboutMe: "Describe yourself...",
   });
+  useEffect(() => {
+    if (userData) {
+      setFormData({
+        firstName: userData.data?.firstName || "",
+        lastName: userData.data?.lastName || "",
+        image: userData.data?.image || "",
+        email: userData.data?.email || "",
+        phoneNumber: userData.data?.phoneNumber || "",
+        facebook: userData.data?.facebook || "",
+        instagram: userData.data?.instagram || "",
+        twitter: userData.data?.twitter || "",
+        aboutMe: userData.data?.aboutMe || "Describe yourself...",
+        password: "", // Set password to an empty string or provide any default you need
+      });
+    }
+  }, [userData]);
+  
 
-  const togglePasswordVisibility = () => {
-    setShowPassword(!showPassword);
-  };
 
   // Toggle editing mode
   const toggleEdit = () => {
@@ -44,6 +55,7 @@ console.log(userData)
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
+
  // Handle image upload and preview
  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
   const file = e.target.files?.[0];
@@ -52,49 +64,61 @@ console.log(userData)
     setFile(file)
   }
 };
+
 //Handle Image upload for user profile
-const handleSaveImage=async()=>{
+const handleSaveImage = async () => {
   if (!file) return;
 
-    setImageUploadLoading(true);
+  setImageUploadLoading(true);
+  try {
+    const formData = new FormData();
+    formData.append("image", file);
 
-    try {
-      const formData = new FormData();
-      formData.append("image", file);
-
-      const response = await axios.post<ImgBBResponseData>(`https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_API_KEY}`, formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
-
-      if (response.data && response.data.data && response.data.data.url) {
-
-        toast.success('Image Uploaded successfully');
-        setImageUploadLoading(false)
-        // updating image url into DB
-      await userUpdate({image:response.data.data.url})
-      setImagePreview("")
-              } else {
-        console.log("Failed to upload image. Please try again.")
+    const response = await axios.post<ImgBBResponseData>(
+      `https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_API_KEY}`, 
+      formData, 
+      {
+        headers: { "Content-Type": "multipart/form-data" },
       }
-    } catch (error) {
-      console.error("Error uploading image:", error);
-    
-    } finally {
+    );
+
+    if (response.data && response.data.data && response.data.data.url) {
+      const uploadedImageUrl = response.data.data.url;
+      setImagePreview(uploadedImageUrl); // Clear image preview after saving
+      toast.success('Image Uploaded successfully');
       setImageUploadLoading(false);
+      
+      // Update the formData with the new image URL to trigger a re-render
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        image: uploadedImageUrl
+      }));
+
+      // Updating the image URL in the database
+      await userUpdate({ image: uploadedImageUrl });
+    } else {
+      console.log("Failed to upload image. Please try again.");
     }
-
-}
-
+  } catch (error) {
+    console.error("Error uploading image:", error);
+  } finally {
+    setImageUploadLoading(false);
+  }
+};
 //handle the user profile update 
-const handleUserProfileUpdate=async()=>{
-  const res=await userUpdate(formData)
-if(res){
-  toast.success("Update successfully")
-  console.log(res)
-}
-}
+const handleUserProfileUpdate = async () => {
+  try {
+     const response = await userUpdate(formData).unwrap(); // `unwrap()` handles response directly from RTK Query
+     toast.success("Profile updated successfully!");
+     console.log(response);
+     setIsEditing(false);
+  } catch (error) {
+     toast.error("Update failed. Please try again.");
+     console.error("Error updating profile:", error);
+  }
+};
+
+
   return (
    <div>
     {
@@ -106,7 +130,7 @@ if(res){
   <div className="flex flex-col justify-center items-center">
     <img
       className="rounded-lg max-w-full w-52 h-36"
-      src={imagePreview || userData?.data.image}
+      src={imagePreview|| userData?.data?.image}
       alt="Profile Picture"
     />
 
@@ -133,7 +157,7 @@ if(res){
         onClick={handleSaveImage}
         className="bg-primary w-full p-2 rounded-lg mt-3 hover:transition-colors hover:bg-yellow-600"
       >
-        Save
+       {imageUploading ? "uploading..." :" Save"}
       </button>
     )}
 
@@ -143,10 +167,12 @@ if(res){
       <input
         type="text"
         name="firstName"
-        value={userData?.data?.firstName}
+        value={formData.firstName}
         onChange={handleInputChange}
         disabled={!isEditing}
-        className="border border-gray-500 rounded-md h-8 mr-2 bg-gray-900 px-1"
+
+        placeholder={userData?.data?.firstName}
+        className="mt-1 border rounded-md border-gray-800 h-8  bg-gray-950 px-1"
       />
 
       <label htmlFor="lastName" className="mr-3 mb-1">Last Name</label>
@@ -156,31 +182,13 @@ if(res){
         value={formData.lastName}
         onChange={handleInputChange}
         disabled={!isEditing}
-        className="border border-gray-500 rounded-md h-8 mr-2 bg-gray-900"
+        placeholder={userData?.data.lastName}
+        className="mt-1 border rounded-md border-gray-800 h-8  bg-gray-950 px-1"
       />
     </div>
 
     {/* Password Field */}
     <div className="flex justify-center w-full flex-col mt-10">
-      <label htmlFor="password" className="mb-1">Password</label>
-      <div className="relative">
-        <input
-          type={showPassword ? "text" : "password"}
-          name="password"
-          value={formData.password}
-          onChange={handleInputChange}
-          disabled={!isEditing}
-          placeholder="Your password"
-          className="border border-gray-500 h-8 rounded-lg bg-gray-900 w-full pr-10 p-2"
-        />
-        <button
-          type="button"
-          className="absolute right-2 top-2 text-sm text-white"
-          onClick={togglePasswordVisibility}
-        >
-          {showPassword ? "Hide" : "See"}
-        </button>
-      </div>
 
       {/* Email and Phone Number Fields */}
       <label htmlFor="email" className="mt-10">Email</label>
@@ -190,7 +198,8 @@ if(res){
         value={formData.email}
         onChange={handleInputChange}
         disabled={!isEditing}
-        className="mt-1 border border-gray-500 h-8 rounded-lg bg-gray-900"
+        placeholder={userData?.data?.email}
+        className="mt-1 border rounded-md border-gray-800 h-8  bg-gray-950 px-1"
       />
 
       <label htmlFor="phoneNumber" className="mt-10">Phone Number</label>
@@ -199,8 +208,9 @@ if(res){
         name="phoneNumber"
         value={formData.phoneNumber}
         onChange={handleInputChange}
-        disabled={!isEditing}
-        className="mt-1 border border-gray-500 h-8 rounded-lg bg-gray-900"
+        disabled
+        placeholder={userData?.data?.phoneNumber}
+        className="mt-1 border rounded-md border-gray-800 h-8  bg-gray-950 px-1"
       />
     </div>
   </div>
