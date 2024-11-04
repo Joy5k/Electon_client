@@ -39,6 +39,11 @@ const Profile = () => {
     setImagePreview(URL.createObjectURL(file));
   }
 };
+//Handle Image upload for user profile
+const handleSaveImage=async()=>{
+  // const result=await 
+
+}
   return (
     <div className="mx-3">
       <div className="flex justify-center flex-col md:flex-row lg:flex-row md:p-4 lg:p-6">
@@ -61,7 +66,7 @@ const Profile = () => {
     />
     {/* Image upload button  */}
     {
-      imagePreview && <button className="bg-primary w-full p-2 rounded-lg mt-3 hover:transition-colors hover:bg-yellow-600">Save</button>
+      imagePreview && <button onClick={handleSaveImage} className="bg-primary w-full p-2 rounded-lg mt-3 hover:transition-colors hover:bg-yellow-600">Save</button>
     }
             <div className="flex justify-center flex-col w-full mt-10">
               <label htmlFor="firstName" className="mr-3 mb-1">First Name</label>
