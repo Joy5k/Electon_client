@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { toast } from "sonner";
 import axios from 'axios';
+import { ImgBBResponseData } from "../../types";
 
 const Profile = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -46,6 +47,7 @@ const Profile = () => {
 };
 //Handle Image upload for user profile
 const handleSaveImage=async()=>{
+  console.log(imagePreview,imageUploading,imageUrl)
   if (!file) return;
 
     setImageUploadLoading(true);
@@ -54,7 +56,7 @@ const handleSaveImage=async()=>{
       const formData = new FormData();
       formData.append("image", file);
 
-      const response = await axios.post(`https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_API_KEY}`, formData, {
+      const response = await axios.post<ImgBBResponseData>(`https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_API_KEY}`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },

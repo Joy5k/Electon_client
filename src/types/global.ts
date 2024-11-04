@@ -27,3 +27,9 @@ export type TQueryParam = {
   name: string;
   value: boolean|React.Key;
 };
+export interface ImgBBResponseData {
+  data: {
+    url: string;
+    // Add other properties here if needed
+  };
+}
