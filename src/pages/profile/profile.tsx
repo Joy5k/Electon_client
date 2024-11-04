@@ -1,10 +1,14 @@
 import { useState } from "react";
+import { toast } from "sonner";
+import axios from 'axios';
 
 const Profile = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
-
+  const [imageUrl, setImageUrl] = useState<string | null>(null);
+  const [imageUploading, setImageUploadLoading] = useState<boolean>(false);
+  const [file,setFile]=useState<File | undefined>(undefined);
   // Form data state
   const [formData, setFormData] = useState({
     firstName: "",
@@ -37,11 +41,39 @@ const Profile = () => {
   const file = e.target.files?.[0];
   if (file) {
     setImagePreview(URL.createObjectURL(file));
+    setFile(file)
   }
 };
 //Handle Image upload for user profile
 const handleSaveImage=async()=>{
-  // const result=await 
+  if (!file) return;
+
+    setImageUploadLoading(true);
+
+    try {
+      const formData = new FormData();
+      formData.append("image", file);
+
+      const response = await axios.post(`https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_API_KEY}`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+
+      if (response.data && response.data.data && response.data.data.url) {
+        console.log(response.data.data.url,"uploaded image")
+        toast.success('Image Uploaded successfully');
+        setImageUploadLoading(false)
+        setImageUrl(response.data.data.url);
+      } else {
+        console.log("Failed to upload image. Please try again.")
+      }
+    } catch (error) {
+      console.error("Error uploading image:", error);
+    
+    } finally {
+      setImageUploadLoading(false);
+    }
 
 }
   return (
