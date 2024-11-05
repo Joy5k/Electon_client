@@ -4,6 +4,7 @@ import axios from 'axios';
 import { IAuthResponse, ImgBBResponseData, IQrCodeData } from "../../types";
 import { useGetUserQuery, useUpdateUserMutation } from "../../redux/features/userManagement/userManagement";
 import { useAuth2Mutation, useVerifyAuth2Mutation } from "../../redux/features/auth/authApi";
+import SelectDivision from "../../components/selectDivision/selectDivision";
 
 const Profile = () => {
   const [isEditing, setIsEditing] = useState(false);
@@ -188,9 +189,9 @@ const handleVerifySecret=async():Promise<void>=>{
             <section className="lg:w-2/3 -mt-5">
               <h4 className="text-2xl animate-pulse font-bold mb-2">Information</h4>
               <hr className="mb-10" />
-              <div className="flex flex-col gap-5">
+              <div className="flex flex-col gap-5  flex-1">
                 {/* all input files div flexing here */}
-                <div className="flex flex-col md:flex-row lg:flex-row gap-6">
+                <div className="flex flex-col md:flex-row lg:flex-row flex-wrap gap-6">
                   <div>
                     <label>Email</label>
                     <p>{userData?.data?.email}</p>
@@ -207,6 +208,7 @@ const handleVerifySecret=async():Promise<void>=>{
                       className="w-full mt-1 border border-gray-800 rounded-md bg-gray-950 px-2 py-1"
                     />
                   </div>
+
                   {/* Two-step authentication */}
                   <div>
                     <label htmlFor="twoStep">Two-step Authentication</label> <br />
@@ -216,6 +218,10 @@ const handleVerifySecret=async():Promise<void>=>{
                         <button onClick={toggleModal} className="text-red-500 bg-gray-800 px-2 ">Enable</button>
                       }
                     </span>
+                  </div>
+                  <div className="flex-1">
+                    <h1 className="text-emerald-500">Address</h1>
+                  <SelectDivision/>
                   </div>
                 </div>
                 <label>About Me</label>

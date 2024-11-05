@@ -4,7 +4,7 @@ import { IDistrict, IDivision, ISubDistrict } from '../../types';
 
 
 
-const SelectDivison= () => {
+const SelectDivision= () => {
   const [divisions, setDivisions] = useState<IDivision[]>([]);
   const [districts, setDistricts] = useState<IDistrict[]>([]);
   const [subDistricts, setSubDistricts] = useState<ISubDistrict[]>([]);
@@ -17,8 +17,8 @@ const SelectDivison= () => {
   useEffect(() => {
     const fetchDivisions = async () => {
       try {
-        const response = await axios.get<IDivision[]>('https://bdapis.com/api/v1.2/division');
-        setDivisions(response.data); // Assuming the API returns an array of divisions
+        const response:any = await axios.get<IDivision[]>('https://bdapis.com/api/v1.2/divisions');
+        setDivisions(response.data?.data); // Assuming the API returns an array of divisions
       } catch (error) {
         console.error('Error fetching divisions:', error);
       }
@@ -32,8 +32,8 @@ const SelectDivison= () => {
     const fetchDistricts = async () => {
       if (selectedDivision) {
         try {
-          const response = await axios.get<IDistrict[]>(`https://bdapis.com/api/v1.2/district?division_id=${selectedDivision}`);
-          setDistricts(response.data); // Assuming the API returns an array of districts for the selected division
+          const response:any = await axios.get<IDistrict[]>(`https://bdapis.com/api/v1.2/division/${selectedDivision}`);
+          setDistricts(response.data.data); // Assuming the API returns an array of districts for the selected division
           setSelectedDistrict(''); // Reset district selection when division changes
           setSelectedSubDistrict(''); // Reset sub-district selection when division changes
         } catch (error) {
@@ -49,11 +49,11 @@ const SelectDivison= () => {
 
   // Fetch sub-districts based on the selected district
   useEffect(() => {
-    const fetchSubDistricts = async () => {
+    const fetchSubDistricts = async ():Promise<void> => {
       if (selectedDistrict) {
         try {
-          const response = await axios.get<ISubDistrict[]>(`https://bdapis.com/api/v1.2/upazila?district_id=${selectedDistrict}`);
-          setSubDistricts(response.data); // Assuming the API returns an array of sub-districts for the selected district
+          const response:any = await axios.get(`https://bdapis.com/api/v1.2/district/${selectedDistrict}`);
+          setSubDistricts(response.data.data[0]); // Assuming the API returns an array of sub-districts for the selected district
           setSelectedSubDistrict(''); // Reset sub-district selection when district changes
         } catch (error) {
           console.error('Error fetching sub-districts:', error);
@@ -65,10 +65,9 @@ const SelectDivison= () => {
 
     fetchSubDistricts();
   }, [selectedDistrict]);
-
   return (
-    <div className="space-y-4">
-      <div>
+    <div className="space-y-4 flex flex-col md:flex-row lg:flex-row align-middle items-center gap-5">
+      <div className='mt-4'>
         <label htmlFor="division" className="block mb-2">Select Division</label>
         <select
           id="division"
@@ -77,8 +76,8 @@ const SelectDivison= () => {
           className="border p-2 w-full"
         >
           <option value="">-- Select Division --</option>
-          {divisions.map((division) => (
-            <option key={division.id} value={division.id}>{division.name}</option>
+          {divisions?.map((division) => (
+            <option key={division.id} value={division.id}>{division.division}</option>
           ))}
         </select>
       </div>
@@ -93,8 +92,8 @@ const SelectDivison= () => {
           disabled={!selectedDivision} // Disable if no division is selected
         >
           <option value="">-- Select District --</option>
-          {districts.map((district) => (
-            <option key={district.id} value={district.id}>{district.name}</option>
+          {districts?.map((district) => (
+            <option key={district.id} value={district.id}>{district.district}</option>
           ))}
         </select>
       </div>
@@ -109,8 +108,8 @@ const SelectDivison= () => {
           disabled={!selectedDistrict} // Disable if no district is selected
         >
           <option value="">-- Select Sub-District --</option>
-          {subDistricts.map((subDistrict) => (
-            <option key={subDistrict.id} value={subDistrict.id}>{subDistrict.name}</option>
+          {subDistricts?.map((UP:any) => (
+            <option key={UP.id} value={UP.id}>{UP}</option>
           ))}
         </select>
       </div>
@@ -118,4 +117,4 @@ const SelectDivison= () => {
   );
 };
 
-export default SelectDivison;
+export default SelectDivision;

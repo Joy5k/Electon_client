@@ -53,15 +53,18 @@ export interface IQrCodeData {
 }
 export interface IDivision {
   id: string; // Adjust according to actual API response
-  name: string;
+  division: string;
 }
 
 export interface IDistrict {
   id: string; // Adjust according to actual API response
-  name: string;
+  district: string;
 }
 
 export interface ISubDistrict {
   id: string; // Adjust according to actual API response
-  name: string;
+  upazillas: string;
+}
+export interface IApiResponse {
+  data: ISubDistrict[]; // This should be the structure of the response
 }
