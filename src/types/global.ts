@@ -33,3 +33,21 @@ export interface ImgBBResponseData {
     // Add other properties here if needed
   };
 }
+
+export interface IAuthResponse {
+  success: boolean;
+  message: string;
+  data: AuthData;
+}
+
+interface AuthData {
+  message: string;
+  qrCode: string;
+  secret: string;
+}
+
+export interface IQrCodeData {
+  message: string;
+  qrCode: string; 
+  secret: string;
+}

@@ -15,7 +15,14 @@ const authApi = baseApi.injectEndpoints({
                     method: "POST",
                     body:userInfo
             })
+        }),
+        auth2: builder.mutation({
+            query: () => ({
+                url: "auth/2fa/setup",
+                    method: "POST",
+                
+            })
         })
     })
 })
-export const {useLoginMutation,useRegisterMutation } = authApi
+export const {useLoginMutation,useRegisterMutation,useAuth2Mutation } = authApi

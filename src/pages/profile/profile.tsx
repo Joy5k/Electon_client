@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import axios from 'axios';
-import { ImgBBResponseData } from "../../types";
+import { IAuthResponse, ImgBBResponseData, IQrCodeData } from "../../types";
 import { useGetUserQuery, useUpdateUserMutation } from "../../redux/features/userManagement/userManagement";
+import { useAuth2Mutation } from "../../redux/features/auth/authApi";
 
 const Profile = () => {
   const [isEditing, setIsEditing] = useState(false);
@@ -10,8 +11,10 @@ const Profile = () => {
   const [imageUploading, setImageUploadLoading] = useState<boolean>(false);
   const [file, setFile] = useState<File | undefined>(undefined);
   const [isOpenModal, setOpenModal] = useState<boolean>(false); // State to manage modal visibility
+  const [qrCodeSecret,setQrCodeSecrete]=useState<IQrCodeData>()
+  const [qrVerifySecret,setVerifyCode]=useState<string>()
   const [userUpdate, { isLoading: updatingUserInfo }] = useUpdateUserMutation();
-
+  const [qrCodeData]=useAuth2Mutation()
   const { data: userData } = useGetUserQuery({});
 
   const [formData, setFormData] = useState({
@@ -107,8 +110,20 @@ const Profile = () => {
   // Modal handle functions
   const toggleModal = (): void => {
     setOpenModal(!isOpenModal);
+    createAuth2Secret()
   };
-console.log(isOpenModal)
+
+// request to server for creating 2FA code
+const createAuth2Secret=async():Promise<void>=>{
+  const res:IAuthResponse=await qrCodeData({}).unwrap()
+  setQrCodeSecrete(res.data)
+
+}
+
+// verify qr authentication code
+const handleVerifySecret=async():Promise<void>=>{
+  console.log(qrVerifySecret)
+}
   return (
     <div>
         <div className="w-screen p-4 mt-5 lg:mt-10">
@@ -191,7 +206,8 @@ console.log(isOpenModal)
                     <label htmlFor="twoStep">Two-step Authentication</label> <br />
                     <span>
                       {
-                        userData?.data?.auth2 ? <p className="text-green-400">Enabled</p> : <button onClick={toggleModal} className="text-red-500 bg-gray-800 px-2 ">Enable</button>
+                        userData?.data?.auth2 ? <p className="text-green-400">Enabled</p> : 
+                        <button onClick={toggleModal} className="text-red-500 bg-gray-800 px-2 ">Enable</button>
                       }
                     </span>
                   </div>
@@ -230,11 +246,18 @@ console.log(isOpenModal)
     {
       isOpenModal && 
       <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 overflow-y-auto">
-       <div>
-        <div>
-          <img src="" alt="qr code" />
+       <div className="border border-gray-800 p-2 relative">
+        <div className="flex justify-center flex-col items-center align-middle ">
+          <img src={qrCodeSecret?.qrCode} className="w-fit" alt="qr code" />
+          <p className="mt-5 font-sans font-bold">Note: <span className="text-primary animate-pulse">{qrCodeSecret?.message}</span></p>
+      
         </div>
-        <button onClick={toggleModal}>cancel</button>
+        <div className="mt-6">
+        <label htmlFor="verifyCode" className="font-bold text-start w-full">Enter 6 Digit Code</label> <br />
+        <input onChange={(e) => setVerifyCode(e.target.value)} type="text" className=" border border-gray-700 p-1 w-full mb-2 mt-1" placeholder="256 587"/>
+      </div>
+      <button onClick={handleVerifySecret} className="bg-gray-900 text-green-500 p-2 px-8 w-full font-bold hover:bg-gray-800">Verify</button>
+        <button onClick={toggleModal} className="absolute text-2xl  px-2 right-0 top-0 ">X</button>
        </div>
       </div>
     }
