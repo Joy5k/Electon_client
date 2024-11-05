@@ -3,7 +3,7 @@ import { toast } from "sonner";
 import axios from 'axios';
 import { IAuthResponse, ImgBBResponseData, IQrCodeData } from "../../types";
 import { useGetUserQuery, useUpdateUserMutation } from "../../redux/features/userManagement/userManagement";
-import { useAuth2Mutation } from "../../redux/features/auth/authApi";
+import { useAuth2Mutation, useVerifyAuth2Mutation } from "../../redux/features/auth/authApi";
 
 const Profile = () => {
   const [isEditing, setIsEditing] = useState(false);
@@ -13,10 +13,11 @@ const Profile = () => {
   const [isOpenModal, setOpenModal] = useState<boolean>(false); // State to manage modal visibility
   const [qrCodeSecret,setQrCodeSecrete]=useState<IQrCodeData>()
   const [qrVerifySecret,setVerifyCode]=useState<string>()
+  // redux queries and mutations
   const [userUpdate, { isLoading: updatingUserInfo }] = useUpdateUserMutation();
   const [qrCodeData]=useAuth2Mutation()
   const { data: userData } = useGetUserQuery({});
-
+  const [qrCodeVerify]=useVerifyAuth2Mutation({})
   const [formData, setFormData] = useState({
     firstName: "",
     image: "",
@@ -122,7 +123,12 @@ const createAuth2Secret=async():Promise<void>=>{
 
 // verify qr authentication code
 const handleVerifySecret=async():Promise<void>=>{
-  console.log(qrVerifySecret)
+    const res=await  qrCodeVerify({token:qrVerifySecret}).unwrap()
+  console.log(res.success)
+  if(res.success){
+    toast.success("Successfully Enabled Two-step Authentication")
+    setOpenModal(false)
+  }
 }
   return (
     <div>
