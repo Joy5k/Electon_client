@@ -51,3 +51,17 @@ export interface IQrCodeData {
   qrCode: string; 
   secret: string;
 }
+export interface IDivision {
+  id: string; // Adjust according to actual API response
+  name: string;
+}
+
+export interface IDistrict {
+  id: string; // Adjust according to actual API response
+  name: string;
+}
+
+export interface ISubDistrict {
+  id: string; // Adjust according to actual API response
+  name: string;
+}

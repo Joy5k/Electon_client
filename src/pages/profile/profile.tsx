@@ -124,7 +124,7 @@ const createAuth2Secret=async():Promise<void>=>{
 // verify qr authentication code
 const handleVerifySecret=async():Promise<void>=>{
     const res=await  qrCodeVerify({token:qrVerifySecret}).unwrap()
-  console.log(res.success)
+  console.log(res)
   if(res.success){
     toast.success("Successfully Enabled Two-step Authentication")
     setOpenModal(false)
