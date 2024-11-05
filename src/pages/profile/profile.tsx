@@ -167,6 +167,7 @@ const Profile = () => {
                     <label>Email</label>
                     <p>{userData?.data?.email}</p>
                   </div>
+                  {/* phoneNumber */}
                   <div>
                     <label>Phone Number</label>
                     <input
@@ -177,6 +178,15 @@ const Profile = () => {
                       disabled={!isEditing}
                       className="w-full mt-1  border border-gray-800 rounded-md bg-gray-950 px-2 py-1"
                     />
+                  </div>
+                  {/* Two-step authentication */}
+                  <div>
+                    <label htmlFor="twoStep">Two-step Authentication</label> <br />
+                    <span>
+                      {
+                        userData?.data?.auth2 ? <p className="text-green-400">Enabled</p> :<button className="text-red-500 bg-gray-800 px-2 ">Enable</button>
+                      }
+                    </span>
                   </div>
                 </div>
                 <label>About Me</label>
