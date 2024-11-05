@@ -9,6 +9,7 @@ const Profile = () => {
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [imageUploading, setImageUploadLoading] = useState<boolean>(false);
   const [file, setFile] = useState<File | undefined>(undefined);
+  const [isOpenModal, setOpenModal] = useState<boolean>(false); // State to manage modal visibility
   const [userUpdate, { isLoading: updatingUserInfo }] = useUpdateUserMutation();
 
   const { data: userData } = useGetUserQuery({});
@@ -45,7 +46,7 @@ const Profile = () => {
 
   const toggleEdit = () => setIsEditing(!isEditing);
 
-  const handleInputChange = (e: any) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
@@ -103,8 +104,14 @@ const Profile = () => {
     }
   };
 
+  // Modal handle functions
+  const toggleModal = (): void => {
+    setOpenModal(!isOpenModal);
+  };
+console.log(isOpenModal)
   return (
-    <div className="w-screen p-4 mt-5 lg:mt-10">
+    <div>
+        <div className="w-screen p-4 mt-5 lg:mt-10">
       <div className="w-full text-white px-2 rounded-lg">
         {updatingUserInfo ? (
           <p className="text-primary text-2xl font-bold text-center">Updating User Info...</p>
@@ -158,8 +165,8 @@ const Profile = () => {
 
             {/* Contact Info and About Me Section */}
             <section className="lg:w-2/3 -mt-5">
-            <h4 className="text-2xl animate-pulse font-bold mb-2">Information</h4>
-            <hr className="mb-10" />
+              <h4 className="text-2xl animate-pulse font-bold mb-2">Information</h4>
+              <hr className="mb-10" />
               <div className="flex flex-col gap-5">
                 {/* all input files div flexing here */}
                 <div className="flex flex-col md:flex-row lg:flex-row gap-6">
@@ -176,7 +183,7 @@ const Profile = () => {
                       value={formData.phoneNumber}
                       onChange={handleInputChange}
                       disabled={!isEditing}
-                      className="w-full mt-1  border border-gray-800 rounded-md bg-gray-950 px-2 py-1"
+                      className="w-full mt-1 border border-gray-800 rounded-md bg-gray-950 px-2 py-1"
                     />
                   </div>
                   {/* Two-step authentication */}
@@ -184,7 +191,7 @@ const Profile = () => {
                     <label htmlFor="twoStep">Two-step Authentication</label> <br />
                     <span>
                       {
-                        userData?.data?.auth2 ? <p className="text-green-400">Enabled</p> :<button className="text-red-500 bg-gray-800 px-2 ">Enable</button>
+                        userData?.data?.auth2 ? <p className="text-green-400">Enabled</p> : <button onClick={toggleModal} className="text-red-500 bg-gray-800 px-2 ">Enable</button>
                       }
                     </span>
                   </div>
@@ -202,7 +209,7 @@ const Profile = () => {
           </div>
         )}
         <div className="flex justify-center mt-4">
-          <button
+        <button
             onClick={toggleEdit}
             className="bg-blue-600 text-white px-4 py-2 rounded mr-2"
           >
@@ -219,6 +226,20 @@ const Profile = () => {
         </div>
       </div>
     </div>
+    {/* modal and qr code part start below */}
+    {
+      isOpenModal && 
+      <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 overflow-y-auto">
+       <div>
+        <div>
+          <img src="" alt="qr code" />
+        </div>
+        <button onClick={toggleModal}>cancel</button>
+       </div>
+      </div>
+    }
+    </div>
+  
   );
 };
 
