@@ -54,6 +54,7 @@ const SelectDivision= () => {
         try {
           const response:any = await axios.get(`https://bdapis.com/api/v1.2/district/${selectedDistrict}`);
           setSubDistricts(response.data.data[0]); // Assuming the API returns an array of sub-districts for the selected district
+         console.log(response.data.data[0])
           setSelectedSubDistrict(''); // Reset sub-district selection when district changes
         } catch (error) {
           console.error('Error fetching sub-districts:', error);
@@ -108,7 +109,7 @@ const SelectDivision= () => {
           disabled={!selectedDistrict} // Disable if no district is selected
         >
           <option value="">-- Select Sub-District --</option>
-          {subDistricts?.map((UP:any) => (
+          {subDistricts?.upazillas?.map((UP:ISu) => (
             <option key={UP.id} value={UP.id}>{UP}</option>
           ))}
         </select>

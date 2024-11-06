@@ -63,8 +63,5 @@ export interface IDistrict {
 
 export interface ISubDistrict {
   id: string; // Adjust according to actual API response
-  upazillas: string;
-}
-export interface IApiResponse {
-  data: ISubDistrict[]; // This should be the structure of the response
+  upazillas: string
 }
