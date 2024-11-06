@@ -219,11 +219,12 @@ const handleVerifySecret=async():Promise<void>=>{
                       }
                     </span>
                   </div>
-                  <div className="flex-1">
+                  
+                </div>
+                <div className="flex-1">
                     <h1 className="text-emerald-500">Address</h1>
                   <SelectDivision/>
                   </div>
-                </div>
                 <label>About Me</label>
                 <textarea
                   name="aboutMe"

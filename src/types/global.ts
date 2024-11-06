@@ -63,5 +63,5 @@ export interface IDistrict {
 
 export interface ISubDistrict {
   id: string; // Adjust according to actual API response
-  upazillas: string
+  upazillas: string[]
 }

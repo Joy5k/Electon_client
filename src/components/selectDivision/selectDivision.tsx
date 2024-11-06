@@ -109,7 +109,7 @@ const SelectDivision= () => {
           disabled={!selectedDistrict} // Disable if no district is selected
         >
           <option value="">-- Select Sub-District --</option>
-          {subDistricts?.upazillas?.map((UP:ISu) => (
+          {subDistricts?.upazillas?.map((UP:any) => (
             <option key={UP.id} value={UP.id}>{UP}</option>
           ))}
         </select>
