@@ -14,6 +14,10 @@ const Profile = () => {
   const [isOpenModal, setOpenModal] = useState<boolean>(false); // State to manage modal visibility
   const [qrCodeSecret,setQrCodeSecrete]=useState<IQrCodeData>()
   const [qrVerifySecret,setVerifyCode]=useState<string>()
+  const [address,setAddress]=useState({})
+
+  const [roadNo,setRoadNo]=useState<string>("")
+  const [postCode,setPostCode]=useState<number>()
   // redux queries and mutations
   const [userUpdate, { isLoading: updatingUserInfo }] = useUpdateUserMutation();
   const [qrCodeData]=useAuth2Mutation()
@@ -31,6 +35,9 @@ const Profile = () => {
     twitter: "",
     aboutMe: "Describe yourself...",
   });
+
+
+console.log(address,roadNo,postCode)
 
   useEffect(() => {
     if (userData) {
@@ -223,8 +230,22 @@ const handleVerifySecret=async():Promise<void>=>{
                 </div>
                 <div className="flex-1">
                     <h1 className="text-emerald-500">Address</h1>
-                  <SelectDivision/>
+                  <SelectDivision setAddress={setAddress}/>
+<div className="flex justify-start align-middle items-center gap-3">
+<div className='mt-0 md:mt-20 lg:mt-4'>
+        <label htmlFor="roadNo">Road No.</label> <br />
+        <input onChange={(e)=>setRoadNo(e.target.value)} type="text" className='border border-gray-400 p-2' placeholder='A Block 1213' />
+      </div>
+
+      <div className='mt-0 md:mt-20 lg:mt-4'>
+        <label htmlFor="postCode">Postcode</label> <br />
+        <input onChange={(e)=>setPostCode(Number(e.target.value))} type="number" className='border border-gray-400 p-2' placeholder='8600' />
+      </div>
+</div>
+                  
+
                   </div>
+           
                 <label>About Me</label>
                 <textarea
                   name="aboutMe"
