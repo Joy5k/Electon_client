@@ -12,7 +12,14 @@ const SelectDivision= () => {
   const [selectedDivision, setSelectedDivision] = useState<string>('');
   const [selectedDistrict, setSelectedDistrict] = useState<string>('');
   const [selectedSubDistrict, setSelectedSubDistrict] = useState<string>('');
-
+  const [address,setAddress]=useState({
+    roadNo:"",
+    subDistrict:"",
+    district:"",
+    division:"",
+    postCode:8600
+  })
+  
   // Fetch divisions from the API
   useEffect(() => {
     const fetchDivisions = async () => {
