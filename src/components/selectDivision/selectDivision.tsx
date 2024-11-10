@@ -2,7 +2,7 @@ import { useEffect, useState, } from 'react';
 import axios from 'axios';
 import { IDistrict, IDivision, ISubDistrict } from '../../types';
 
-const SelectDivision = ({ setAddress }: any) => {
+const SelectDivision = ({ setAddress,disabled,userData }: any) => {
   const [divisions, setDivisions] = useState<IDivision[]>([]);
   const [districts, setDistricts] = useState<IDistrict[]>([]);
   const [subDistricts, setSubDistricts] = useState<ISubDistrict[]>([]);
@@ -11,7 +11,8 @@ const SelectDivision = ({ setAddress }: any) => {
   const [selectedDistrict, setSelectedDistrict] = useState<string>('');
   const [selectedSubDistrict, setSelectedSubDistrict] = useState<string>('');
 
-  // Update the address when sub-district changes
+
+ // Update the address when sub-district changes
   useEffect(() => {
     if (selectedSubDistrict ) {
       const addressData = {
@@ -82,12 +83,14 @@ const SelectDivision = ({ setAddress }: any) => {
         <select
           id="division"
           value={selectedDivision}
+          disabled={disabled}
           onChange={(e) => setSelectedDivision(e.target.value)}
+        defaultValue={userData?.data?.address.division}
           className="border p-2 w-full"
         >
-          <option value="">-- Select Division --</option>
+          <option value="">{userData?.data?.address.division ||"-- Select Division --"}</option>
           {divisions?.map((division) => (
-            <option key={division.id} value={division.id}>{division.division}</option>
+            <option key={division.division} value={division.id}>{division.division}</option>
           ))}
         </select>
       </div>
@@ -101,7 +104,7 @@ const SelectDivision = ({ setAddress }: any) => {
           className="border p-2 w-full"
           disabled={!selectedDivision}
         >
-          <option value="">-- Select District --</option>
+          <option value="">{userData?.data?.address.district ||"-- Select District --"}</option>
           {districts?.map((district) => (
             <option key={district.id} value={district.id}>{district.district}</option>
           ))}
@@ -117,7 +120,7 @@ const SelectDivision = ({ setAddress }: any) => {
           className="border p-2 w-full"
           disabled={!selectedDistrict}
         >
-          <option value="">--Select Sub-District --</option>
+          <option value="">{userData?.data?.address.subDistrict ||"-- Select Sub-District --"}</option>
           {subDistricts?.map((UP: any) => (
             <option key={UP.id} value={UP.id}>{UP}</option>
           ))}

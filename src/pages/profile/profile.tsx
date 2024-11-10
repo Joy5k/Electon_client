@@ -32,32 +32,31 @@ const Profile = () => {
     facebook: "",
     instagram: "",
     twitter: "",
-    aboutMe: "Describe yourself...",
+    description: "Describe yourself...",
     address: {
       subDistrict: address?.subDistrict ||  '',
       district: address?.district || '',
       division: address?.division  || '',
-      roadNo: roadNo || '',
-      postCode: postCode || 0,
+      roadNo,
+      postCode,
     }
     
     
   });
-console.log(formData)
 useEffect(() => {
   setFormData((prevFormData) => ({
     ...prevFormData,
     address: {
-      subDistrict: address?.subDistrict ||  '',
-      district: address?.district || '',
-      division: address?.division  || '',
-      roadNo: roadNo || '',
-      postCode: postCode || 0,
+      subDistrict: address?.subDistrict || userData?.data?.address.subDistrict|| '',
+      district: address?.district || userData?.data?.address.district|| '',
+      division: address?.division  ||  userData?.data?.address.division||'',
+      roadNo: roadNo ||  userData?.data?.address.roadNo|| '',
+      postCode: postCode ||userData?.data?.address.postCode || 8888,
     },
   }));
   
-}, [roadNo, postCode, address]);
-
+}, [roadNo, postCode, address,userData]);
+console.log(formData)
   useEffect(() => {
     if (userData) {
       setFormData({
@@ -69,7 +68,7 @@ useEffect(() => {
         facebook: userData.data?.facebook || "",
         instagram: userData.data?.instagram || "",
         twitter: userData.data?.twitter || "",
-        aboutMe: userData.data?.aboutMe || "Describe yourself...",
+        description: userData.data?.description || "Describe yourself...",
         address:{...userData.data?.address},
 
       });
@@ -251,23 +250,32 @@ const handleVerifySecret=async():Promise<void>=>{
                 </div>
                 <div className="flex-1">
                     <h1 className="text-green-500">Address</h1>
-                  <SelectDivision setAddress={setAddress}/>
+                  <SelectDivision setAddress={setAddress}  disabled={!isEditing} userData={userData}/>
                     <div className="flex justify-start align-middle items-center gap-3">
                         <div className='mt-0 md:mt-20 lg:mt-4'>
                             <label htmlFor="roadNo">Road No.</label> <br />
-                               <input onChange={(e)=>setRoadNo(e.target.value)} type="text" className='border border-gray-400 p-2' placeholder='A Block 1213' />
+                               <input onChange={(e)=>setRoadNo(e.target.value)}
+                                type="text"
+                                 className='border border-gray-400 p-2'
+                                 disabled={!isEditing}
+                                 placeholder={userData?.data?.address.roadNo ||"street address"} />
                        </div>
                      <div className='mt-0 md:mt-20 lg:mt-4'>
                          <label htmlFor="postCode">Postcode</label> <br />
-                         <input onChange={(e)=>setPostCode(Number(e.target.value))} type="number" className='border border-gray-400 p-2' placeholder='8600' />
+                         <input
+                          onChange={(e)=>setPostCode(Number(e.target.value))} 
+                          type="number"
+                          disabled={!isEditing}
+                           className='border border-gray-400 p-2' 
+                           placeholder={userData?.data?.address.postCode ||"8888"} />
                       </div>
                     </div>
                 </div>
            
                 <label>About Me</label>
                 <textarea
-                  name="aboutMe"
-                  value={formData.aboutMe}
+                  name="description"
+                  value={formData.description}
                   onChange={handleInputChange}
                   disabled={!isEditing}
                   className="w-full mt-1 border border-gray-800 rounded-lg bg-gray-950 px-2 py-1"
