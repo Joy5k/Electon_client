@@ -172,8 +172,8 @@ const Navbar=()=>{
         </a>
       </MenuItem>
       <MenuItem>
-        <a href="#" className="block px-4 py-2 text-sm text-white  hover:text-primary ">
-          Settings
+        <a href="/dashboard" className="block px-4 py-2 text-sm text-white  hover:text-primary ">
+          Dashboard
         </a>
       </MenuItem>
       {

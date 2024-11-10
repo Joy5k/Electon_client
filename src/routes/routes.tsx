@@ -8,6 +8,7 @@ import Booking from "../pages/Booking";
 import Checkout from "../pages/CheckOut";
 import Chat from "../pages/chat/chat";
 import Profile from "../pages/profile/profile";
+import Dashboard from "../pages/dashboard/Dashboard";
 
 const router = createBrowserRouter([
   {
@@ -49,6 +50,10 @@ const router = createBrowserRouter([
   {
     path: "login",
     element: <Login />
+  },
+  {
+    path:"dashboard",
+    element:<Dashboard></Dashboard>
   }
 ]);
 
