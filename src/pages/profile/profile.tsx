@@ -5,6 +5,8 @@ import { IAuthResponse, ImgBBResponseData, IQrCodeData } from "../../types";
 import { useGetUserQuery, useUpdateUserMutation } from "../../redux/features/userManagement/userManagement";
 import { useAuth2Mutation, useVerifyAuth2Mutation } from "../../redux/features/auth/authApi";
 import SelectDivision from "../../components/selectDivision/selectDivision";
+import { MdEdit } from "react-icons/md";
+import Spinner from "../../components/Spinner/Spinner";
 
 const Profile = () => {
   const [isEditing, setIsEditing] = useState(false);
@@ -152,7 +154,6 @@ const createAuth2Secret=async():Promise<void>=>{
 // verify qr authentication code
 const handleVerifySecret=async():Promise<void>=>{
     const res=await  qrCodeVerify({token:qrVerifySecret}).unwrap()
-  console.log(res)
   if(res.success){
     toast.success("Successfully Enabled Two-step Authentication")
     setOpenModal(false)
@@ -160,17 +161,18 @@ const handleVerifySecret=async():Promise<void>=>{
 }
   return (
     <div>
+       {updatingUserInfo ? (
+         <Spinner/>
+        ) : (
         <div className="w-screen p-4 mt-5 lg:mt-10">
       <div className="w-full text-white px-2 rounded-lg">
-        {updatingUserInfo ? (
-          <p className="text-primary text-2xl font-bold text-center">Updating User Info...</p>
-        ) : (
+       
           <div className="flex flex-col lg:flex-row lg:gap-8">
             {/* Image and Basic Info Section */}
             <section className="flex flex-col items-center lg:w-2/12 mb-10">
               <img
                 className="rounded-lg w-52 h-36"
-                src={imagePreview || userData?.data?.image}
+                src={imagePreview || userData?.data?.image||"https://media.istockphoto.com/id/1288129985/vector/missing-image-of-a-person-placeholder.jpg?s=612x612&w=0&k=20&c=9kE777krx5mrFHsxx02v60ideRWvIgI1RWzR1X4MG2Y="}
                 alt="Profile Picture"
               />
               <input
@@ -214,7 +216,13 @@ const handleVerifySecret=async():Promise<void>=>{
 
             {/* Contact Info and About Me Section */}
             <section className="lg:w-2/3 -mt-5">
-              <h4 className="text-green-500 text-2xl animate-pulse font-bold mb-2">Information</h4>
+             <div className="flex flex-col md:flex-row lg:flex-row justify-between">
+             <h4 className="text-green-500 text-2xl animate-pulse font-bold mb-2">Information</h4>
+              <button className="text-xl"> 
+                
+                <MdEdit />
+              </button>
+             </div>
               <hr className="mb-10" />
               <div className="flex flex-col gap-4  flex-1">
                 {/* all input files div flexing here */}
@@ -283,14 +291,18 @@ const handleVerifySecret=async():Promise<void>=>{
               </div>
             </section>
           </div>
-        )}
+        
         <div className="flex justify-center mt-4">
         <button
-            onClick={toggleEdit}
-            className="bg-blue-600 text-white px-4 py-2 rounded mr-2"
-          >
-            {isEditing ? <button onClick={handleUserProfileUpdate}>Save</button> : "Edit Profile"}
-          </button>
+  onClick={() => {
+    if (isEditing) handleUserProfileUpdate();
+    toggleEdit();
+  }}
+  className="bg-blue-600 text-white px-4 py-2 rounded mr-2"
+>
+  {isEditing ? "Save" : "Edit Profile"}
+</button>
+
           {isEditing && (
             <button
               onClick={() => setIsEditing(false)}
@@ -301,7 +313,7 @@ const handleVerifySecret=async():Promise<void>=>{
           )}
         </div>
       </div>
-    </div>
+    </div> )}
     {/* modal and qr code part start below */}
     {
       isOpenModal && 
@@ -321,6 +333,7 @@ const handleVerifySecret=async():Promise<void>=>{
        </div>
       </div>
     }
+ 
     </div>
   
   );
