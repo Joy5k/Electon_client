@@ -216,11 +216,16 @@ const handleVerifySecret=async():Promise<void>=>{
 
             {/* Contact Info and About Me Section */}
             <section className="lg:w-2/3 -mt-5">
-             <div className="flex flex-col md:flex-row lg:flex-row justify-between">
+             <div className="flex justify-between">
              <h4 className="text-green-500 text-2xl animate-pulse font-bold mb-2">Information</h4>
-              <button className="text-xl"> 
-                
-                <MdEdit />
+              <button onClick={() => {
+               if (isEditing) handleUserProfileUpdate();
+                 toggleEdit();
+            }} className="text-xl"> 
+                {/* conditionally handle user profile update functionality appearing edit icon or save button */}
+                 {isEditing ? 
+                 <button   className="text-sm bg-green-500 p-1 px-4 rounded-md">save changes</button> : <MdEdit />}
+               
               </button>
              </div>
               <hr className="mb-10" />
@@ -259,22 +264,22 @@ const handleVerifySecret=async():Promise<void>=>{
                 <div className="flex-1">
                     <h1 className="text-green-500">Address</h1>
                   <SelectDivision setAddress={setAddress}  disabled={!isEditing} userData={userData}/>
-                    <div className="flex justify-start align-middle items-center gap-3">
-                        <div className='mt-0 md:mt-20 lg:mt-4'>
+                    <div className="flex flex-col md:flex-row lg:flex-row justify-start align-middle items-start gap-3">
+                        <div className='mt-3 md:mt-20 lg:mt-4'>
                             <label htmlFor="roadNo">Road No.</label> <br />
                                <input onChange={(e)=>setRoadNo(e.target.value)}
                                 type="text"
-                                 className='border border-gray-400 p-2'
+                                 className='border border-gray-400 p-2 w-40'
                                  disabled={!isEditing}
                                  placeholder={userData?.data?.address.roadNo ||"street address"} />
                        </div>
-                     <div className='mt-0 md:mt-20 lg:mt-4'>
+                     <div className='mt-2 md:mt-20 lg:mt-4'>
                          <label htmlFor="postCode">Postcode</label> <br />
                          <input
                           onChange={(e)=>setPostCode(Number(e.target.value))} 
                           type="number"
                           disabled={!isEditing}
-                           className='border border-gray-400 p-2' 
+                           className='border border-gray-400 p-2 w-40' 
                            placeholder={userData?.data?.address.postCode ||"8888"} />
                       </div>
                     </div>
@@ -286,7 +291,7 @@ const handleVerifySecret=async():Promise<void>=>{
                   value={formData.description}
                   onChange={handleInputChange}
                   disabled={!isEditing}
-                  className="w-full mt-1 border border-gray-800 rounded-lg bg-gray-950 px-2 py-1"
+                  className="w-full mt-1 border border-gray-800 rounded-lg bg-gray-950 px-2 py-1 min-h-40"
                 />
               </div>
             </section>
@@ -294,11 +299,11 @@ const handleVerifySecret=async():Promise<void>=>{
         
         <div className="flex justify-center mt-4">
         <button
-  onClick={() => {
-    if (isEditing) handleUserProfileUpdate();
-    toggleEdit();
-  }}
-  className="bg-blue-600 text-white px-4 py-2 rounded mr-2"
+          onClick={() => {
+               if (isEditing) handleUserProfileUpdate();
+             toggleEdit();
+            }}
+          className="bg-green-500  text-white px-4 py-2 rounded mr-2"
 >
   {isEditing ? "Save" : "Edit Profile"}
 </button>

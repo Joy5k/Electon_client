@@ -86,7 +86,7 @@ const SelectDivision = ({ setAddress,disabled,userData }: any) => {
           disabled={disabled}
           onChange={(e) => setSelectedDivision(e.target.value)}
         defaultValue={userData?.data?.address.division}
-          className="border p-2 w-full"
+          className="border p-2 w-40"
         >
           <option value="">{userData?.data?.address.division ||"-- Select Division --"}</option>
           {divisions?.map((division) => (
@@ -101,7 +101,7 @@ const SelectDivision = ({ setAddress,disabled,userData }: any) => {
           id="district"
           value={selectedDistrict}
           onChange={(e) => setSelectedDistrict(e.target.value)}
-          className="border p-2 w-full"
+          className="border p-2 w-40"
           disabled={!selectedDivision}
         >
           <option value="">{userData?.data?.address.district ||"-- Select District --"}</option>
@@ -117,7 +117,7 @@ const SelectDivision = ({ setAddress,disabled,userData }: any) => {
           id="subDistrict"
           value={selectedSubDistrict}
           onChange={(e) => setSelectedSubDistrict(e.target.value)}
-          className="border p-2 w-full"
+          className="border p-2 w-40"
           disabled={!selectedDistrict}
         >
           <option value="">{userData?.data?.address.subDistrict ||"-- Select Sub-District --"}</option>
