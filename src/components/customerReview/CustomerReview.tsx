@@ -8,8 +8,8 @@ const CustomerReview=()=>{
         <div>
             <h3 className='text-4xl text-center font-bold my-10'>Customer love
             </h3>
-            <div className=' flex flex-col md:flex-row lg:flex-row justify-center mx-10 gap-6'>
-                <div className='border border-dashed border-gray-700 w-96 p-8'>
+            <div className=' flex flex-col md:flex-row lg:flex-row justify-center mx-0 md:mx-10 gap-6'>
+                <div className='border border-dashed border-gray-700 w-full p-8'>
                    <div className='flex items-center justify-start gap-6 mb-2'>
                    <img src={men} className='w-20 h-20 rounded-full border border-primary border-dashed p-1' alt="" />
                    <p className='text-2xl font-mono font-bold'>Mehedi Hasan</p>
@@ -19,7 +19,7 @@ const CustomerReview=()=>{
                   Lorem ipsum dolor sit amet consectetur adipisicing elit. Quod, maxime!</p>
                     </div>
                 </div>
-                <div className='border border-dashed border-gray-700 w-96 p-8'>
+                <div className='border border-dashed border-gray-700 w-full p-8'>
                    <div className='flex items-center justify-start gap-6 mb-2'>
                    <img src={men2} className='w-20 h-20 rounded-full border border-primary border-dashed p-1' alt="" />
                    <p className='text-2xl font-mono font-bold'>Michel ston</p>
@@ -29,7 +29,7 @@ const CustomerReview=()=>{
                   Lorem ipsum dolor sit amet consectetur adipisicing elit. Quod, maxime!</p>
                     </div>
                 </div>
-                <div className='border border-dashed border-gray-700 w-96 p-8'>
+                <div className='border border-dashed border-gray-700 w-full p-8'>
                    <div className='flex items-center justify-start gap-6 mb-2'>
                    <img src={men3} className='w-20 h-20 rounded-full border border-primary border-dashed p-1' alt="" />
                    <p className='text-2xl font-mono font-bold'>Chris p.creem</p>
