@@ -14,7 +14,7 @@ const Profile = () => {
   const [isOpenModal, setOpenModal] = useState<boolean>(false); // State to manage modal visibility
   const [qrCodeSecret,setQrCodeSecrete]=useState<IQrCodeData>()
   const [qrVerifySecret,setVerifyCode]=useState<string>()
-  const [address,setAddress]=useState({})
+  const [address,setAddress]=useState({subDistrict:"",district:"",division:"",})
 
   const [roadNo,setRoadNo]=useState<string>("")
   const [postCode,setPostCode]=useState<number>()
@@ -27,17 +27,36 @@ const Profile = () => {
     firstName: "",
     image: "",
     lastName: "",
-    password: "",
     email: "",
     phoneNumber: "",
     facebook: "",
     instagram: "",
     twitter: "",
     aboutMe: "Describe yourself...",
+    address: {
+      subDistrict: address?.subDistrict ||  '',
+      district: address?.district || '',
+      division: address?.division  || '',
+      roadNo: roadNo || '',
+      postCode: postCode || 0,
+    }
+    
+    
   });
-
-
-console.log(address,roadNo,postCode)
+console.log(formData)
+useEffect(() => {
+  setFormData((prevFormData) => ({
+    ...prevFormData,
+    address: {
+      subDistrict: address?.subDistrict ||  '',
+      district: address?.district || '',
+      division: address?.division  || '',
+      roadNo: roadNo || '',
+      postCode: postCode || 0,
+    },
+  }));
+  
+}, [roadNo, postCode, address]);
 
   useEffect(() => {
     if (userData) {
@@ -51,7 +70,8 @@ console.log(address,roadNo,postCode)
         instagram: userData.data?.instagram || "",
         twitter: userData.data?.twitter || "",
         aboutMe: userData.data?.aboutMe || "Describe yourself...",
-        password: "",
+        address:{...userData.data?.address},
+
       });
     }
   }, [userData]);
@@ -107,7 +127,8 @@ console.log(address,roadNo,postCode)
 
   const handleUserProfileUpdate = async () => {
     try {
-      await userUpdate(formData).unwrap();
+     const res= await userUpdate(formData).unwrap();
+      console.log(res,formData)
       toast.success("Profile updated successfully!");
       setIsEditing(false);
     } catch (error) {
@@ -194,9 +215,9 @@ const handleVerifySecret=async():Promise<void>=>{
 
             {/* Contact Info and About Me Section */}
             <section className="lg:w-2/3 -mt-5">
-              <h4 className="text-2xl animate-pulse font-bold mb-2">Information</h4>
+              <h4 className="text-green-500 text-2xl animate-pulse font-bold mb-2">Information</h4>
               <hr className="mb-10" />
-              <div className="flex flex-col gap-5  flex-1">
+              <div className="flex flex-col gap-4  flex-1">
                 {/* all input files div flexing here */}
                 <div className="flex flex-col md:flex-row lg:flex-row flex-wrap gap-6">
                   <div>
@@ -212,39 +233,36 @@ const handleVerifySecret=async():Promise<void>=>{
                       value={formData.phoneNumber}
                       onChange={handleInputChange}
                       disabled={!isEditing}
-                      className="w-full mt-1 border border-gray-800 rounded-md bg-gray-950 px-2 py-1"
+                      className="w-full mt-1 border border-gray-800 rounded-md bg-gray-950  py-1"
                     />
                   </div>
 
                   {/* Two-step authentication */}
-                  <div>
+                  <div className="mb-5">
                     <label htmlFor="twoStep">Two-step Authentication</label> <br />
                     <span>
                       {
-                        userData?.data?.auth2 ? <p className="text-green-400">Enabled</p> : 
-                        <button onClick={toggleModal} className="text-red-500 bg-gray-800 px-2 ">Enable</button>
+                        userData?.data?.auth2 ? <p className="text-green-500">Enabled</p> : 
+                        <button onClick={toggleModal} className="text-red-500 bg-gray-800 px-2  animate-pulse">Enable</button>
                       }
                     </span>
                   </div>
                   
                 </div>
                 <div className="flex-1">
-                    <h1 className="text-emerald-500">Address</h1>
+                    <h1 className="text-green-500">Address</h1>
                   <SelectDivision setAddress={setAddress}/>
-<div className="flex justify-start align-middle items-center gap-3">
-<div className='mt-0 md:mt-20 lg:mt-4'>
-        <label htmlFor="roadNo">Road No.</label> <br />
-        <input onChange={(e)=>setRoadNo(e.target.value)} type="text" className='border border-gray-400 p-2' placeholder='A Block 1213' />
-      </div>
-
-      <div className='mt-0 md:mt-20 lg:mt-4'>
-        <label htmlFor="postCode">Postcode</label> <br />
-        <input onChange={(e)=>setPostCode(Number(e.target.value))} type="number" className='border border-gray-400 p-2' placeholder='8600' />
-      </div>
-</div>
-                  
-
-                  </div>
+                    <div className="flex justify-start align-middle items-center gap-3">
+                        <div className='mt-0 md:mt-20 lg:mt-4'>
+                            <label htmlFor="roadNo">Road No.</label> <br />
+                               <input onChange={(e)=>setRoadNo(e.target.value)} type="text" className='border border-gray-400 p-2' placeholder='A Block 1213' />
+                       </div>
+                     <div className='mt-0 md:mt-20 lg:mt-4'>
+                         <label htmlFor="postCode">Postcode</label> <br />
+                         <input onChange={(e)=>setPostCode(Number(e.target.value))} type="number" className='border border-gray-400 p-2' placeholder='8600' />
+                      </div>
+                    </div>
+                </div>
            
                 <label>About Me</label>
                 <textarea
