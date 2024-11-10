@@ -4,7 +4,7 @@ import DashboardSiteBar from "./DashboardSiteBar";
 import DashboardContent from "./DashboardContent";
 
 function Dashboard() {
-    const [activePage, setActivePage] = useState<string>('Home');
+    const [activePage, setActivePage] = useState<string>('Overview');
 
     return (
       <div className="h-screen flex flex-col">

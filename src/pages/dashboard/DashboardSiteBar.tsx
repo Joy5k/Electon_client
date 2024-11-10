@@ -6,7 +6,7 @@ type SidebarProps = {
 };
 
 const DashboardSiteBar: React.FC<SidebarProps> = ({ activePage, setActivePage }) => {
-  const pages = ['Home', 'Settings', 'Profile'];
+  const pages = ['Overview', 'Products', 'Users'];
 
   return (
     <div className="w-44 bg-transparent text-white px-4 space-y-4">
@@ -14,7 +14,7 @@ const DashboardSiteBar: React.FC<SidebarProps> = ({ activePage, setActivePage })
         <button
           key={page}
           className={`block w-full text-left p-2 rounded ${
-            activePage === page ? 'bg-blue-500' : 'bg-gray-900'
+            activePage === page ? 'bg-primary' : 'bg-gray-900'
           }`}
           onClick={() => setActivePage(page)}
         >
