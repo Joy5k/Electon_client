@@ -1,5 +1,8 @@
 import { CiBoxes } from "react-icons/ci";
 import { BsGraphUpArrow } from "react-icons/bs";
+import { TiGroup } from "react-icons/ti";
+import { FaSackDollar } from "react-icons/fa6";
+import { MdOutlineReportProblem } from "react-icons/md";
 
 
 
@@ -9,10 +12,11 @@ function Overview() {
     <div className="w-full" >
       <div className="bg-gray-400">
         {/* overview carts */}
-        <div className="flex flex-col md:flex-row lg:flex-row mb-5 gap-3">
+      <div className="flex flex-col md:flex-row lg:flex-row mb-5 gap-3">
+        {/* products cart */}
         <div className=" bg-emerald-800 p-3 w-52 h-36 rounded-lg bg-transparent">
           <div className=" flex flex-row-reverse justify-between bg-transparent ">
-          <CiBoxes className="bg-transparent text-7xl mt-5 animate-pulse" />
+          <CiBoxes className="bg-transparent text-7xl mt-5 " />
 
           <div className="bg-transparent">
           <p className="text-white  bg-transparent"> Products</p>
@@ -26,12 +30,14 @@ function Overview() {
 
           </div>
         </div>
-        <div className=" bg-emerald-800 p-3 w-52 h-36 rounded-lg bg-transparent">
+        {/* users cart */}
+        <div className=" bg-purple-900 p-3 w-52 h-36 rounded-lg bg-transparent">
           <div className=" flex flex-row-reverse justify-between bg-transparent ">
-          <CiBoxes className="bg-transparent text-7xl mt-5 animate-pulse" />
+         
+          <TiGroup className="bg-transparent text-7xl mt-5 "  />
 
           <div className="bg-transparent">
-          <p className="text-white  bg-transparent"> Products</p>
+          <p className="text-white  bg-transparent"> Users</p>
           <p className="text-white text-4xl py-5 bg-transparent">{products?.length}</p>
           </div>
           </div>
@@ -42,12 +48,14 @@ function Overview() {
 
           </div>
         </div>
-        <div className=" bg-emerald-800 p-3 w-52 h-36 rounded-lg bg-transparent">
+        {/* Total Sells products */}
+        <div className=" bg-lime-600 p-3 w-52 h-36 rounded-lg bg-transparent">
           <div className=" flex flex-row-reverse justify-between bg-transparent ">
-          <CiBoxes className="bg-transparent text-7xl mt-5 animate-pulse" />
+          <FaSackDollar className="bg-transparent text-7xl mt-5 " />
+        
 
           <div className="bg-transparent">
-          <p className="text-white  bg-transparent"> Products</p>
+          <p className="text-white  bg-transparent"> Sells</p>
           <p className="text-white text-4xl py-5 bg-transparent">{products?.length}</p>
           </div>
           </div>
@@ -58,12 +66,13 @@ function Overview() {
 
           </div>
         </div>
-        <div className=" bg-emerald-800 p-3 w-52 h-36 rounded-lg bg-transparent">
+        <div className=" bg-yellow-500 p-3 w-52 h-36 rounded-lg bg-transparent">
           <div className=" flex flex-row-reverse justify-between bg-transparent ">
-          <CiBoxes className="bg-transparent text-7xl mt-5 animate-pulse" />
+         
+          < MdOutlineReportProblem  className="bg-transparent text-7xl mt-5 " />
 
           <div className="bg-transparent">
-          <p className="text-white  bg-transparent"> Products</p>
+          <p className="text-white  bg-transparent"> Reported items</p>
           <p className="text-white text-4xl py-5 bg-transparent">{products?.length}</p>
           </div>
           </div>
