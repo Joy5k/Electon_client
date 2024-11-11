@@ -10,8 +10,9 @@ function Overview() {
   const products=[]
   return (
     <div className="w-full" >
-      <div className="bg-gray-400">
+      <div className="">
         {/* overview carts */}
+        <h3 className="text-xl font-bold mb-5 bg-transparent">Overview</h3>
       <div className="flex flex-col md:flex-row lg:flex-row mb-5 gap-3">
         {/* products cart */}
         <div className=" bg-emerald-800 p-3 w-52 h-36 rounded-lg bg-transparent">
@@ -84,6 +85,8 @@ function Overview() {
           </div>
         </div>
         </div>
+
+        
       </div>
     </div>
   )
