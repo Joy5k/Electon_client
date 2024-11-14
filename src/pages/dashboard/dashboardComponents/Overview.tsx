@@ -15,7 +15,7 @@ function Overview() {
         <h3 className="text-xl font-bold mb-5 bg-transparent">Overview</h3>
       <div className="flex flex-col md:flex-row lg:flex-row mb-5 gap-3">
         {/* products cart */}
-        <div className=" bg-emerald-900 p-3 w-52 h-36 rounded-lg bg-transparent">
+        <div className=" bg-emerald-800 p-3 w-52 h-36 rounded-lg bg-transparent">
           <div className=" flex flex-row-reverse justify-between bg-transparent ">
           <CiBoxes className="bg-transparent text-7xl mt-5 " />
 
@@ -32,7 +32,7 @@ function Overview() {
           </div>
         </div>
         {/* users cart */}
-        <div className=" bg-purple-800 p-3 w-52 h-36 rounded-lg bg-transparent">
+        <div className=" bg-purple-900 p-3 w-52 h-36 rounded-lg bg-transparent">
           <div className=" flex flex-row-reverse justify-between bg-transparent ">
          
           <TiGroup className="bg-transparent text-7xl mt-5 "  />
@@ -50,7 +50,7 @@ function Overview() {
           </div>
         </div>
         {/* Total Sells products */}
-        <div className=" bg-lime-700 p-3 w-52 h-36 rounded-lg bg-transparent">
+        <div className=" bg-lime-800 p-3 w-52 h-36 rounded-lg bg-transparent">
           <div className=" flex flex-row-reverse justify-between bg-transparent ">
           <FaSackDollar className="bg-transparent text-7xl mt-5 " />
         
@@ -67,7 +67,7 @@ function Overview() {
 
           </div>
         </div>
-        <div className=" bg-yellow-500 p-3 w-52 h-36 rounded-lg bg-transparent">
+        <div className=" bg-yellow-600 p-3 w-52 h-36 rounded-lg bg-transparent">
           <div className=" flex flex-row-reverse justify-between bg-transparent ">
          
           < MdOutlineReportProblem  className="bg-transparent text-7xl mt-5 " />
