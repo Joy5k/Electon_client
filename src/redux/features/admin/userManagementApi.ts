@@ -2,7 +2,12 @@ import { baseApi } from "../../api/baseApi";
 
 const userManagementApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
-  
+  getAllUsers:builder.query({
+    query:()=>({
+      url:"/user/all-users",
+      method:"GET"
+    })
+  }),
     addStudent: builder.mutation({
       query: (data) => ({
         url: "/users/create-student",
@@ -24,6 +29,7 @@ const userManagementApi = baseApi.injectEndpoints({
 });
 
 export const {
+  useGetAllUsersQuery,
   useAddStudentMutation,
   useUpdateStudentStatusMutation,
 
