@@ -5,16 +5,18 @@ import { FaSackDollar } from "react-icons/fa6";
 import { MdOutlineReportProblem } from "react-icons/md";
 import { useAllProductsQuery } from "../../../redux/features/admin/productManagementApi";
 import Spinner from "../../../components/Spinner/Spinner";
+import { useGetAllUsersQuery } from "../../../redux/features/admin/userManagementApi";
 
 
 
 function Overview() {
   const {data:products,isLoading}=useAllProductsQuery({})
+  const {data:users,isLoading:userLoading}=useGetAllUsersQuery({})
 console.log(products)  
 return (
     <div className="w-full" >
      {
-      isLoading ? <Spinner></Spinner> :
+      isLoading ||userLoading ? <Spinner></Spinner> :
       <div className="">
       {/* overview carts */}
       <h3 className="text-xl font-bold mb-5 bg-transparent">Overview</h3>
@@ -44,11 +46,11 @@ return (
 
         <div className="bg-transparent">
         <p className="text-white  bg-transparent"> Users</p>
-        <p className="text-white text-4xl py-5 bg-transparent">{products?.data?.length}</p>
+        <p className="text-white text-4xl py-5 bg-transparent">{users?.data?.length}</p>
         </div>
         </div>
         <hr />
-        <p className="font-mono text-white bg-transparent relative">{(products?.data?.length * 3.67).toFixed(2)}% Increase <BsGraphUpArrow className="bg-transparent absolute right-4 top-[6px] font-bold bold" />
+        <p className="font-mono text-white bg-transparent relative">{(users?.data?.length * 3.67).toFixed(2)}% Increase <BsGraphUpArrow className="bg-transparent absolute right-4 top-[6px] font-bold bold" />
         </p>
         <div>
 
