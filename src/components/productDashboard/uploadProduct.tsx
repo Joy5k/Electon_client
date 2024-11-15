@@ -1,17 +1,11 @@
-import React, { useState, FormEvent } from "react";
+import React, { useState, FormEvent, useEffect } from "react";
+import { IProduct } from "../../types";
+import { jwtDecode } from "jwt-decode";
+import { useNavigate } from "react-router-dom";
 
-interface IProduct {
-  title: string;
-  description: string;
-  image: string;
-  price: number;
-  quantity: number;
-  color: string[];
-  rating?: number;
-  sellerId:string;
-}
-
-const ProductUploadForm: React.FC = () => {
+const ProductUploadForm = () => {
+  const navigate = useNavigate();
+  const [sellerId, setSellerId] = useState<string>("");
   const [product, setProduct] = useState<IProduct>({
     title: "",
     description: "",
@@ -20,8 +14,28 @@ const ProductUploadForm: React.FC = () => {
     quantity: 0,
     color: [""],
     rating: undefined,
-    sellerId: new Types.ObjectId(), // Placeholder ID
+    sellerId, // Initially, sellerId is empty
   });
+  const token = localStorage.getItem("token");
+
+  // Redirect to login if no token
+  useEffect(() => {
+    if (!token) {
+      navigate("/login");
+    } else {
+      const { userId } = jwtDecode(token) as { userId: string; email: string; role: string };
+      setSellerId(userId); // Set the sellerId
+    }
+  }, [token, navigate]);
+
+  useEffect(() => {
+    if (sellerId) {
+      setProduct((prev) => ({
+        ...prev,
+        sellerId, // Update the product's sellerId after it's set
+      }));
+    }
+  }, [sellerId]); // Only update product when sellerId changes
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
