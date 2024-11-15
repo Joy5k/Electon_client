@@ -1,4 +1,4 @@
-import ProductTable from "../../../components/productTable/productTable"
+import ProductTable from "../../../components/productDashboard/productTable"
 import Spinner from "../../../components/Spinner/Spinner"
 import { useAllProductsQuery } from "../../../redux/features/admin/productManagementApi"
 

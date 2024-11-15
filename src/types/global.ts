@@ -65,3 +65,13 @@ export interface ISubDistrict {
   id: string; // Adjust according to actual API response
   upazillas: string[]
 }
+export interface IProduct {
+  title: string;
+  description: string;
+  image: string;
+  price: number;
+  quantity: number;
+  color: string[];
+  rating?: number;
+  sellerId:string;
+}

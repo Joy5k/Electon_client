@@ -22,7 +22,7 @@ return (
       <h3 className="text-xl font-bold mb-5 bg-transparent">Overview</h3>
     <div className="flex flex-col md:flex-row lg:flex-row mb-5 gap-3">
       {/* products cart */}
-      <div className=" bg-emerald-800 p-3 w-52 h-36 rounded-lg bg-transparent">
+      <div className=" bg-emerald-800 p-3 w-52 h-36 rounded-lg ">
         <div className=" flex flex-row-reverse justify-between bg-transparent ">
         <CiBoxes className="bg-transparent text-7xl mt-5 " />
 
@@ -39,7 +39,7 @@ return (
         </div>
       </div>
       {/* users cart */}
-      <div className=" bg-purple-900 p-3 w-52 h-36 rounded-lg bg-transparent">
+      <div className=" bg-purple-900 p-3 w-52 h-36 rounded-lg ">
         <div className=" flex flex-row-reverse justify-between bg-transparent ">
        
         <TiGroup className="bg-transparent text-7xl mt-5 "  />
@@ -57,7 +57,7 @@ return (
         </div>
       </div>
       {/* Total Sells products */}
-      <div className=" bg-lime-800 p-3 w-52 h-36 rounded-lg bg-transparent">
+      <div className=" bg-lime-800 p-3 w-52 h-36 rounded-lg ">
         <div className=" flex flex-row-reverse justify-between bg-transparent ">
         <FaSackDollar className="bg-transparent text-7xl mt-5 " />
       
