@@ -8,7 +8,7 @@ function ProductManagement() {
   return (
     <div>
      {
-      isLoading ? <Spinner></Spinner>: <div>
+      isLoading ? <Spinner></Spinner>: <div >
         <ProductUploadForm></ProductUploadForm>
         <ProductTable products={data?.data}></ProductTable>
       </div>

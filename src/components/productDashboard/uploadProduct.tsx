@@ -57,12 +57,12 @@ const ProductUploadForm = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className=" mx-auto p-6 bg-gray-100 rounded-lg shadow-md">
-      <h2 className="text-2xl font-semibold text-gray-800 mb-6">Upload Product</h2>
+    <form onSubmit={handleSubmit} className=" mx-auto p-6  border rounded-md shadow-md mb-10">
+      <h2 className="text-2xl font-semibold mb-6 bg-transparent">Upload Product</h2>
 
-     <div className="flex justify-center flex-wrap gap-4 ">
+     <div className="flex justify-start flex-wrap gap-4 ">
      <div className="mb-4 w-full min-w-40">
-        <label className="block text-gray-700 mb-2">Title</label>
+        <label className="block  mb-2">Title</label>
         <input
           type="text"
           name="title"
@@ -74,7 +74,7 @@ const ProductUploadForm = () => {
       </div>
 
       <div className="mb-4">
-        <label className="block text-gray-700 mb-2">Description</label>
+        <label className="block  mb-2">Description</label>
         <textarea
           name="description"
           value={product.description}
@@ -85,7 +85,7 @@ const ProductUploadForm = () => {
       </div>
 
       <div className="mb-4">
-        <label className="block text-gray-700 mb-2">Image URL</label>
+        <label className="block  mb-2">Image URL</label>
         <input
           type="text"
           name="image"
@@ -97,7 +97,7 @@ const ProductUploadForm = () => {
       </div>
 
       <div className="mb-4">
-        <label className="block text-gray-700 mb-2">Price ($)</label>
+        <label className="block  mb-2">Price ($)</label>
         <input
           type="number"
           name="price"
@@ -109,7 +109,7 @@ const ProductUploadForm = () => {
       </div>
 
       <div className="mb-4">
-        <label className="block text-gray-700 mb-2">Quantity</label>
+        <label className="block  mb-2">Quantity</label>
         <input
           type="number"
           name="quantity"
@@ -121,7 +121,7 @@ const ProductUploadForm = () => {
       </div>
 
       <div className="mb-4">
-        <label className="block text-gray-700 mb-2">Colors</label>
+        <label className="block  mb-2">Colors</label>
         {product.color.map((color, index) => (
           <input
             key={index}
@@ -141,7 +141,7 @@ const ProductUploadForm = () => {
       </div>
 
       <div className="mb-4">
-        <label className="block text-gray-700 mb-2">Rating (optional)</label>
+        <label className="block  mb-2">Rating (optional)</label>
         <input
           type="number"
           name="rating"
