@@ -11,7 +11,7 @@ function Dashboard() {
         <DashboardNav />
         <div className="flex flex-1">
         <div className="">  <DashboardSiteBar  activePage={activePage} setActivePage={setActivePage} /></div>
-          <div  className="w-10/12">
+          <div  >
           <DashboardContent activePage={activePage} />
           </div>
         </div>

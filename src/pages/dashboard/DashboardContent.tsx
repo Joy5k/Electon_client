@@ -11,7 +11,7 @@ const DashboardContent: React.FC<DashboardContentProps> = ({ activePage }) => {
   return (
     <div className="flex-1 pr-5">
       {activePage === 'Overview' && <div><Overview></Overview></div>}
-      {activePage === 'Products' && <div><ProductManagement></ProductManagement></div>}
+      {activePage === 'Products' && <div className="w-full md:w-10/12 lg:w-11/12"><ProductManagement></ProductManagement></div>}
       {activePage === 'Users' && <div><UsersManagement></UsersManagement></div>}
     </div>
   );

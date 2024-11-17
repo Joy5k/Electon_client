@@ -1,16 +1,16 @@
 const ProductTable = ({ products }: any) => {
   return (
     <div className="overflow-x-auto mr-5">
-      <table className="min-w-[600px] w-full bg-white border-collapse overflow-scroll">
+      <table className=" w-full bg-white border-collapse overflow-scroll">
         <thead>
           <tr className="border bg-gray-100">
             <th className="px-4 py-2 whitespace-nowrap">Image</th>
             <th className="px-4 py-2 whitespace-nowrap">Title</th>
-            <th className="px-4 py-2 whitespace-nowrap">Quantity</th>
+            <th className=" whitespace-nowrap">Quantity</th>
             <th className="px-4 py-2 whitespace-nowrap">Price ($)</th>
             <th className="px-4 py-2 whitespace-nowrap">Seller Name</th>
-            <th className="px-4 py-2 whitespace-nowrap">Seller Email</th>
-            <th className="px-4 py-2 whitespace-nowrap">Delete</th>
+            {/* <th className="px-4 py-2 whitespace-nowrap">Seller Email</th> */}
+            <th className="whitespace-nowrap">Delete</th>
             <th className="px-4 py-2 whitespace-nowrap">Update</th>
           </tr>
         </thead>
@@ -30,9 +30,9 @@ const ProductTable = ({ products }: any) => {
               <td className="border px-4 py-2 text-center">
                 {product?.sellerId?.firstName} {product?.sellerId?.lastName}
               </td>
-              <td className="border px-4 py-2 text-center">
+              {/* <td className="border px-4 py-2 text-center">
                 {product?.sellerId?.email || "N/A"}
-              </td>
+              </td> */}
               <td className="border px-4 py-2 text-center">
                 <button className="text-red-500">X</button>
               </td>
