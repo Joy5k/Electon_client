@@ -133,7 +133,7 @@ const ProductUploadForm = () => {
           <img
             src={imagePreview}
             alt="Uploaded Preview"
-            className="rounded-lg max-w-full h-auto mb-4"
+            className="rounded-lg w-full h-44 mb-4"
           />
           <button
             onClick={() => setImagePreview("")}
