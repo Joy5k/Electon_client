@@ -10,7 +10,6 @@ import axios from "axios";
 const ProductUploadForm = () => {
      const [imageUploading,setImageUploadLoading]=useState<boolean>(false)
      const [imagePreview,setImagePreview]=useState<string>()
-
   const navigate = useNavigate();
   const [sellerId, setSellerId] = useState<string>("");
   const [product, setProduct] = useState<IProduct>({
@@ -21,10 +20,13 @@ const ProductUploadForm = () => {
     quantity: 0,
     color: [""],
     rating: undefined,
-    sellerId, // Initially, sellerId is empty
+    sellerId, 
   });
   const [createProduct]=useCreateProductMutation()
   const token = localStorage.getItem("token");
+
+
+
 
   // Redirect to login if no token
   useEffect(() => {
@@ -102,21 +104,36 @@ const ProductUploadForm = () => {
   
 
 
-  const handleSubmit = async(e: FormEvent) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-  try {
-    const res=await createProduct(product).unwrap()
-        // Here, submit `product` data to your backend
-        console.log(res,res?.success);
-    if(res?.success){
-      toast.success("Created product successfully")
+  
+    try {
+      // Create product using the product state
+      const res = await createProduct(product).unwrap();
+  
+      // Check if the product was created successfully
+      if (res?.success) {
+        // Success: Show success toast
+        toast.success("Created product successfully");
+  
+        // Reset form fields to initial state (clear the form)
+        setProduct({
+          title: "",
+          description: "",
+          color: [""],
+          price: 0,
+          quantity: 0,
+          image: "",
+          sellerId: "", // Or the value that corresponds to the current seller
+        });
+        setImagePreview("")
+      }
+    } catch (error) {
+      // Error: Show error toast
+      toast.error("Something went wrong");
     }
-  } catch (error) {
-    toast.error("Something went wrong")
-  }
-
   };
-
+  
   return (
     <form onSubmit={handleSubmit} className=" mx-auto p-6  border rounded-md shadow-md mb-10">
       <h2 className="text-2xl font-semibold mb-6 bg-transparent">Upload Product</h2>
