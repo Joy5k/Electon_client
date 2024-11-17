@@ -58,8 +58,8 @@ useEffect(() => {
   }));
   
 }, [roadNo, postCode, address,userData]);
-console.log(formData)
-  useEffect(() => {
+
+useEffect(() => {
     if (userData) {
       setFormData({
         firstName: userData.data?.firstName || "",

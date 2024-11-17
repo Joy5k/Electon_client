@@ -4,21 +4,24 @@ import { jwtDecode } from "jwt-decode";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { useCreateProductMutation } from "../../redux/features/admin/productManagementApi";
+import Spinner from "../Spinner/Spinner";
+import axios from "axios";
 
 const ProductUploadForm = () => {
+     const [imageUploading,setImageUploadLoading]=useState<boolean>(false)
+     const [imagePreview,setImagePreview]=useState<string>()
+
   const [formData, setFormData] = useState({
     title: "",
     description: "",
-    image: "",
+    image:"",
     price: 0,
     quantity: 0,
     color: "",
     sellerId: "",
     
     
-  });  const [imageUploading,setImageUploadLoading]=useState<boolean>(false)
-  const[file,setFile]=useState();
-  const [imagePreview,setImagePreview]=useState<string>()
+  }); 
   const navigate = useNavigate();
   const [sellerId, setSellerId] = useState<string>("");
   const [product, setProduct] = useState<IProduct>({
@@ -66,38 +69,34 @@ const ProductUploadForm = () => {
 
   const addColorField = () => setProduct((prev) => ({ ...prev, color: [...prev.color, ""] }));
 
-  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleSaveImage = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    if (file) {
-      setImagePreview(URL.createObjectURL(file));
-      setFile(file);
+  
+    if (!file) {
+      console.error("No file provided");
+      return;
     }
-  };
-  const handleSaveImage = async () => {
-    if (!file) return;
-
+  
     setImageUploadLoading(true);
     try {
       const formData = new FormData();
       formData.append("image", file);
-
+  
       const response = await axios.post<ImgBBResponseData>(
-        `https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_API_KEY}`, 
-        formData, 
-        { headers: { "Content-Type": "multipart/form-data" } }
+        `https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_API_KEY}`,
+        formData
       );
-
+  
       if (response.data && response.data.data && response.data.data.url) {
         const uploadedImageUrl = response.data.data.url;
         setImagePreview(uploadedImageUrl);
-        toast.success('Image Uploaded successfully');
-        setImageUploadLoading(false);
-
-        setFormData((prevFormData) => ({
-          ...prevFormData,
-          image: uploadedImageUrl
+        toast.success("Image Uploaded successfully");
+        setProduct((prev) => ({
+          ...prev,
+          image: uploadedImageUrl, // Update the image field in the product state
         }));
-
+      } else {
+        console.error("Unexpected response format:", response.data);
       }
     } catch (error) {
       console.error("Error uploading image:", error);
@@ -105,13 +104,15 @@ const ProductUploadForm = () => {
       setImageUploadLoading(false);
     }
   };
+  
+  
 
 
   const handleSubmit = async(e: FormEvent) => {
     e.preventDefault();
-    const res=await createProduct(formData)
+    // const res=await createProduct(formData)
     // Here, submit `product` data to your backend
-    console.log(res,"Product data:", product);
+    console.log("Product data:", product);
   };
 
   return (
@@ -119,23 +120,66 @@ const ProductUploadForm = () => {
       <h2 className="text-2xl font-semibold mb-6 bg-transparent">Upload Product</h2>
 
      <div className="flex justify-start flex-wrap gap-4 ">
-
-     <div className="flex bg-black w-full ">
-    <div className="extraOutline p-4 w-max  m-auto rounded-lg">
-        <div className="file_upload p-5 relative border-4 border-dotted border-gray-300 rounded-lg" style={{width: "450px"}}>
-            <svg className="text-indigo-500 w-24 mx-auto mb-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" /></svg>
-            <div className="input_field flex flex-col w-max mx-auto text-center">
-                <label>
-                    <input onChange={(e)=>handleImageUpload(e)} className="text-sm cursor-pointer w-36 hidden" type="file" multiple />
-                    <div className="text bg-indigo-600 text-white border border-gray-300 rounded font-semibold cursor-pointer p-1 px-3 hover:bg-indigo-500">Upload Image</div>
-                </label>
-
-                <div className="title text-indigo-500 uppercase">or drop files here</div>
-            </div>
+     <div className="flex bg-black w-full">
+  {imageUploading ? (
+    <Spinner />
+  ) : (
+    <div className="extraOutline p-4 w-max m-auto rounded-lg">
+      {imagePreview ? (
+        <div className="text-center">
+          <img
+            src={imagePreview}
+            alt="Uploaded Preview"
+            className="rounded-lg max-w-full h-auto mb-4"
+          />
+          <button
+            onClick={() => setImagePreview("")}
+            className="text-white bg-primary  rounded font-semibold cursor-pointer p-1 px-3 hover:bg-indigo-500"
+          >
+           Cancel
+          </button>
         </div>
+      ) : (
+        <div
+          className="file_upload p-5 relative border-4 border-dotted border-gray-300 rounded-lg"
+          style={{ width: "450px" }}
+        >
+          <svg
+            className="text-indigo-500 w-24 mx-auto mb-4"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
+            />
+          </svg>
+          <div className="input_field flex flex-col w-max mx-auto text-center">
+            <label>
+              <input
+                onChange={(e) => handleSaveImage(e)}
+                className="text-sm cursor-pointer w-36 hidden"
+                type="file"
+                multiple
+              />
+              <div className="text bg-indigo-600 text-white border border-gray-300 rounded font-semibold cursor-pointer p-1 px-3 hover:bg-indigo-500">
+                Upload Image
+              </div>
+            </label>
+            <div className="title text-indigo-500 uppercase">
+              or drop files here
+            </div>
+          </div>
+        </div>
+      )}
     </div>
+  )}
 </div>
+
 
 
      <div className="mb-4 w-full min-w-40">
