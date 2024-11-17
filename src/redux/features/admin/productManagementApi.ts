@@ -22,10 +22,19 @@ const productManagementApi = baseApi.injectEndpoints({
         }
       },invalidatesTags:["products"]
     }),
+    deleteProduct: builder.mutation({
+      query: (data) => {
+      return  {
+          url: `/product/delete-product/${data.id}`,
+          method: "DELETE",
+        }
+      },invalidatesTags:["products"]
+    }),
   }),
 });
 
 export const {
   useAllProductsQuery,
-  useCreateProductMutation
+  useCreateProductMutation,
+  useDeleteProductMutation,
 } = productManagementApi;
