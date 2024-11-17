@@ -1,9 +1,23 @@
 import React, { useState, FormEvent, useEffect } from "react";
-import { IProduct } from "../../types";
+import { ImgBBResponseData, IProduct } from "../../types";
 import { jwtDecode } from "jwt-decode";
 import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 
 const ProductUploadForm = () => {
+  const [formData, setFormData] = useState({
+    title: "",
+    description: "",
+    image: "",
+    price: 0,
+    quantity: 0,
+    color: "",
+    sellerId: "",
+    
+    
+  });  const [imageUploading,setImageUploadLoading]=useState<boolean>(false)
+  const[file,setFile]=useState();
+  const [imagePreview,setImagePreview]=useState<string>()
   const navigate = useNavigate();
   const [sellerId, setSellerId] = useState<string>("");
   const [product, setProduct] = useState<IProduct>({
@@ -50,6 +64,48 @@ const ProductUploadForm = () => {
 
   const addColorField = () => setProduct((prev) => ({ ...prev, color: [...prev.color, ""] }));
 
+  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setImagePreview(URL.createObjectURL(file));
+      setFile(file);
+    }
+  };
+  const handleSaveImage = async () => {
+    if (!file) return;
+
+    setImageUploadLoading(true);
+    try {
+      const formData = new FormData();
+      formData.append("image", file);
+
+      const response = await axios.post<ImgBBResponseData>(
+        `https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_API_KEY}`, 
+        formData, 
+        { headers: { "Content-Type": "multipart/form-data" } }
+      );
+
+      if (response.data && response.data.data && response.data.data.url) {
+        const uploadedImageUrl = response.data.data.url;
+        setImagePreview(uploadedImageUrl);
+        toast.success('Image Uploaded successfully');
+        setImageUploadLoading(false);
+
+        setFormData((prevFormData) => ({
+          ...prevFormData,
+          image: uploadedImageUrl
+        }));
+
+        await userUpdate({ image: uploadedImageUrl });
+      }
+    } catch (error) {
+      console.error("Error uploading image:", error);
+    } finally {
+      setImageUploadLoading(false);
+    }
+  };
+
+
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
     // Here, submit `product` data to your backend
@@ -91,7 +147,7 @@ const ProductUploadForm = () => {
         />
       </div>
 
-      <div className="mb-4">
+      <div className="mb-4 w-full min-w-40">
         <label className="block  mb-2">Description</label>
         <textarea
           name="description"
