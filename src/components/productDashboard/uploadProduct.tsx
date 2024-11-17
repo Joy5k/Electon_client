@@ -112,7 +112,6 @@ const ProductUploadForm = () => {
       toast.success("Created product successfully")
     }
   } catch (error) {
-    console.log(error.message)
     toast.error("Something went wrong")
   }
 
