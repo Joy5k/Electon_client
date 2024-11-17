@@ -11,17 +11,6 @@ const ProductUploadForm = () => {
      const [imageUploading,setImageUploadLoading]=useState<boolean>(false)
      const [imagePreview,setImagePreview]=useState<string>()
 
-  const [formData, setFormData] = useState({
-    title: "",
-    description: "",
-    image:"",
-    price: 0,
-    quantity: 0,
-    color: "",
-    sellerId: "",
-    
-    
-  }); 
   const navigate = useNavigate();
   const [sellerId, setSellerId] = useState<string>("");
   const [product, setProduct] = useState<IProduct>({
@@ -58,8 +47,13 @@ const ProductUploadForm = () => {
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
-    setProduct((prev) => ({ ...prev, [name]: value }));
+  
+    setProduct((prev) => ({
+      ...prev,
+      [name]: name === "quantity" || name === "price" ? Number(value) : value,
+    }));
   };
+  
 
   const handleColorChange = (index: number, value: string) => {
     const newColors = [...product.color];
@@ -110,9 +104,18 @@ const ProductUploadForm = () => {
 
   const handleSubmit = async(e: FormEvent) => {
     e.preventDefault();
-    // const res=await createProduct(formData)
-    // Here, submit `product` data to your backend
-    console.log("Product data:", product);
+  try {
+    const res=await createProduct(product).unwrap()
+        // Here, submit `product` data to your backend
+        console.log(res,res?.success);
+    if(res?.success){
+      toast.success("Created product successfully")
+    }
+  } catch (error) {
+    console.log(error.message)
+    toast.error("Something went wrong")
+  }
+
   };
 
   return (
