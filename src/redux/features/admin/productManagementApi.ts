@@ -23,9 +23,10 @@ const productManagementApi = baseApi.injectEndpoints({
       },invalidatesTags:["products"]
     }),
     deleteProduct: builder.mutation({
-      query: (data) => {
+      query: (id) => {
+        console.log("In Redux",id)
       return  {
-          url: `/product/delete-product/${data.id}`,
+          url: `/product/delete-product/${id}`,
           method: "DELETE",
         }
       },invalidatesTags:["products"]

@@ -1,4 +1,18 @@
+import { toast } from "sonner";
+import { useDeleteProductMutation } from "../../redux/features/admin/productManagementApi";
+
 const ProductTable = ({ products }: any) => {
+  const [deleteProduct]=useDeleteProductMutation()
+
+  //deleting product below
+  const handleDeleteProduct=async(id:string)=>{
+   const res=await deleteProduct(id).unwrap()
+
+   if(res?.success){
+    toast.success("Product deleted successfully")
+   }
+
+  }
   return (
     <div className="overflow-x-auto mr-5">
       <table className=" w-full bg-white border-collapse overflow-scroll">
@@ -34,7 +48,7 @@ const ProductTable = ({ products }: any) => {
                 {product?.sellerId?.email || "N/A"}
               </td> */}
               <td className="border px-4 py-2 text-center">
-                <button className="text-red-500">X</button>
+                <button onClick={()=>handleDeleteProduct(product?._id)} className="text-red-500">X</button>
               </td>
               <td className="border px-4 py-2 text-center">
                 <button className="text-blue-500">Update</button>
