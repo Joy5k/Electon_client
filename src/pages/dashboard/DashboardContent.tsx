@@ -9,7 +9,7 @@ type DashboardContentProps = {
 
 const DashboardContent: React.FC<DashboardContentProps> = ({ activePage }) => {
   return (
-    <div className="flex-1 px-8">
+    <div className="flex-1 pr-5">
       {activePage === 'Overview' && <div><Overview></Overview></div>}
       {activePage === 'Products' && <div><ProductManagement></ProductManagement></div>}
       {activePage === 'Users' && <div><UsersManagement></UsersManagement></div>}

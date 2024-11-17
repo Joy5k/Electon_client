@@ -10,8 +10,10 @@ function Dashboard() {
       <div className="h-screen flex flex-col">
         <DashboardNav />
         <div className="flex flex-1">
-          <DashboardSiteBar activePage={activePage} setActivePage={setActivePage} />
+        <div className="">  <DashboardSiteBar  activePage={activePage} setActivePage={setActivePage} /></div>
+          <div  className="w-10/12">
           <DashboardContent activePage={activePage} />
+          </div>
         </div>
       </div>
     );
