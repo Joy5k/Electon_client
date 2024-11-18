@@ -75,3 +75,13 @@ export interface IProduct {
   rating?: number;
   sellerId:string;
 }
+
+export interface IUser {
+  _id:string
+  firstName:string;
+  lastName:string;
+  image:string;
+  email:string;
+  status:string;
+  role:string
+}

@@ -1,15 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { toast } from "sonner";
-import { useDeleteProductMutation, useUpdateProductMutation } from "../../../../redux/features/admin/productManagementApi";
-import { ImgBBResponseData, IProduct } from "../../../../types";
-import Spinner from "../../../../components/Spinner/Spinner";
+
 import axios from "axios";
+import { useDeleteProductMutation, useUpdateProductMutation } from "../../../redux/features/admin/productManagementApi";
+import { ImgBBResponseData, IProduct, IUser } from "../../../types";
+import { useGetAllUsersQuery } from "../../../redux/features/admin/userManagementApi";
+import Spinner from "../../../components/Spinner/Spinner";
 
 
 function UsersManagement() {
   const [deleteProduct] = useDeleteProductMutation();
   const [updateProduct]=useUpdateProductMutation()
-
+  const {data}=useGetAllUsersQuery({})
   const [imageUploading,setImageUploadLoading]=useState<boolean>(false)
      const [imagePreview,setImagePreview]=useState<string>()
      const [selectedProduct, setSelectedProduct] = useState<any>(null);
@@ -37,12 +39,12 @@ function UsersManagement() {
   // Pagination state
   const [currentPage, setCurrentPage] = useState(1);
   const rowsPerPage = 10;
-
+console.log(data.data)
   // Calculate pagination variables
-  const totalPages = Math.ceil(products.length / rowsPerPage);
+  const totalPages = Math.ceil(data.data.length / rowsPerPage);
   const indexOfLastRow = currentPage * rowsPerPage;
   const indexOfFirstRow = indexOfLastRow - rowsPerPage;
-  const currentRows = products.slice(indexOfFirstRow, indexOfLastRow);
+  const currentRows = data.data.slice(indexOfFirstRow, indexOfLastRow);
 
   
     // Only update product when sellerId changes
@@ -152,40 +154,40 @@ const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaE
           <tr className="border bg-gray-100">
             <th className="px-4 py-2 whitespace-nowrap">No.</th>
             <th className="px-4 py-2 whitespace-nowrap">Image</th>
-            <th className="px-4 py-2 whitespace-nowrap">Title</th>
-            <th className="whitespace-nowrap">Quantity</th>
-            <th className="px-4 py-2 whitespace-nowrap">Price ($)</th>
-            <th className="px-4 py-2 whitespace-nowrap">Seller Name</th>
+            <th className="px-4 py-2 whitespace-nowrap">Name</th>
+            <th className="whitespace-nowrap">Role</th>
+            <th className="px-4 py-2 whitespace-nowrap">Email</th>
+            <th className="px-4 py-2 whitespace-nowrap">Status</th>
             <th className="whitespace-nowrap">Delete</th>
-            <th className="px-4 py-2 whitespace-nowrap">Update</th>
+            <th className="px-4 py-2 whitespace-nowrap">Create Admin</th>
           </tr>
         </thead>
         <tbody>
-          {currentRows?.map((product: any,i:any) => (
-            <tr key={product?._id} className="border-b">
+          {currentRows?.map((user: IUser,i:any) => (
+            <tr key={user?._id} className="border-b">
               <td className="border px-4">
                 {i+1}
               </td>
               <td className="border px-4 py-2">
         <img
-          src={product.image ? product.image : "https://cdn-icons-png.flaticon.com/512/1554/1554590.png"}
-          alt={product?.title}
+          src={user.image ? user.image : "https://st.depositphotos.com/1537427/3571/v/450/depositphotos_35717211-stock-illustration-vector-user-icon.jpg"}
+          alt={user?.firstName+ user?.lastName}
           className="w-16 h-16 object-cover rounded"
         />
       </td>
-              <td className="border px-4 py-2 text-center">{product?.title}</td>
+              <td className="border px-4 py-2 text-center">{user?.firstName + "_" + user?.lastName}</td>
               <td className="border px-4 py-2 text-center">
-                {product?.quantity}
+                {user?.role}
               </td>
               <td className="border px-4 py-2 text-center">
-                ${product?.price.toFixed(2)}
+                ${user?.email}
               </td>
               <td className="border px-4 py-2 text-center">
-                {product?.sellerId?.firstName} {product?.sellerId?.lastName}
+               {user?.status}
               </td>
               <td className="border px-4 py-2 text-center">
                 <button
-                  onClick={() => handleDeleteProduct(product?._id)}
+                  onClick={() => handleDeleteProduct(user?._id)}
                   className="text-red-500"
                 >
                   X
@@ -193,10 +195,10 @@ const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaE
               </td>
               <td className="border px-4 py-2 text-center">
                 <button
-                  onClick={() => handleUpdateClick(product)}
+                  onClick={() => handleUpdateClick(user)}
                   className="text-blue-500"
                 >
-                  Update
+                  {user.role === "admin"? "user":"admin"}
                 </button>
               </td>
             </tr>
@@ -226,7 +228,7 @@ const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaE
     <div
       className="border w-full md:w-9/12 lg:w-8/12 max-h-screen overflow-y-auto p-6 rounded-lg shadow-lg "
     >
-      <h2 className="text-xl font-bold mb-4">Update Product</h2>
+      <h2 className="text-xl font-bold mb-4">Change Image</h2>
     
       <form
         onSubmit={(e) => {
@@ -371,6 +373,6 @@ const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaE
 
     </div>
   );
-};
+}
 
 export default UsersManagement
