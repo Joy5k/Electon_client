@@ -128,8 +128,7 @@ useEffect(() => {
 
   const handleUserProfileUpdate = async () => {
     try {
-     const res= await userUpdate(formData).unwrap();
-      console.log(res,formData)
+     await userUpdate(formData).unwrap();
       toast.success("Profile updated successfully!");
       setIsEditing(false);
     } catch (error) {

@@ -24,7 +24,6 @@ const productManagementApi = baseApi.injectEndpoints({
     }),
     deleteProduct: builder.mutation({
       query: (id) => {
-        console.log("In Redux",id)
       return  {
           url: `/product/delete-product/${id}`,
           method: "DELETE",

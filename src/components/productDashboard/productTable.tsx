@@ -1,13 +1,18 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { useDeleteProductMutation } from "../../redux/features/admin/productManagementApi";
 import { ImgBBResponseData, IProduct } from "../../types";
 import Spinner from "../Spinner/Spinner";
+import { useNavigate } from "react-router-dom";
+import { jwtDecode } from "jwt-decode";
 
 const ProductTable = ({ products }: any) => {
   const [deleteProduct] = useDeleteProductMutation();
   const [imageUploading,setImageUploadLoading]=useState<boolean>(false)
      const [imagePreview,setImagePreview]=useState<string>()
+     const [sellerId, setSellerId] = useState<string>("");
+     const navigate = useNavigate();
+
      const [product, setProduct] = useState<IProduct>({
       title: "",
       description: "",
@@ -18,6 +23,27 @@ const ProductTable = ({ products }: any) => {
       rating: undefined,
       sellerId:""
     });
+
+    const token = localStorage.getItem("token");
+  
+  // Redirect to login if no token
+  useEffect(() => {
+    if (!token) {
+      navigate("/login");
+    } else {
+      const { userId } = jwtDecode(token) as { userId: string; email: string; role: string };
+      setSellerId(userId); // Set the sellerId
+    }
+  }, [token, navigate]);
+
+    useEffect(() => {
+      if (sellerId) {
+        setProduct((prev) => ({
+          ...prev,
+          sellerId, // Update the product's sellerId after it's set
+        }));
+      }
+    }, [sellerId]); // Only update product when sellerId changes
 
   // State for modal
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -41,6 +67,17 @@ const ProductTable = ({ products }: any) => {
       toast.success("Product deleted successfully");
     }
   };
+
+// handle all input element for getting value to update product
+const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const { name, value } = e.target;
+
+  setProduct((prev) => ({
+    ...prev,
+    [name]: name === "quantity" || name === "price" ? Number(value) : value,
+  }));
+};
+
 
   // Opening the modal
   const handleUpdateClick = (product: any) => {
@@ -94,6 +131,11 @@ const ProductTable = ({ products }: any) => {
       setImageUploadLoading(false);
     }
   };
+
+  // update product function
+  const handleUpdateProduct=()=>{
+    console.log(product)
+  }
   return (
     <div className="overflow-x-auto mr-5">
       <table className="w-full bg-white border-collapse overflow-scroll">
@@ -183,9 +225,9 @@ const ProductTable = ({ products }: any) => {
         onSubmit={(e) => {
           e.preventDefault();
           // Add your update logic here
-          console.log('Form submitted');
         }}
       >
+{/* show the image and upload or change the product image */}
 
 <div className="flex bg-black w-full">
   {imageUploading ? (
@@ -257,6 +299,7 @@ const ProductTable = ({ products }: any) => {
           <div className="mb-4">
             <label className="block mb-2 font-medium">Title</label>
             <input
+            onChange={handleInputChange}
               type="text"
               defaultValue={selectedProduct.title}
               className="border border-gray-300 rounded p-2 w-full"
@@ -266,6 +309,7 @@ const ProductTable = ({ products }: any) => {
           <div className="mb-4">
             <label className="block mb-2 font-medium">Quantity</label>
             <input
+              onChange={handleInputChange}
               type="number"
               defaultValue={selectedProduct.quantity}
               className="border border-gray-300 rounded p-2 w-full"
@@ -275,6 +319,7 @@ const ProductTable = ({ products }: any) => {
           <div className="mb-4">
             <label className="block mb-2 font-medium">Price ($)</label>
             <input
+              onChange={handleInputChange}
               type="number"
               defaultValue={selectedProduct.price}
               className="border border-gray-300 rounded p-2 w-full"
@@ -285,30 +330,8 @@ const ProductTable = ({ products }: any) => {
         <div className="mb-4 w-full">
           <label className="block mb-2 font-medium">Description</label>
           <textarea
+            onChange={handleInputChange}
             defaultValue={selectedProduct.description}
-            className="border border-gray-300 rounded p-2 w-full"
-          />
-        </div>
-
-        {/* Image Upload */}
-        <div className="mb-4">
-          <label className="block mb-2 font-medium">Product Image</label>
-          <input
-            type="file"
-            accept="image/*"
-            onChange={(e) => {
-              if (e.target.files && e.target.files[0]) {
-                const reader = new FileReader();
-                reader.onload = () => {
-                  // Preview the image
-                  setSelectedProduct((prev: any) => ({
-                    ...prev,
-                    image: reader.result as string,
-                  }));
-                };
-                reader.readAsDataURL(e.target.files[0]);
-              }
-            }}
             className="border border-gray-300 rounded p-2 w-full"
           />
         </div>
@@ -323,6 +346,7 @@ const ProductTable = ({ products }: any) => {
             Cancel
           </button>
           <button
+          onClick={handleUpdateProduct}
             type="submit"
             className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded"
           >

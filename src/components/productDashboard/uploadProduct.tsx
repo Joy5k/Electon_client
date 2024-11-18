@@ -10,9 +10,9 @@ import axios from "axios";
 const ProductUploadForm = () => {
      const [imageUploading,setImageUploadLoading]=useState<boolean>(false)
      const [imagePreview,setImagePreview]=useState<string>()
-  const navigate = useNavigate();
-  const [sellerId, setSellerId] = useState<string>("");
-  const [product, setProduct] = useState<IProduct>({
+     const navigate = useNavigate();
+     const [sellerId, setSellerId] = useState<string>("");
+     const [product, setProduct] = useState<IProduct>({
     title: "",
     description: "",
     image: "",

@@ -12,7 +12,6 @@ import { useGetAllUsersQuery } from "../../../redux/features/admin/userManagemen
 function Overview() {
   const {data:products,isLoading}=useAllProductsQuery({})
   const {data:users,isLoading:userLoading}=useGetAllUsersQuery({})
-console.log(products)  
 return (
     <div className="w-full" >
      {

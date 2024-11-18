@@ -28,7 +28,6 @@ const Register = () => {
             ...formValues,
             [e.target.name]: e.target.value,
         });
-        console.log(`Updated form values:`, formValues);
     };
 
     const handleUserRegistration = async () => {

@@ -40,7 +40,6 @@ const baseQueryWithRefreshToken:BaseQueryFn<FetchArgs,BaseQueryApi,DefinitionTyp
     const data = await res.json();
 
     if (data?.data?.accessToken) {
-      console.log("create access token",data?.data?.accessToken);
       const user = (api.getState() as RootState).auth.user;
       api.dispatch(
         setUser({
@@ -50,7 +49,6 @@ const baseQueryWithRefreshToken:BaseQueryFn<FetchArgs,BaseQueryApi,DefinitionTyp
       );
       result = await baseQuery(arg, api, extraOptions);
     } else {
-      console.log("navigating logout page");
       api.dispatch(logout());
     }
   }

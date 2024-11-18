@@ -17,7 +17,6 @@ const userManagementApi = baseApi.injectEndpoints({
     }),
     updateStudentStatus: builder.mutation({
       query: (data) => {
-        console.log(data);
         return {
           url: `/users/change-status/${data.id}`,
           method: "POST",
