@@ -185,11 +185,11 @@ const ProductUploadForm = () => {
                 type="file"
                 multiple
               />
-              <div className="text bg-indigo-600 text-white border border-gray-300 rounded font-semibold cursor-pointer p-1 px-3 hover:bg-indigo-500">
+              <div className="text bg-primary text-white border border-gray-300 rounded font-semibold cursor-pointer p-1 px-3 hover:bg-indigo-500">
                 Upload Image
               </div>
             </label>
-            <div className="title text-indigo-500 uppercase">
+            <div className="title text-primary uppercase">
               or drop files here
             </div>
           </div>
@@ -276,7 +276,7 @@ const ProductUploadForm = () => {
 
       <button
         type="submit"
-        className="w-full p-2 bg-blue-500 text-white rounded hover:bg-blue-600 focus:outline-none"
+        className="w-full p-2 bg-primary text-white rounded hover:bg-blue-600 focus:outline-none"
       >
         Submit Product
       </button>

@@ -9,6 +9,16 @@ const ProductTable = ({ products }: any) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState<any>(null);
 
+  // Pagination state
+  const [currentPage, setCurrentPage] = useState(1);
+  const rowsPerPage = 10;
+
+  // Calculate pagination variables
+  const totalPages = Math.ceil(products.length / rowsPerPage);
+  const indexOfLastRow = currentPage * rowsPerPage;
+  const indexOfFirstRow = indexOfLastRow - rowsPerPage;
+  const currentRows = products.slice(indexOfFirstRow, indexOfLastRow);
+
   // Deleting product
   const handleDeleteProduct = async (id: string) => {
     const res = await deleteProduct(id).unwrap();
@@ -30,6 +40,11 @@ const ProductTable = ({ products }: any) => {
     setSelectedProduct(null);
   };
 
+  // Handle page change
+  const handlePageChange = (pageNumber: number) => {
+    setCurrentPage(pageNumber);
+  };
+
   return (
     <div className="overflow-x-auto mr-5">
       <table className="w-full bg-white border-collapse overflow-scroll">
@@ -45,7 +60,7 @@ const ProductTable = ({ products }: any) => {
           </tr>
         </thead>
         <tbody>
-          {products?.map((product: any) => (
+          {currentRows?.map((product: any) => (
             <tr key={product?._id} className="border-b">
               <td className="border px-4 py-2">
                 <img
@@ -88,10 +103,27 @@ const ProductTable = ({ products }: any) => {
         </tbody>
       </table>
 
+      {/* Pagination Controls */}
+      <div className="flex justify-center mt-4 space-x-2">
+        {Array.from({ length: totalPages }, (_, index) => (
+          <button
+            key={index + 1}
+            onClick={() => handlePageChange(index + 1)}
+            className={`px-3 py-1 border rounded ${
+              currentPage === index + 1
+                ? "bg-primary text-white"
+                : "bg-white text-blue-500"
+            }`}
+          >
+            {index + 1}
+          </button>
+        ))}
+      </div>
+
       {/* Modal */}
       {isModalOpen && selectedProduct && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center w-full">
-          <div className=" w-full md:w-9/12 lg:w-8-12   p-6 rounded-lg shadow-lg">
+          <div className=" w-full md:w-9/12 lg:w-8-12 p-6 rounded-lg shadow-lg">
             <h2 className="text-xl font-bold mb-4">Update Product</h2>
             <form>
               <div className="mb-4">
@@ -128,7 +160,7 @@ const ProductTable = ({ products }: any) => {
                 </button>
                 <button
                   type="submit"
-                  className="bg-blue-500 text-white px-4 py-2 rounded"
+                  className="bg-primary text-white px-4 py-2 rounded"
                 >
                   Update
                 </button>
