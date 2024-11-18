@@ -6,7 +6,7 @@ import { useAllProductsQuery } from "../../../redux/features/admin/productManage
 function ProductManagement() {
   const {data,isLoading}=useAllProductsQuery({})
   return (
-    <div>
+    <div className="mt-4 mb-10">
      {
       isLoading ? <Spinner></Spinner>: <div >
         <ProductUploadForm></ProductUploadForm>

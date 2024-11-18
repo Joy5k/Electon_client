@@ -5,8 +5,7 @@ import { ImgBBResponseData, IProduct } from "../../../../types";
 import Spinner from "../../../../components/Spinner/Spinner";
 import axios from "axios";
 
-
-function UsersManagement() {
+const ProductTable = ({ products }: any) => {
   const [deleteProduct] = useDeleteProductMutation();
   const [updateProduct]=useUpdateProductMutation()
 
@@ -373,4 +372,4 @@ const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaE
   );
 };
 
-export default UsersManagement
+export default ProductTable;
