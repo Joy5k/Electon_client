@@ -1,10 +1,10 @@
 import React, { useState, FormEvent, useEffect } from "react";
-import { ImgBBResponseData, IProduct } from "../../types";
+import { ImgBBResponseData, IProduct } from "../../../../types";
 import { jwtDecode } from "jwt-decode";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
-import { useCreateProductMutation } from "../../redux/features/admin/productManagementApi";
-import Spinner from "../Spinner/Spinner";
+import { useCreateProductMutation } from "../../../../redux/features/admin/productManagementApi";
+import Spinner from "../../../../components/Spinner/Spinner";
 import axios from "axios";
 
 const ProductUploadForm = () => {

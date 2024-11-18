@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { toast } from "sonner";
-import { useDeleteProductMutation } from "../../redux/features/admin/productManagementApi";
-import { ImgBBResponseData, IProduct } from "../../types";
-import Spinner from "../Spinner/Spinner";
+import { useDeleteProductMutation } from "../../../../redux/features/admin/productManagementApi";
+import { ImgBBResponseData, IProduct } from "../../../../types";
+import Spinner from "../../../../components/Spinner/Spinner";
 import { useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 
