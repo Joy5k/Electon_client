@@ -9,7 +9,8 @@ function ProductManagement() {
     <div className="mt-4 mb-10">
      {
       isLoading ? <Spinner></Spinner>: <div >
-        <ProductUploadForm></ProductUploadForm>
+        <ProductUploadForm></ProductUploadForm> <p className="text-xl font-bold  my-5  shadow w-fit px-4 py-1 shadow-indigo-100">Manage All Products</p>
+       
         <ProductTable products={data?.data}></ProductTable>
       </div>
      }

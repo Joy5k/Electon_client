@@ -14,23 +14,23 @@ function UsersManagement() {
   const {data}=useGetAllUsersQuery({})
   const [imageUploading,setImageUploadLoading]=useState<boolean>(false)
      const [imagePreview,setImagePreview]=useState<string>()
-     const [selectedProduct, setSelectedProduct] = useState<any>(null);
-    const [product,setProduct]=useState<IProduct>()
+     const [selectedUser, setSelectedUser] = useState<any>(null);
+    const [product,setUser]=useState<IProduct>()
 
       useEffect(() => {
-        if (selectedProduct) {
-          setProduct({
-            title: selectedProduct.title || "",
-            description: selectedProduct.description || "",
-            image: selectedProduct.image || "",
-            price: selectedProduct.price || 0,
-            quantity: selectedProduct.quantity || 0,
-            color: selectedProduct.color || [],
-            rating: selectedProduct.rating,
-            sellerId: selectedProduct.sellerId._id || "",
+        if (selectedUser) {
+          setUser({
+            title: selectedUser.title || "",
+            description: selectedUser.description || "",
+            image: selectedUser.image || "",
+            price: selectedUser.price || 0,
+            quantity: selectedUser.quantity || 0,
+            color: selectedUser.color || [],
+            rating: selectedUser.rating,
+            sellerId: selectedUser.sellerId._id || "",
           });
         }
-      }, [selectedProduct]);
+      }, [selectedUser]);
   
 
   // State for modal
@@ -62,7 +62,7 @@ console.log(data.data)
 const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
   const { name, value } = e.target;
 
-  setProduct((prev) => ({
+  setUser((prev) => ({
     ...prev,
     [name]: (name === "quantity" || name === "price") ? Number(value) : value,
   }) as IProduct); // Explicit cast ensures TypeScript recognizes the result matches IProduct.
@@ -70,16 +70,17 @@ const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaE
 
 
   // Opening the modal
-  const handleUpdateClick = (product: any) => {
-    setImagePreview(product?.image)
-    setSelectedProduct(product);
+  const handleUpdateClick = (user: any) => {
+    console.log(user)
+    setImagePreview(user?.image)
+    setSelectedUser(user);
     setIsModalOpen(true);
   };
 
   // Closing the modal
   const handleCloseModal = () => {
     setIsModalOpen(false);
-    setSelectedProduct(null);
+    setSelectedUser(null);
   };
 
   // Handle page change
@@ -110,7 +111,7 @@ const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaE
         const uploadedImageUrl = response.data.data.url;
         setImagePreview(uploadedImageUrl);
         toast.success("Image Uploaded successfully");
-        setProduct((prev) => ({
+        setUser((prev) => ({
           ...prev,
           image: uploadedImageUrl, // Update the image field in the product state
         }) as IProduct);
@@ -129,7 +130,7 @@ const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaE
   const handleUpdateProduct=async()=>{
     const payload={
       data:product,
-      id:selectedProduct._id
+      id:selectedUser._id
     }
     console.log(payload)
    try {
@@ -138,7 +139,7 @@ const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaE
     if(res.success){
       toast.success("Product update successfully")
       setIsModalOpen(false);
-      setSelectedProduct(null);
+      setSelectedUser(null);
     }
    } catch (error) {
     toast.error("Something went wrong")
@@ -159,7 +160,7 @@ const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaE
             <th className="px-4 py-2 whitespace-nowrap">Email</th>
             <th className="px-4 py-2 whitespace-nowrap">Status</th>
             <th className="whitespace-nowrap">Delete</th>
-            <th className="px-4 py-2 whitespace-nowrap">Create Admin</th>
+            <th className="px-4 py-2 whitespace-nowrap">Change Role</th>
           </tr>
         </thead>
         <tbody>
@@ -177,7 +178,10 @@ const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaE
       </td>
               <td className="border px-4 py-2 text-center">{user?.firstName + "_" + user?.lastName}</td>
               <td className="border px-4 py-2 text-center">
-                {user?.role}
+                {
+                user?.role==="super_admin"&&  <p className="text-primary font-bold animate-pulse">{user?.role}</p>
+                }
+                {user?.role !=="super_admin"&& user?.role}
               </td>
               <td className="border px-4 py-2 text-center">
                 ${user?.email}
@@ -223,7 +227,7 @@ const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaE
         ))}
       </div>
 
-      {isModalOpen && selectedProduct && (
+      {isModalOpen && selectedUser && (
   <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center w-full">
     <div
       className="border w-full md:w-9/12 lg:w-8/12 max-h-screen overflow-y-auto p-6 rounded-lg shadow-lg "
@@ -250,7 +254,7 @@ const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaE
       {imagePreview ? (
         <div className="text-center">
           <img
-            src={imagePreview||selectedProduct.image||"https://cdn-icons-png.flaticon.com/512/1554/1554590.png"}
+            src={imagePreview||selectedUser.image||"https://cdn-icons-png.flaticon.com/512/1554/1554590.png"}
             alt="Uploaded Preview"
             className="rounded-lg w-full h-44 mb-4"
           />
@@ -306,11 +310,11 @@ const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaE
         {/* Product details form */}
         <div className="flex gap-4">
           <div className="mb-4">
-            <label className="block mb-2 font-medium">Title</label>
+            <label className="block mb-2 font-medium">Name</label>
             <input
             onChange={handleInputChange}
               type="text"
-              defaultValue={selectedProduct.title}
+              defaultValue={selectedUser.firstName+ "_" + selectedUser.lastName}
               name="title"
               className="border border-gray-300 rounded p-2 w-full"
             />
@@ -322,7 +326,7 @@ const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaE
               onChange={handleInputChange}
               type="number"
               name="quantity"
-              defaultValue={selectedProduct.quantity}
+              defaultValue={selectedUser.quantity}
               className="border border-gray-300 rounded p-2 w-full"
             />
           </div>
@@ -332,7 +336,7 @@ const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaE
             <input
               onChange={handleInputChange}
               type="number"
-              defaultValue={selectedProduct.price}
+              defaultValue={selectedUser.price}
               name="price"
               className="border border-gray-300 rounded p-2 w-full"
             />
@@ -344,7 +348,7 @@ const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaE
           <textarea
             onChange={handleInputChange}
             name="description"
-            defaultValue={selectedProduct.description}
+            defaultValue={selectedUser.description}
             className="border border-gray-300 rounded p-2 w-full"
           />
         </div>
