@@ -1,9 +1,23 @@
 import React, { useState } from "react";
 import { toast } from "sonner";
 import { useDeleteProductMutation } from "../../redux/features/admin/productManagementApi";
+import { ImgBBResponseData, IProduct } from "../../types";
+import Spinner from "../Spinner/Spinner";
 
 const ProductTable = ({ products }: any) => {
   const [deleteProduct] = useDeleteProductMutation();
+  const [imageUploading,setImageUploadLoading]=useState<boolean>(false)
+     const [imagePreview,setImagePreview]=useState<string>()
+     const [product, setProduct] = useState<IProduct>({
+      title: "",
+      description: "",
+      image: "",
+      price: 0,
+      quantity: 0,
+      color: [""],
+      rating: undefined,
+      sellerId:""
+    });
 
   // State for modal
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -30,6 +44,7 @@ const ProductTable = ({ products }: any) => {
 
   // Opening the modal
   const handleUpdateClick = (product: any) => {
+    setImagePreview(product?.image)
     setSelectedProduct(product);
     setIsModalOpen(true);
   };
@@ -44,7 +59,41 @@ const ProductTable = ({ products }: any) => {
   const handlePageChange = (pageNumber: number) => {
     setCurrentPage(pageNumber);
   };
-
+  const handleSaveImage = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+  
+    if (!file) {
+      console.error("No file provided");
+      return;
+    }
+  
+    setImageUploadLoading(true);
+    try {
+      const formData = new FormData();
+      formData.append("image", file);
+  
+      const response = await axios.post<ImgBBResponseData>(
+        `https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_API_KEY}`,
+        formData
+      );
+  
+      if (response.data && response.data.data && response.data.data.url) {
+        const uploadedImageUrl = response.data.data.url;
+        setImagePreview(uploadedImageUrl);
+        toast.success("Image Uploaded successfully");
+        setProduct((prev) => ({
+          ...prev,
+          image: uploadedImageUrl, // Update the image field in the product state
+        }));
+      } else {
+        console.error("Unexpected response format:", response.data);
+      }
+    } catch (error) {
+      console.error("Error uploading image:", error);
+    } finally {
+      setImageUploadLoading(false);
+    }
+  };
   return (
     <div className="overflow-x-auto mr-5">
       <table className="w-full bg-white border-collapse overflow-scroll">
@@ -124,55 +173,167 @@ const ProductTable = ({ products }: any) => {
         ))}
       </div>
 
-      {/* Modal */}
       {isModalOpen && selectedProduct && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center w-full">
-          <div className=" w-full md:w-9/12 lg:w-8-12 p-6 rounded-lg shadow-lg">
-            <h2 className="text-xl font-bold mb-4">Update Product</h2>
-            <form>
-              <div className="mb-4">
-                <label className="block mb-2 font-medium">Title</label>
-                <input
-                  type="text"
-                  defaultValue={selectedProduct.title}
-                  className="border border-gray-300 rounded p-2 w-full"
-                />
+  <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center w-full">
+    <div
+      className="border w-full md:w-9/12 lg:w-8/12 max-h-screen overflow-y-auto p-6 rounded-lg shadow-lg "
+    >
+      <h2 className="text-xl font-bold mb-4">Update Product</h2>
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          // Add your update logic here
+          console.log('Form submitted');
+        }}
+      >
+
+<div className="flex bg-black w-full">
+  {imageUploading ? (
+    <div className="w-full flex justify-center align-middle items-center">
+      <div className=" mx-auto">
+      <Spinner />
+      </div>
+    </div>
+  ) : (
+    <div className="extraOutline p-4 w-max m-auto rounded-lg">
+      {imagePreview ? (
+        <div className="text-center">
+          <img
+            src={imagePreview}
+            alt="Uploaded Preview"
+            className="rounded-lg w-full h-44 mb-4"
+          />
+          <button
+            onClick={() => setImagePreview("")}
+            className="text-white bg-primary  rounded font-semibold cursor-pointer p-1 px-3 hover:bg-indigo-500"
+          >
+           Cancel
+          </button>
+        </div>
+      ) : (
+        <div
+          className="file_upload p-5 relative border-4 border-dotted border-gray-300 rounded-lg"
+          style={{ width: "450px" }}
+        >
+          <svg
+            className="text-indigo-500 w-24 mx-auto mb-4"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
+            />
+          </svg>
+          <div className="input_field flex flex-col w-max mx-auto text-center">
+            <label>
+              <input
+                onChange={(e) => handleSaveImage(e)}
+                className="text-sm cursor-pointer w-36 hidden"
+                type="file"
+                multiple
+              />
+              <div className="text bg-primary text-white border border-gray-300 rounded font-semibold cursor-pointer p-1 px-3 hover:bg-indigo-500">
+                Upload Image
               </div>
-              <div className="mb-4">
-                <label className="block mb-2 font-medium">Quantity</label>
-                <input
-                  type="number"
-                  defaultValue={selectedProduct.quantity}
-                  className="border border-gray-300 rounded p-2 w-full"
-                />
-              </div>
-              <div className="mb-4">
-                <label className="block mb-2 font-medium">Price ($)</label>
-                <input
-                  type="number"
-                  defaultValue={selectedProduct.price}
-                  className="border border-gray-300 rounded p-2 w-full"
-                />
-              </div>
-              <div className="flex justify-end space-x-4">
-                <button
-                  type="button"
-                  onClick={handleCloseModal}
-                  className="bg-gray-300 px-4 py-2 rounded"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  className="bg-primary text-white px-4 py-2 rounded"
-                >
-                  Update
-                </button>
-              </div>
-            </form>
+            </label>
+            <div className="title text-primary uppercase">
+              or drop files here
+            </div>
           </div>
         </div>
       )}
+    </div>
+  )}
+</div>
+
+
+        {/* Product details form */}
+        <div className="flex gap-4">
+          <div className="mb-4">
+            <label className="block mb-2 font-medium">Title</label>
+            <input
+              type="text"
+              defaultValue={selectedProduct.title}
+              className="border border-gray-300 rounded p-2 w-full"
+            />
+          </div>
+
+          <div className="mb-4">
+            <label className="block mb-2 font-medium">Quantity</label>
+            <input
+              type="number"
+              defaultValue={selectedProduct.quantity}
+              className="border border-gray-300 rounded p-2 w-full"
+            />
+          </div>
+
+          <div className="mb-4">
+            <label className="block mb-2 font-medium">Price ($)</label>
+            <input
+              type="number"
+              defaultValue={selectedProduct.price}
+              className="border border-gray-300 rounded p-2 w-full"
+            />
+          </div>
+        </div>
+
+        <div className="mb-4 w-full">
+          <label className="block mb-2 font-medium">Description</label>
+          <textarea
+            defaultValue={selectedProduct.description}
+            className="border border-gray-300 rounded p-2 w-full"
+          />
+        </div>
+
+        {/* Image Upload */}
+        <div className="mb-4">
+          <label className="block mb-2 font-medium">Product Image</label>
+          <input
+            type="file"
+            accept="image/*"
+            onChange={(e) => {
+              if (e.target.files && e.target.files[0]) {
+                const reader = new FileReader();
+                reader.onload = () => {
+                  // Preview the image
+                  setSelectedProduct((prev: any) => ({
+                    ...prev,
+                    image: reader.result as string,
+                  }));
+                };
+                reader.readAsDataURL(e.target.files[0]);
+              }
+            }}
+            className="border border-gray-300 rounded p-2 w-full"
+          />
+        </div>
+
+
+        <div className="flex justify-end space-x-4">
+          <button
+            type="button"
+            onClick={handleCloseModal}
+            className="bg-gray-300 px-4 py-2 rounded"
+          >
+            Cancel
+          </button>
+          <button
+            type="submit"
+            className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded"
+          >
+            Update
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+)}
+
     </div>
   );
 };
