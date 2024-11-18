@@ -50,6 +50,7 @@ const ProductTable = ({ products }: any) => {
       <table className="w-full bg-white border-collapse overflow-scroll">
         <thead>
           <tr className="border bg-gray-100">
+            <th className="px-4 py-2 whitespace-nowrap">No.</th>
             <th className="px-4 py-2 whitespace-nowrap">Image</th>
             <th className="px-4 py-2 whitespace-nowrap">Title</th>
             <th className="whitespace-nowrap">Quantity</th>
@@ -60,8 +61,11 @@ const ProductTable = ({ products }: any) => {
           </tr>
         </thead>
         <tbody>
-          {currentRows?.map((product: any) => (
+          {currentRows?.map((product: any,i:any) => (
             <tr key={product?._id} className="border-b">
+              <td className="border px-4">
+                {i+1}
+              </td>
               <td className="border px-4 py-2">
                 <img
                   src={
