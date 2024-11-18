@@ -1,33 +1,34 @@
 import React, { useEffect, useState } from "react";
 import { toast } from "sonner";
-import { useDeleteProductMutation } from "../../../../redux/features/admin/productManagementApi";
+import { useDeleteProductMutation, useUpdateProductMutation } from "../../../../redux/features/admin/productManagementApi";
 import { ImgBBResponseData, IProduct } from "../../../../types";
 import Spinner from "../../../../components/Spinner/Spinner";
-import { useNavigate } from "react-router-dom";
-import { jwtDecode } from "jwt-decode";
+import axios from "axios";
 
 const ProductTable = ({ products }: any) => {
   const [deleteProduct] = useDeleteProductMutation();
+  const [updateProduct]=useUpdateProductMutation()
+
   const [imageUploading,setImageUploadLoading]=useState<boolean>(false)
      const [imagePreview,setImagePreview]=useState<string>()
-     const [sellerId, setSellerId] = useState<string>("");
-     const navigate = useNavigate();
      const [selectedProduct, setSelectedProduct] = useState<any>(null);
+    const [product,setProduct]=useState<IProduct>()
 
-     const [product, setProduct] = useState<IProduct>({
-      title: selectedProduct?.title||"",
-      description:selectedProduct?.description|| "",
-      image: selectedProduct?.image||"",
-      price: selectedProduct?.price||0,
-      quantity:selectedProduct?.quantity|| 0,
-      color: [""],
-      rating: undefined,
-      sellerId:""
-    });
-
-    const token = localStorage.getItem("token");
+      useEffect(() => {
+        if (selectedProduct) {
+          setProduct({
+            title: selectedProduct.title || "",
+            description: selectedProduct.description || "",
+            image: selectedProduct.image || "",
+            price: selectedProduct.price || 0,
+            quantity: selectedProduct.quantity || 0,
+            color: selectedProduct.color || [],
+            rating: selectedProduct.rating,
+            sellerId: selectedProduct.sellerId._id || "",
+          });
+        }
+      }, [selectedProduct]);
   
-
 
   // State for modal
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -42,25 +43,10 @@ const ProductTable = ({ products }: any) => {
   const indexOfFirstRow = indexOfLastRow - rowsPerPage;
   const currentRows = products.slice(indexOfFirstRow, indexOfLastRow);
 
-  // Redirect to login if no token
-  useEffect(() => {
-    if (!token) {
-      navigate("/login");
-    } else {
-      const { userId } = jwtDecode(token) as { userId: string; email: string; role: string };
-      setSellerId(userId); // Set the sellerId
-    }
-  }, [token, navigate]);
-
-    useEffect(() => {
-      if (sellerId) {
-        setProduct((prev) => ({
-          ...prev,
-          sellerId, // Update the product's sellerId after it's set
-        }));
-      }
-    }, [sellerId]); // Only update product when sellerId changes
+  
+    // Only update product when sellerId changes
   // Deleting product
+
   const handleDeleteProduct = async (id: string) => {
     const res = await deleteProduct(id).unwrap();
 
@@ -75,8 +61,8 @@ const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaE
 
   setProduct((prev) => ({
     ...prev,
-    [name]: name === "quantity" || name === "price" ? Number(value) : value,
-  }));
+    [name]: (name === "quantity" || name === "price") ? Number(value) : value,
+  }) as IProduct); // Explicit cast ensures TypeScript recognizes the result matches IProduct.
 };
 
 
@@ -97,6 +83,8 @@ const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaE
   const handlePageChange = (pageNumber: number) => {
     setCurrentPage(pageNumber);
   };
+
+  // handle the image uploading system
   const handleSaveImage = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
   
@@ -122,7 +110,8 @@ const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaE
         setProduct((prev) => ({
           ...prev,
           image: uploadedImageUrl, // Update the image field in the product state
-        }));
+        }) as IProduct);
+        console.log(uploadedImageUrl)
       } else {
         console.error("Unexpected response format:", response.data);
       }
@@ -134,9 +123,27 @@ const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaE
   };
 
   // update product function
-  const handleUpdateProduct=()=>{
-    console.log(product)
+  const handleUpdateProduct=async()=>{
+    const payload={
+      data:product,
+      id:selectedProduct._id
+    }
+    console.log(payload)
+   try {
+    const res=await updateProduct(payload).unwrap();
+    console.log(res)
+    if(res.success){
+      toast.success("Product update successfully")
+      setIsModalOpen(false);
+      setSelectedProduct(null);
+    }
+   } catch (error) {
+    toast.error("Something went wrong")
+   }
   }
+
+
+
   return (
     <div className="overflow-x-auto mr-5">
       <table className="w-full bg-white border-collapse overflow-scroll">
@@ -159,15 +166,12 @@ const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaE
                 {i+1}
               </td>
               <td className="border px-4 py-2">
-                <img
-                  src={
-                    product.image ||
-                    "https://cdn-icons-png.flaticon.com/512/1554/1554590.png"
-                  }
-                  alt={product?.title}
-                  className="w-16 h-16 object-cover rounded"
-                />
-              </td>
+        <img
+          src={product.image ? product.image : "https://cdn-icons-png.flaticon.com/512/1554/1554590.png"}
+          alt={product?.title}
+          className="w-16 h-16 object-cover rounded"
+        />
+      </td>
               <td className="border px-4 py-2 text-center">{product?.title}</td>
               <td className="border px-4 py-2 text-center">
                 {product?.quantity}
@@ -222,6 +226,7 @@ const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaE
       className="border w-full md:w-9/12 lg:w-8/12 max-h-screen overflow-y-auto p-6 rounded-lg shadow-lg "
     >
       <h2 className="text-xl font-bold mb-4">Update Product</h2>
+    
       <form
         onSubmit={(e) => {
           e.preventDefault();
@@ -242,7 +247,7 @@ const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaE
       {imagePreview ? (
         <div className="text-center">
           <img
-            src={imagePreview}
+            src={imagePreview||selectedProduct.image||"https://cdn-icons-png.flaticon.com/512/1554/1554590.png"}
             alt="Uploaded Preview"
             className="rounded-lg w-full h-44 mb-4"
           />
