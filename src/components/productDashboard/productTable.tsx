@@ -12,13 +12,14 @@ const ProductTable = ({ products }: any) => {
      const [imagePreview,setImagePreview]=useState<string>()
      const [sellerId, setSellerId] = useState<string>("");
      const navigate = useNavigate();
+     const [selectedProduct, setSelectedProduct] = useState<any>(null);
 
      const [product, setProduct] = useState<IProduct>({
-      title: "",
-      description: "",
-      image: "",
-      price: 0,
-      quantity: 0,
+      title: selectedProduct?.title||"",
+      description:selectedProduct?.description|| "",
+      image: selectedProduct?.image||"",
+      price: selectedProduct?.price||0,
+      quantity:selectedProduct?.quantity|| 0,
       color: [""],
       rating: undefined,
       sellerId:""
@@ -26,6 +27,21 @@ const ProductTable = ({ products }: any) => {
 
     const token = localStorage.getItem("token");
   
+
+
+  // State for modal
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  // Pagination state
+  const [currentPage, setCurrentPage] = useState(1);
+  const rowsPerPage = 10;
+
+  // Calculate pagination variables
+  const totalPages = Math.ceil(products.length / rowsPerPage);
+  const indexOfLastRow = currentPage * rowsPerPage;
+  const indexOfFirstRow = indexOfLastRow - rowsPerPage;
+  const currentRows = products.slice(indexOfFirstRow, indexOfLastRow);
+
   // Redirect to login if no token
   useEffect(() => {
     if (!token) {
@@ -44,21 +60,6 @@ const ProductTable = ({ products }: any) => {
         }));
       }
     }, [sellerId]); // Only update product when sellerId changes
-
-  // State for modal
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedProduct, setSelectedProduct] = useState<any>(null);
-
-  // Pagination state
-  const [currentPage, setCurrentPage] = useState(1);
-  const rowsPerPage = 10;
-
-  // Calculate pagination variables
-  const totalPages = Math.ceil(products.length / rowsPerPage);
-  const indexOfLastRow = currentPage * rowsPerPage;
-  const indexOfFirstRow = indexOfLastRow - rowsPerPage;
-  const currentRows = products.slice(indexOfFirstRow, indexOfLastRow);
-
   // Deleting product
   const handleDeleteProduct = async (id: string) => {
     const res = await deleteProduct(id).unwrap();
@@ -302,6 +303,7 @@ const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaE
             onChange={handleInputChange}
               type="text"
               defaultValue={selectedProduct.title}
+              name="title"
               className="border border-gray-300 rounded p-2 w-full"
             />
           </div>
@@ -311,6 +313,7 @@ const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaE
             <input
               onChange={handleInputChange}
               type="number"
+              name="quantity"
               defaultValue={selectedProduct.quantity}
               className="border border-gray-300 rounded p-2 w-full"
             />
@@ -322,6 +325,7 @@ const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaE
               onChange={handleInputChange}
               type="number"
               defaultValue={selectedProduct.price}
+              name="price"
               className="border border-gray-300 rounded p-2 w-full"
             />
           </div>
@@ -331,6 +335,7 @@ const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaE
           <label className="block mb-2 font-medium">Description</label>
           <textarea
             onChange={handleInputChange}
+            name="description"
             defaultValue={selectedProduct.description}
             className="border border-gray-300 rounded p-2 w-full"
           />
@@ -341,7 +346,7 @@ const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaE
           <button
             type="button"
             onClick={handleCloseModal}
-            className="bg-gray-300 px-4 py-2 rounded"
+            className="bg-primary px-4 py-2 rounded"
           >
             Cancel
           </button>
