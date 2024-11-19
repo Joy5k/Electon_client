@@ -2,23 +2,23 @@ import React, { useEffect, useState } from "react";
 import { toast } from "sonner";
 
 import axios from "axios";
-import { useDeleteProductMutation, useUpdateProductMutation } from "../../../redux/features/admin/productManagementApi";
+import { useDeleteProductMutation } from "../../../redux/features/admin/productManagementApi";
 import { ImgBBResponseData, IUser } from "../../../types";
-import { useGetAllUsersQuery, useUpdateUserStatusMutation } from "../../../redux/features/admin/userManagementApi";
+import { useCreateAdminMutation, useGetAllUsersQuery, useUpdateUserStatusMutation } from "../../../redux/features/admin/userManagementApi";
 import Spinner from "../../../components/Spinner/Spinner";
 
 
 function UsersManagement() {
   const [deleteProduct] = useDeleteProductMutation();
-  const [updateUser]=useUpdateProductMutation()
   const [updateUserStatus]=useUpdateUserStatusMutation()
+  const [changeRole]=useCreateAdminMutation()
 
 
   const {data}=useGetAllUsersQuery({})
   const [imageUploading,setImageUploadLoading]=useState<boolean>(false)
      const [imagePreview,setImagePreview]=useState<string>()
      const [selectedUser, setSelectedUser] = useState<any>(null);
-    const [product,setUser]=useState<IUser>()
+    const [user,setUser]=useState<IUser>()
 
       useEffect(() => {
         if (selectedUser) {
@@ -123,17 +123,12 @@ const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaE
   };
 
   // update product function
-  const handleUpdateUser=async()=>{
-    const payload={
-      data:product,
-      id:selectedUser._id
-    }
-    console.log(payload)
+  const handleUserRoleChange=async()=>{
+  
    try {
-    const res=await updateUser(payload).unwrap();
-    console.log(res)
+    const res=await changeRole({}).unwrap();
     if(res.success){
-      toast.success("Product update successfully")
+      toast.success("user role changed successfully")
       setIsModalOpen(false);
       setSelectedUser(null);
     }
@@ -199,7 +194,7 @@ const handleUserStatus=async(id:string)=>{
               </td>
               <td className="border px-4 py-2 text-center">
                 <button
-                  onClick={() => handleUpdateClick(user)}
+                  onClick={() => handleUserRoleChange()}
                   className="text-blue-500"
                 >
                   {user.role === "admin"? "user":"admin"}
@@ -356,7 +351,7 @@ const handleUserStatus=async(id:string)=>{
             Cancel
           </button>
           <button
-          onClick={handleUpdateUser}
+          onClick={handleUserRoleChange}
             type="submit"
             className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded"
           >
