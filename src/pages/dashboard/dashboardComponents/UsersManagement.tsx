@@ -146,7 +146,6 @@ const handleUserStatus=async(id:string)=>{
   if(res.success){
     toast.success("user status has been changed")
   }
-console.log(res,id)
 }
 
   return (

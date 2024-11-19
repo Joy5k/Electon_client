@@ -23,6 +23,14 @@ const userManagementApi = baseApi.injectEndpoints({
         };
       },invalidatesTags:["users"]
     }),
+    createAdmin: builder.mutation({
+      query: () => {
+        return {
+          url: `/user/create-admin`,
+          method: "PUT",
+        };
+      },invalidatesTags:["users"]
+    }),
   }),
 });
 
@@ -30,5 +38,6 @@ export const {
   useGetAllUsersQuery,
   useAddStudentMutation,
   useUpdateUserStatusMutation,
+  useCreateAdminMutation,
 
 } = userManagementApi;
