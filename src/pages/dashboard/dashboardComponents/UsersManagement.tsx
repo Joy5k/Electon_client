@@ -4,13 +4,16 @@ import { toast } from "sonner";
 import axios from "axios";
 import { useDeleteProductMutation, useUpdateProductMutation } from "../../../redux/features/admin/productManagementApi";
 import { ImgBBResponseData, IUser } from "../../../types";
-import { useGetAllUsersQuery } from "../../../redux/features/admin/userManagementApi";
+import { useGetAllUsersQuery, useUpdateUserStatusMutation } from "../../../redux/features/admin/userManagementApi";
 import Spinner from "../../../components/Spinner/Spinner";
 
 
 function UsersManagement() {
   const [deleteProduct] = useDeleteProductMutation();
-  const [updateProduct]=useUpdateProductMutation()
+  const [updateUser]=useUpdateProductMutation()
+  const [updateUserStatus]=useUpdateUserStatusMutation()
+
+
   const {data}=useGetAllUsersQuery({})
   const [imageUploading,setImageUploadLoading]=useState<boolean>(false)
      const [imagePreview,setImagePreview]=useState<string>()
@@ -120,14 +123,14 @@ const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaE
   };
 
   // update product function
-  const handleUpdateProduct=async()=>{
+  const handleUpdateUser=async()=>{
     const payload={
       data:product,
       id:selectedUser._id
     }
     console.log(payload)
    try {
-    const res=await updateProduct(payload).unwrap();
+    const res=await updateUser(payload).unwrap();
     console.log(res)
     if(res.success){
       toast.success("Product update successfully")
@@ -138,8 +141,13 @@ const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaE
     toast.error("Something went wrong")
    }
   }
-
-
+const handleUserStatus=async(id:string)=>{
+  const res=await updateUserStatus(id).unwrap()
+  if(res.success){
+    toast.success("user status has been changed")
+  }
+console.log(res,id)
+}
 
   return (
     <div className="overflow-x-auto mr-5">
@@ -179,7 +187,7 @@ const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaE
               <td className="border px-4 py-2 text-center">
                 ${user?.email}
               </td>
-              <td className="border px-4 py-2 text-center">
+              <td onClick={()=>handleUserStatus(user?._id)} className="border px-4 py-2 text-center cursor-pointer">
                {user?.status}
               </td>
               <td className="border px-4 py-2 text-center">
@@ -349,7 +357,7 @@ const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaE
             Cancel
           </button>
           <button
-          onClick={handleUpdateProduct}
+          onClick={handleUpdateUser}
             type="submit"
             className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded"
           >

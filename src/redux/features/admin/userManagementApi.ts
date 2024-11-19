@@ -16,10 +16,10 @@ const userManagementApi = baseApi.injectEndpoints({
       }),
     }),
     updateUserStatus: builder.mutation({
-      query: (data) => {
+      query: (id) => {
         return {
-          url: `/users/change-status/${data.id}`,
-          method: "POST",
+          url: `/user/block/${id}`,
+          method: "PUT",
         };
       },invalidatesTags:["users"]
     }),
