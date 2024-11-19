@@ -6,7 +6,7 @@ const userManagementApi = baseApi.injectEndpoints({
     query:()=>({
       url:"/user/all-users",
       method:"GET"
-    })
+    }),providesTags:["users"]
   }),
     addStudent: builder.mutation({
       query: (data) => ({
@@ -15,14 +15,13 @@ const userManagementApi = baseApi.injectEndpoints({
         body: data,
       }),
     }),
-    updateStudentStatus: builder.mutation({
+    updateUserStatus: builder.mutation({
       query: (data) => {
         return {
           url: `/users/change-status/${data.id}`,
           method: "POST",
-          body: data.data,
         };
-      },
+      },invalidatesTags:["users"]
     }),
   }),
 });
@@ -30,6 +29,6 @@ const userManagementApi = baseApi.injectEndpoints({
 export const {
   useGetAllUsersQuery,
   useAddStudentMutation,
-  useUpdateStudentStatusMutation,
+  useUpdateUserStatusMutation,
 
 } = userManagementApi;
