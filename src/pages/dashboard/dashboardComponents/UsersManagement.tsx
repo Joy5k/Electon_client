@@ -3,7 +3,7 @@ import { toast } from "sonner";
 
 import axios from "axios";
 import { useDeleteProductMutation, useUpdateProductMutation } from "../../../redux/features/admin/productManagementApi";
-import { ImgBBResponseData, IProduct, IUser } from "../../../types";
+import { ImgBBResponseData, IUser } from "../../../types";
 import { useGetAllUsersQuery } from "../../../redux/features/admin/userManagementApi";
 import Spinner from "../../../components/Spinner/Spinner";
 
@@ -15,19 +15,19 @@ function UsersManagement() {
   const [imageUploading,setImageUploadLoading]=useState<boolean>(false)
      const [imagePreview,setImagePreview]=useState<string>()
      const [selectedUser, setSelectedUser] = useState<any>(null);
-    const [product,setUser]=useState<IProduct>()
+    const [product,setUser]=useState<IUser>()
 
       useEffect(() => {
         if (selectedUser) {
           setUser({
-            title: selectedUser.title || "",
-            description: selectedUser.description || "",
+            firstName: selectedUser.title || "",
+            lastName: selectedUser.description || "",
             image: selectedUser.image || "",
-            price: selectedUser.price || 0,
-            quantity: selectedUser.quantity || 0,
-            color: selectedUser.color || [],
-            rating: selectedUser.rating,
-            sellerId: selectedUser.sellerId._id || "",
+            email: selectedUser.price || 0,
+            role: selectedUser.quantity || 0,
+            status: selectedUser.color || [],
+            _id: selectedUser.rating,
+          
           });
         }
       }, [selectedUser]);
@@ -39,12 +39,11 @@ function UsersManagement() {
   // Pagination state
   const [currentPage, setCurrentPage] = useState(1);
   const rowsPerPage = 10;
-console.log(data.data)
   // Calculate pagination variables
-  const totalPages = Math.ceil(data.data.length / rowsPerPage);
+  const totalPages = Math.ceil(data?.data?.length / rowsPerPage);
   const indexOfLastRow = currentPage * rowsPerPage;
   const indexOfFirstRow = indexOfLastRow - rowsPerPage;
-  const currentRows = data.data.slice(indexOfFirstRow, indexOfLastRow);
+  const currentRows = data?.data.slice(indexOfFirstRow, indexOfLastRow);
 
   
     // Only update product when sellerId changes
@@ -60,18 +59,12 @@ console.log(data.data)
 
 // handle all input element for getting value to update product
 const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-  const { name, value } = e.target;
-
-  setUser((prev) => ({
-    ...prev,
-    [name]: (name === "quantity" || name === "price") ? Number(value) : value,
-  }) as IProduct); // Explicit cast ensures TypeScript recognizes the result matches IProduct.
+ [e.target.name]=[e.target.value]
 };
 
 
   // Opening the modal
   const handleUpdateClick = (user: any) => {
-    console.log(user)
     setImagePreview(user?.image)
     setSelectedUser(user);
     setIsModalOpen(true);
@@ -113,9 +106,9 @@ const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaE
         toast.success("Image Uploaded successfully");
         setUser((prev) => ({
           ...prev,
+         
           image: uploadedImageUrl, // Update the image field in the product state
-        }) as IProduct);
-        console.log(uploadedImageUrl)
+        }) as IUser);
       } else {
         console.error("Unexpected response format:", response.data);
       }
@@ -234,12 +227,7 @@ const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaE
     >
       <h2 className="text-xl font-bold mb-4">Change Image</h2>
     
-      <form
-        onSubmit={(e) => {
-          e.preventDefault();
-          // Add your update logic here
-        }}
-      >
+      <form>
 {/* show the image and upload or change the product image */}
 
 <div className="flex bg-black w-full">
@@ -305,9 +293,7 @@ const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaE
     </div>
   )}
 </div>
-
-
-        {/* Product details form */}
+        {/* user details form */}
         <div className="flex gap-4">
           <div className="mb-4">
             <label className="block mb-2 font-medium">Name</label>
