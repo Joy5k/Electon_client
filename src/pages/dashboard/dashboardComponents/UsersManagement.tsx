@@ -1,22 +1,19 @@
-import React, { useEffect, useState } from "react";
+import  { useEffect, useState } from "react";
 import { toast } from "sonner";
 
-import axios from "axios";
 import { useDeleteProductMutation } from "../../../redux/features/admin/productManagementApi";
-import { ImgBBResponseData, IUser } from "../../../types";
-import { useCreateAdminMutation, useGetAllUsersQuery, useUpdateUserStatusMutation } from "../../../redux/features/admin/userManagementApi";
+import {  IUser } from "../../../types";
+import { useCreateAdminMutation, useDeleteUserMutation, useGetAllUsersQuery, useUpdateUserStatusMutation } from "../../../redux/features/admin/userManagementApi";
 import Spinner from "../../../components/Spinner/Spinner";
 
 
 function UsersManagement() {
-  const [deleteProduct] = useDeleteProductMutation();
+  const [deleteUser] = useDeleteUserMutation();
   const [updateUserStatus]=useUpdateUserStatusMutation()
   const [changeRole]=useCreateAdminMutation()
 
 
   const {data}=useGetAllUsersQuery({})
-  const [imageUploading,setImageUploadLoading]=useState<boolean>(false)
-     const [imagePreview,setImagePreview]=useState<string>()
      const [selectedUser, setSelectedUser] = useState<any>(null);
     const [user,setUser]=useState<IUser>()
 
@@ -52,26 +49,14 @@ function UsersManagement() {
     // Only update product when sellerId changes
   // Deleting product
 
-  const handleDeleteProduct = async (id: string) => {
-    const res = await deleteProduct(id).unwrap();
+  const handleUserDelete = async (id: string) => {
+    const res = await deleteUser(id).unwrap();
 
     if (res?.success) {
-      toast.success("Product deleted successfully");
+      toast.success("user deleted successfully");
     }
   };
 
-// handle all input element for getting value to update product
-const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
- [e.target.name]=[e.target.value]
-};
-
-
-  // Opening the modal
-  const handleUpdateClick = (user: any) => {
-    setImagePreview(user?.image)
-    setSelectedUser(user);
-    setIsModalOpen(true);
-  };
 
   // Closing the modal
   const handleCloseModal = () => {
@@ -82,44 +67,6 @@ const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaE
   // Handle page change
   const handlePageChange = (pageNumber: number) => {
     setCurrentPage(pageNumber);
-  };
-
-  // handle the image uploading system
-  const handleSaveImage = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-  
-    if (!file) {
-      console.error("No file provided");
-      return;
-    }
-  
-    setImageUploadLoading(true);
-    try {
-      const formData = new FormData();
-      formData.append("image", file);
-  
-      const response = await axios.post<ImgBBResponseData>(
-        `https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_API_KEY}`,
-        formData
-      );
-  
-      if (response.data && response.data.data && response.data.data.url) {
-        const uploadedImageUrl = response.data.data.url;
-        setImagePreview(uploadedImageUrl);
-        toast.success("Image Uploaded successfully");
-        setUser((prev) => ({
-          ...prev,
-         
-          image: uploadedImageUrl, // Update the image field in the product state
-        }) as IUser);
-      } else {
-        console.error("Unexpected response format:", response.data);
-      }
-    } catch (error) {
-      console.error("Error uploading image:", error);
-    } finally {
-      setImageUploadLoading(false);
-    }
   };
 
   // update product function
@@ -186,7 +133,7 @@ const handleUserStatus=async(id:string)=>{
               </td>
               <td className="border px-4 py-2 text-center">
                 <button
-                  onClick={() => handleDeleteProduct(user?._id)}
+                  onClick={() => handleUserDelete(user?._id)}
                   className="text-red-500"
                 >
                   X
@@ -233,131 +180,10 @@ const handleUserStatus=async(id:string)=>{
 {/* show the image and upload or change the product image */}
 
 <div className="flex bg-black w-full">
-  {imageUploading ? (
-    <div className="w-full flex justify-center align-middle items-center">
-      <div className=" mx-auto">
-      <Spinner />
-      </div>
-    </div>
-  ) : (
-    <div className="extraOutline p-4 w-max m-auto rounded-lg">
-      {imagePreview ? (
-        <div className="text-center">
-          <img
-            src={imagePreview||selectedUser.image||"https://cdn-icons-png.flaticon.com/512/1554/1554590.png"}
-            alt="Uploaded Preview"
-            className="rounded-lg w-full h-44 mb-4"
-          />
-          <button
-            onClick={() => setImagePreview("")}
-            className="text-white bg-primary  rounded font-semibold cursor-pointer p-1 px-3 hover:bg-indigo-500"
-          >
-           Cancel
-          </button>
-        </div>
-      ) : (
-        <div
-          className="file_upload p-5 relative border-4 border-dotted border-gray-300 rounded-lg"
-          style={{ width: "450px" }}
-        >
-          <svg
-            className="text-indigo-500 w-24 mx-auto mb-4"
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-              d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
-            />
-          </svg>
-          <div className="input_field flex flex-col w-max mx-auto text-center">
-            <label>
-              <input
-                onChange={(e) => handleSaveImage(e)}
-                className="text-sm cursor-pointer w-36 hidden"
-                type="file"
-                multiple
-              />
-              <div className="text bg-primary text-white border border-gray-300 rounded font-semibold cursor-pointer p-1 px-3 hover:bg-indigo-500">
-                Upload Image
-              </div>
-            </label>
-            <div className="title text-primary uppercase">
-              or drop files here
-            </div>
-          </div>
-        </div>
-      )}
-    </div>
-  )}
+ 
+  
 </div>
-        {/* user details form */}
-        <div className="flex gap-4">
-          <div className="mb-4">
-            <label className="block mb-2 font-medium">Name</label>
-            <input
-            onChange={handleInputChange}
-              type="text"
-              defaultValue={selectedUser.firstName+ "_" + selectedUser.lastName}
-              name="title"
-              className="border border-gray-300 rounded p-2 w-full"
-            />
-          </div>
-
-          <div className="mb-4">
-            <label className="block mb-2 font-medium">Quantity</label>
-            <input
-              onChange={handleInputChange}
-              type="number"
-              name="quantity"
-              defaultValue={selectedUser.quantity}
-              className="border border-gray-300 rounded p-2 w-full"
-            />
-          </div>
-
-          <div className="mb-4">
-            <label className="block mb-2 font-medium">Price ($)</label>
-            <input
-              onChange={handleInputChange}
-              type="number"
-              defaultValue={selectedUser.price}
-              name="price"
-              className="border border-gray-300 rounded p-2 w-full"
-            />
-          </div>
-        </div>
-
-        <div className="mb-4 w-full">
-          <label className="block mb-2 font-medium">Description</label>
-          <textarea
-            onChange={handleInputChange}
-            name="description"
-            defaultValue={selectedUser.description}
-            className="border border-gray-300 rounded p-2 w-full"
-          />
-        </div>
-
-
-        <div className="flex justify-end space-x-4">
-          <button
-            type="button"
-            onClick={handleCloseModal}
-            className="bg-primary px-4 py-2 rounded"
-          >
-            Cancel
-          </button>
-          <button
-          onClick={handleUserRoleChange}
-            type="submit"
-            className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded"
-          >
-            Update
-          </button>
-        </div>
+     
       </form>
     </div>
   </div>

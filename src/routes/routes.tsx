@@ -9,6 +9,7 @@ import Checkout from "../pages/CheckOut";
 import Chat from "../pages/chat/chat";
 import Profile from "../pages/profile/profile";
 import Dashboard from "../pages/dashboard/Dashboard";
+import ProtectedRoute from "../components/layout/ProtectedRoute";
 
 const router = createBrowserRouter([
   {
@@ -37,7 +38,7 @@ const router = createBrowserRouter([
       },
       {
         path: "profile",
-        element: <Profile />
+        element: <ProtectedRoute><Profile /></ProtectedRoute>
       },
      
      
@@ -53,7 +54,7 @@ const router = createBrowserRouter([
   },
   {
     path:"dashboard",
-    element:<Dashboard></Dashboard>
+    element:<ProtectedRoute><Dashboard></Dashboard></ProtectedRoute>
   }
 ]);
 

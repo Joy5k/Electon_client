@@ -31,6 +31,14 @@ const userManagementApi = baseApi.injectEndpoints({
         };
       },invalidatesTags:["users"]
     }),
+    deleteUser: builder.mutation({
+      query: (id) => {
+        return {
+          url: `/user/delete/${id}`,
+          method: "DELETE",
+        };
+      },invalidatesTags:["users"]
+    }),
   }),
 });
 
@@ -39,5 +47,6 @@ export const {
   useAddStudentMutation,
   useUpdateUserStatusMutation,
   useCreateAdminMutation,
+  useDeleteUserMutation
 
 } = userManagementApi;
