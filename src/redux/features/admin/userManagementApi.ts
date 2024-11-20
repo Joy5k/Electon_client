@@ -23,14 +23,17 @@ const userManagementApi = baseApi.injectEndpoints({
         };
       },invalidatesTags:["users"]
     }),
+
     createAdmin: builder.mutation({
-      query: () => {
+      query: (_id) => {
         return {
           url: `/user/create-admin`,
           method: "PUT",
+          body:_id
         };
       },invalidatesTags:["users"]
     }),
+
     deleteUser: builder.mutation({
       query: (id) => {
         return {

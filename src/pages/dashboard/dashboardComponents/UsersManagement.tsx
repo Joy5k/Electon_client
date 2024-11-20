@@ -5,6 +5,7 @@ import { useDeleteProductMutation } from "../../../redux/features/admin/productM
 import {  IUser } from "../../../types";
 import { useCreateAdminMutation, useDeleteUserMutation, useGetAllUsersQuery, useUpdateUserStatusMutation } from "../../../redux/features/admin/userManagementApi";
 import Spinner from "../../../components/Spinner/Spinner";
+import { GoAlert } from "react-icons/go";
 
 
 function UsersManagement() {
@@ -57,7 +58,10 @@ function UsersManagement() {
     }
   };
 
-
+const handleOpenModal=(user:any)=>{
+  setIsModalOpen(true)
+  setSelectedUser(user)
+}
   // Closing the modal
   const handleCloseModal = () => {
     setIsModalOpen(false);
@@ -83,6 +87,8 @@ function UsersManagement() {
     toast.error("Something went wrong")
    }
   }
+
+
 const handleUserStatus=async(id:string)=>{
   const res=await updateUserStatus(id).unwrap()
   if(res.success){
@@ -141,7 +147,7 @@ const handleUserStatus=async(id:string)=>{
               </td>
               <td className="border px-4 py-2 text-center">
                 <button
-                  onClick={() => handleUserRoleChange()}
+                  onClick={() => handleOpenModal(user)}
                   className="text-blue-500"
                 >
                   {user.role === "admin"? "user":"admin"}
@@ -172,19 +178,20 @@ const handleUserStatus=async(id:string)=>{
       {isModalOpen && selectedUser && (
   <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center w-full">
     <div
-      className="border w-full md:w-9/12 lg:w-8/12 max-h-screen overflow-y-auto p-6 rounded-lg shadow-lg "
+      className="border w-full md:w-5/12 lg:w-5/12 max-h-screen overflow-y-auto p-6 rounded-lg shadow-lg "
     >
-      <h2 className="text-xl font-bold mb-4">Change Image</h2>
-    
-      <form>
-{/* show the image and upload or change the product image */}
-
-<div className="flex bg-black w-full">
- 
-  
+<div className="flex justify-center items-center space-x-2 ">
+  <h2 className="text-red-600 text-3xl font-bold">Caution</h2>
+  <GoAlert className="text-3xl font-bold  animate-bounce"  />
 </div>
-     
-      </form>
+
+
+      <p className="text-white"><span className="font-bold text-primary">Note:</span> Are you sure you want to create this person as an admin? Admins have full control and can modify your website.
+      </p>
+      <div className="flex flex-col md:flex-row lg:flex-row justify-center space-x-3">
+        <button onClick={handleUserRoleChange} className="bg-emerald-700 rounded-lg p-2 ">Yes! Go ahead</button>
+        <button onClick={handleCloseModal} className="bg-orange-600 p-2 rounded-lg">No! save website</button>
+      </div>
     </div>
   </div>
 )}
