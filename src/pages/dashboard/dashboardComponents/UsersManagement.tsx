@@ -11,7 +11,7 @@ import { GoAlert } from "react-icons/go";
 function UsersManagement() {
   const [deleteUser] = useDeleteUserMutation();
   const [updateUserStatus]=useUpdateUserStatusMutation()
-  const [changeRole]=useCreateAdminMutation()
+  const [changeRole,{isLoading}]=useCreateAdminMutation()
 
 
   const {data}=useGetAllUsersQuery({})
@@ -74,10 +74,10 @@ const handleOpenModal=(user:any)=>{
   };
 
   // update product function
-  const handleUserRoleChange=async()=>{
-  
+  const handleUserRoleChange=async():Promise<void>=>{
+    const userId=selectedUser._id
    try {
-    const res=await changeRole({}).unwrap();
+    const res=await changeRole(userId).unwrap();
     if(res.success){
       toast.success("user role changed successfully")
       setIsModalOpen(false);
@@ -189,8 +189,9 @@ const handleUserStatus=async(id:string)=>{
       <p className="text-white"><span className="font-bold text-primary">Note:</span> Are you sure you want to create this person as an admin? Admins have full control and can modify your website.
       </p>
       <div className="flex flex-col md:flex-row lg:flex-row justify-center space-x-3">
-        <button onClick={handleUserRoleChange} className="bg-emerald-700 rounded-lg p-2 ">Yes! Go ahead</button>
-        <button onClick={handleCloseModal} className="bg-orange-600 p-2 rounded-lg">No! save website</button>
+        {isLoading ? <Spinner></Spinner>: <div className="flex flex-col md:flex-row lg:flex-row justify-center space-x-3"> <button onClick={()=>handleUserRoleChange()} className="bg-emerald-700 rounded-lg p-2 "> Yes! Go ahead</button>
+        <button onClick={handleCloseModal} className="bg-orange-600 p-2 rounded-lg">No! save website</button></div>
+        }
       </div>
     </div>
   </div>
