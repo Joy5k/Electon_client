@@ -24,7 +24,7 @@ const ProductTable = ({ products }: any) => {
             quantity: selectedProduct.quantity || 0,
             color: selectedProduct.color || [],
             rating: selectedProduct.rating,
-            sellerId: selectedProduct.sellerId._id || "",
+            sellerId: selectedProduct?.sellerId?._id || "",
           });
         }
       }, [selectedProduct]);

@@ -12,12 +12,10 @@ function UsersManagement() {
   const [updateUserStatus]=useUpdateUserStatusMutation()
   const [changeRole,{isLoading}]=useCreateAdminMutation()
 
-
   const {data}=useGetAllUsersQuery({})
-     const [selectedUser, setSelectedUser] = useState<any>(null);
+  const [selectedUser, setSelectedUser] = useState<any>(null);
 
   
-
   // State for modal
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -31,7 +29,7 @@ function UsersManagement() {
   const currentRows = data?.data.slice(indexOfFirstRow, indexOfLastRow);
 
   
-    // Only update product when sellerId changes
+  // Only update product when sellerId changes
   // Deleting product
 
   const handleUserDelete = async (id: string) => {
@@ -130,13 +128,20 @@ const handleUserStatus=async(id:string)=>{
                 </button>
               </td>
               <td className="border px-4 py-2 text-center">
-                <button
-                  onClick={() => handleOpenModal(user)}
-                  className="text-blue-500"
-                >
-                  {user.role === "admin"? "user":"admin"}
-                </button>
-              </td>
+  <button
+    onClick={() => handleOpenModal(user)}
+    className="text-blue-500"
+    disabled={user.role === "super_admin"}
+  >
+    {/* Show 'Super_Admin' only for super_admin role */}
+    {user.role === "super_admin" ? <p className="cursor-not-allowed text-red-500 ">Super Admin</p> :
+    
+      user.role === "admin" ? "user" : 
+     
+      "admin"}
+  </button>
+</td>
+
             </tr>
           ))}
         </tbody>
