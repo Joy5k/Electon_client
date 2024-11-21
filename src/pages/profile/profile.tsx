@@ -216,7 +216,7 @@ const handleVerifySecret=async():Promise<void>=>{
             {/* Contact Info and About Me Section */}
             <section className="lg:w-2/3 -mt-5">
              <div className="flex justify-between">
-             <h4 className="text-green-500 text-2xl animate-pulse font-bold mb-2">Information</h4>
+             <h4 className="text-green-500 text-2xl font-bold mb-2">Information</h4>
               <button onClick={() => {
                if (isEditing) handleUserProfileUpdate();
                  toggleEdit();

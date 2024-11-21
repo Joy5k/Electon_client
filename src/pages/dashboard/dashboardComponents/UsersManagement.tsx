@@ -1,7 +1,6 @@
-import  { useEffect, useState } from "react";
+import  { useState } from "react";
 import { toast } from "sonner";
 
-import { useDeleteProductMutation } from "../../../redux/features/admin/productManagementApi";
 import {  IUser } from "../../../types";
 import { useCreateAdminMutation, useDeleteUserMutation, useGetAllUsersQuery, useUpdateUserStatusMutation } from "../../../redux/features/admin/userManagementApi";
 import Spinner from "../../../components/Spinner/Spinner";
@@ -16,22 +15,7 @@ function UsersManagement() {
 
   const {data}=useGetAllUsersQuery({})
      const [selectedUser, setSelectedUser] = useState<any>(null);
-    const [user,setUser]=useState<IUser>()
 
-      useEffect(() => {
-        if (selectedUser) {
-          setUser({
-            firstName: selectedUser.title || "",
-            lastName: selectedUser.description || "",
-            image: selectedUser.image || "",
-            email: selectedUser.price || 0,
-            role: selectedUser.quantity || 0,
-            status: selectedUser.color || [],
-            _id: selectedUser.rating,
-          
-          });
-        }
-      }, [selectedUser]);
   
 
   // State for modal
@@ -132,7 +116,7 @@ const handleUserStatus=async(id:string)=>{
                 {user?.role !=="super_admin"&& user?.role}
               </td>
               <td className="border px-4 py-2 text-center">
-                ${user?.email}
+                {user?.email}
               </td>
               <td onClick={()=>handleUserStatus(user?._id)} className="border px-4 py-2 text-center cursor-pointer">
                {user?.status}

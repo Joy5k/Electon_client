@@ -15,7 +15,7 @@ function Overview() {
 return (
     <div className="w-full" >
      {
-      isLoading ||userLoading ? <Spinner></Spinner> :
+      isLoading ||userLoading ? <div className="flex justify-center items-center align-middle mx-auto w-11/12"><Spinner></Spinner></div> :
       <div className="">
       {/* overview carts */}
       <h3 className="text-xl font-bold mb-5 bg-transparent">Overview</h3>
