@@ -7,6 +7,7 @@ import { useAuth2Mutation, useVerifyAuth2Mutation } from "../../redux/features/a
 import SelectDivision from "../../components/selectDivision/selectDivision";
 import { MdEdit } from "react-icons/md";
 import Spinner from "../../components/Spinner/Spinner";
+import { FiAlertTriangle } from "react-icons/fi";
 
 const Profile = () => {
   const [isEditing, setIsEditing] = useState(false);
@@ -253,8 +254,13 @@ const handleVerifySecret=async():Promise<void>=>{
                     <label htmlFor="twoStep">Two-step Authentication</label> <br />
                     <span>
                       {
-                        userData?.data?.auth2 ? <p className="text-green-500">Enabled</p> : 
-                        <button onClick={toggleModal} className="text-red-500 bg-gray-800 px-2  animate-pulse">Enable</button>
+                        userData?.data?.auth2 ?  <>
+                        <p className="text-green-500">Enabled </p>
+
+                        </> :
+                       <div className="flex align-middle  space-x-2 items-center">
+                        <button onClick={toggleModal} className="text-red-500 bg-gray-900 px-2 hover:bg-slate-800 ">Enable </button> <FiAlertTriangle className="animate-pulse text-xl" />
+                       </div>
                       }
                     </span>
                   </div>
@@ -330,7 +336,7 @@ const handleVerifySecret=async():Promise<void>=>{
         </div>
         <div className="mt-6">
         <label htmlFor="verifyCode" className="font-bold text-start w-full">Enter 6 Digit Code</label> <br />
-        <input onChange={(e) => setVerifyCode(e.target.value)} type="text" className=" border border-gray-700 p-1 w-full mb-2 mt-1" placeholder="256 587"/>
+        <input onChange={(e) => setVerifyCode(e.target.value)} type="text" className=" border border-gray-700 p-1 w-full mb-2 mt-1" placeholder="*** ***"/>
       </div>
       <button onClick={handleVerifySecret} className="bg-gray-900 text-green-500 p-2 px-8 w-full font-bold hover:bg-gray-800">Verify</button>
         <button onClick={toggleModal} className="absolute text-2xl  px-2 right-0 top-0 ">X</button>
