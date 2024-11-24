@@ -133,7 +133,7 @@ const Navbar=()=>{
     className="relative rounded-full bg-black p-1 text-gray-400 hover:text-primary focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800 mr-2"
   >
     <span className="sr-only hover:text-primary">View Wishlist</span>
-    <Link to="/booking">
+    <Link to="/wishlist">
     <MdOutlineFavoriteBorder className="h-6 w-6 text-white hover:text-primary" />
     
     </Link>

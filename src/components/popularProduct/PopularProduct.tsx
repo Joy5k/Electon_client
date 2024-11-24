@@ -6,6 +6,7 @@ import { AppDispatch } from "../../redux/store";
 import { useDispatch } from "react-redux";
 import { addToWishlist } from "../../redux/features/admin/wishlistSlice";
 import { IProduct } from "../../types";
+import { toast } from "sonner";
 
 
 const PopularProduct = () => {
@@ -25,6 +26,8 @@ const [selectedColor, setSelectedColor] = useState<string | null>(null);
 
   const handleAddToWishlist = (product: IProduct) => {
     dispatch(addToWishlist(product));
+    setIsModalOpen(false)
+    toast.success("Product added wishlist successfully")
   };
 
   const increaseQuantity = () => {

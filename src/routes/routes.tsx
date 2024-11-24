@@ -10,6 +10,7 @@ import Chat from "../pages/chat/chat";
 import Profile from "../pages/profile/profile";
 import Dashboard from "../pages/dashboard/Dashboard";
 import ProtectedRoute from "../components/layout/ProtectedRoute";
+import Wishlist from "../pages/wishlist/Wishlist";
 
 const router = createBrowserRouter([
   {
@@ -29,6 +30,10 @@ const router = createBrowserRouter([
         element: <Booking />
       },
       {
+        path: "wishlist",
+        element: <Wishlist />
+      },
+      {
         path: "checkout",
         element: <Checkout />
       },
@@ -40,6 +45,7 @@ const router = createBrowserRouter([
         path: "profile",
         element: <ProtectedRoute><Profile /></ProtectedRoute>
       },
+    
      
      
     ]
