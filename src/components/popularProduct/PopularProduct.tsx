@@ -218,8 +218,8 @@ const [selectedColor, setSelectedColor] = useState<string | null>(null);
             <button className="capitalize bg-primary p-3 hover:bg-gray-700 mt-6 hover:text-white rounded-full text-white w-full">
               Add To Cart
             </button>
-            <button className="capitalize bg-primary p-3 hover:bg-gray-700 mt-6 hover:text-white rounded-full text-white w-full">
-              Buy Now
+            <button className="capitalize bg-gray-700 p-3 md:p-0 lg:p-  hover:bg-primary mt-6 hover:text-white rounded-full text-white w-full">
+             Add to wishlist
             </button>
           </div>
         </div>
