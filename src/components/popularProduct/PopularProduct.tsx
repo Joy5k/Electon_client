@@ -9,6 +9,8 @@ interface Product {
   title: string;
   price: number;
   image: string;
+  quantity:number;
+  color?:string[]
 }
 
 const PopularProduct = () => {
@@ -137,13 +139,13 @@ const PopularProduct = () => {
             <h3 className="text-2xl sm:text-3xl font-bold text-white">
               Bluetooth speaker
             </h3>
-            <p className="text-primary font-semibold">Price 2,13.59 $</p>
+            <p className="text-primary font-semibold">Price:{selectedProduct?.price} $</p>
           </div>
           <div>
             <p className="my-2">
-              Availability: <span className="text-green-500">16 in stock</span>
+              Availability: <span className="text-green-500">{selectedProduct?.quantity} in stock</span>
             </p>
-            <p className="text-lg mb-2">
+            {/* <p className="text-lg mb-2">
               Size: <span> 32</span>
             </p>
             <div className="mb-2">
@@ -159,10 +161,18 @@ const PopularProduct = () => {
               <button className="border px-3 py-1 hover:bg-primary hover:text-gray-100 rounded-xl mr-2">
                 36
               </button>
-            </div>
+            </div> */}
             <p className="my-1">
-              Color: <span>Red</span>
-            </p>
+  Color:
+  <span className="ml-2 ">
+    {selectedProduct?.color?.map((clr, index) => (
+      <span key={index} className="inline-block mr-2 border rounded-full px-2 cursor-pointer hover:bg-gray-700">
+        {clr}
+      </span>
+    ))}
+  </span>
+</p>
+
           </div>
           <div className="flex  sm:flex-row justify-start my-2 gap-2 items-center">
             <span className="text-xl text-gray-400 font-semibold">
