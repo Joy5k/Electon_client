@@ -1,10 +1,7 @@
 import { useState } from "react";
-import img1 from "../../assets/images/img_p.webp";
-import img2 from "../../assets/images/imge_p2.webp";
-import img3 from "../../assets/images/img_p3.webp";
-import img4 from "../../assets/images/img_p4.webp";
 import { Link } from "react-router-dom";
 import { FaBagShopping } from "react-icons/fa6";
+import { useAllProductsQuery } from "../../redux/features/admin/productManagementApi";
 
 // Define a type for the product data
 interface Product {
@@ -15,15 +12,11 @@ interface Product {
 }
 
 const PopularProduct = () => {
+  const{data}=useAllProductsQuery({})
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
-
-  const products: Product[] = [
-    { id: 1, name: "Play game", price: 50, image: img1 },
-    { id: 2, name: "Play game", price: 50, image: img2 },
-    { id: 3, name: "Play game", price: 50, image: img3 },
-    { id: 4, name: "Play game", price: 50, image: img4 },
-  ];
+console.log(data.data)
+  const products: Product[] = data?.data
   const [quantity, setQuantity] = useState<number>(1);
 
   const increaseQuantity = () => {

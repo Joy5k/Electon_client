@@ -6,12 +6,34 @@ import { MdOutlineReportProblem } from "react-icons/md";
 import { useAllProductsQuery } from "../../../redux/features/admin/productManagementApi";
 import Spinner from "../../../components/Spinner/Spinner";
 import { useGetAllUsersQuery } from "../../../redux/features/admin/userManagementApi";
+import PieChart from "./charts/PieChart";
+import { useEffect, useState } from "react";
 
 
 
 function Overview() {
   const {data:products,isLoading}=useAllProductsQuery({})
   const {data:users,isLoading:userLoading}=useGetAllUsersQuery({})
+  const [chartData, setChartData] = useState<any>(null);
+  useEffect(() => {
+    if (products?.data && users?.data) {
+      setChartData({
+        labels: ["Products", "Users"], // Labels for the datasets
+        datasets: [
+          {
+            label: "Product Count",
+            data: [products.data.length, 0], // Product count
+            backgroundColor: ["rgba(54, 162, 235, 0.6)", "rgba(255, 99, 132, 0.6)"], // Product colors
+          },
+          {
+            label: "User Count",
+            data: [0, users.data.length], // User count
+            backgroundColor: ["rgba(153, 102, 255, 0.6)", "rgba(255, 159, 64, 0.6)"], // User colors
+          },
+        ],
+      });
+    }
+  }, [products, users]);
 return (
     <div className="w-full" >
      {
@@ -92,7 +114,10 @@ return (
       </div>
       </div>
 
-      
+    {/* chart section start here */}
+    <div>
+      {chartData && <PieChart chartData={chartData} />}
+    </div>
     </div>
      }
     </div>

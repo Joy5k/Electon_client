@@ -49,19 +49,22 @@ function DashboardNav() {
   return (
     <div className="p-5">
       <div>
-        {/* Responsive Time Display */}
-        <p className={`text-sm text-gray-400 ${formattedTime ? '' : 'hidden'}`}>
-          {formattedTime}
-        </p>
+      
 
-        <div className="flex justify-between items-center bg-transparent relative border-b-2">
+        <div className="flex justify-stretch items-center bg-transparent relative border-b-2">
           <Link
             to="/"
             className="text-primary text-2xl font-bold mx-10 pb-2 bg-transparent"
           >
             Electon
           </Link>
-
+  {/* Responsive Time Display */}
+  <div className='flex flex-col'>
+  <p className='hidden md:block lg:block mr-4'>Hi, { userData?.data?.firstName}</p>
+  <p className={`text-sm text-gray-400 ${formattedTime ? '' : 'hidden'}`}>
+         Date: {formattedTime}
+        </p>
+  </div>
           {/* Profile Navbar Section */}
           <div className="absolute right-0 top-0 bg-transparent mr-0 md:mr-5 lg:mr-5">
             <Menu as="div" className="relative ml-3 bg-transparent">
