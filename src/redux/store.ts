@@ -3,7 +3,7 @@ import authReducer from "./features/auth/authSlice"
 import { baseApi } from "./api/baseApi";
 import storage from "redux-persist/lib/storage";
 import { persistStore, persistReducer, FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER } from 'redux-persist'
-
+import wishlistReducer from"./features/admin/wishlistSlice"
 
 const persistConfig = ({
     key: "auth",
@@ -15,6 +15,7 @@ export const store = configureStore({
     reducer: {
         [baseApi.reducerPath]:baseApi.reducer,
         auth:persistedAuthReducer,
+        wishlist: wishlistReducer,
     },
     middleware: (getDefaultMiddlewares) => getDefaultMiddlewares({
         serializableCheck: {

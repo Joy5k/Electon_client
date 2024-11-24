@@ -2,6 +2,9 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { FaBagShopping } from "react-icons/fa6";
 import { useAllProductsQuery } from "../../redux/features/admin/productManagementApi";
+import { AppDispatch } from "../../redux/store";
+import { useDispatch } from "react-redux";
+import { addToWishlist } from "../../redux/features/admin/wishlistSlice";
 
 // Define a type for the product data
 interface Product {
@@ -14,6 +17,7 @@ interface Product {
 }
 
 const PopularProduct = () => {
+  const dispatch = useDispatch<AppDispatch>();
   const{data}=useAllProductsQuery({})
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
@@ -24,6 +28,12 @@ const [selectedColor, setSelectedColor] = useState<string | null>(null);
   const [seeMore,setSeeMore]=useState<boolean>(false)
 
   const products: Product[] = data?.data ?? [];
+
+
+
+  const handleAddToWishlist = (product: Product) => {
+    dispatch(addToWishlist(product));
+  };
 
   const increaseQuantity = () => {
     setQuantity(prevQuantity => prevQuantity + 1);
@@ -43,6 +53,7 @@ const [selectedColor, setSelectedColor] = useState<string | null>(null);
     setIsModalOpen(false);
     setSelectedProduct(null);
   };
+
   if (!data) {
     return <p>Loading products...</p>;
   }
@@ -146,23 +157,7 @@ const [selectedColor, setSelectedColor] = useState<string | null>(null);
             <p className="my-2">
               Availability: <span className="text-green-500">{selectedProduct?.quantity} in stock</span>
             </p>
-            {/* <p className="text-lg mb-2">
-              Size: <span> 32</span>
-            </p>
-            <div className="mb-2">
-              <button className="border px-3 py-1 hover:bg-primary hover:text-gray-100 rounded-xl mr-2">
-                30
-              </button>
-              <button className="border px-3 py-1 hover:bg-primary hover:text-gray-100 rounded-xl mr-2">
-                32
-              </button>
-              <button className="border px-3 py-1 hover:bg-primary hover:text-gray-100 rounded-xl mr-2">
-                34
-              </button>
-              <button className="border px-3 py-1 hover:bg-primary hover:text-gray-100 rounded-xl mr-2">
-                36
-              </button>
-            </div> */}
+           
            <p className="my-1">
                   Color:
                   <span className="ml-2">
@@ -218,7 +213,7 @@ const [selectedColor, setSelectedColor] = useState<string | null>(null);
             <button className="capitalize bg-primary p-3 hover:bg-gray-700 mt-6 hover:text-white rounded-full text-white w-full">
               Add To Cart
             </button>
-            <button className="capitalize bg-gray-700 p-3 md:p-0 lg:p-  hover:bg-primary mt-6 hover:text-white rounded-full text-white w-full">
+            <button  onClick={() => handleAddToWishlist(selectedProduct)} className="capitalize bg-gray-700 p-3 md:p-0 lg:p-  hover:bg-primary mt-6 hover:text-white rounded-full text-white w-full">
              Add to wishlist
             </button>
           </div>
