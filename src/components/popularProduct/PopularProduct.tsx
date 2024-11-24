@@ -5,8 +5,8 @@ import { useAllProductsQuery } from "../../redux/features/admin/productManagemen
 
 // Define a type for the product data
 interface Product {
-  id: number;
-  name: string;
+  _id: string;
+  title: string;
   price: number;
   image: string;
 }
@@ -15,9 +15,12 @@ const PopularProduct = () => {
   const{data}=useAllProductsQuery({})
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
-console.log(data.data)
-  const products: Product[] = data?.data
   const [quantity, setQuantity] = useState<number>(1);
+
+  // show product according to the user wise
+  const [seeMore,setSeeMore]=useState<boolean>(false)
+
+  const products: Product[] = data?.data ?? [];
 
   const increaseQuantity = () => {
     setQuantity(prevQuantity => prevQuantity + 1);
@@ -37,7 +40,10 @@ console.log(data.data)
     setIsModalOpen(false);
     setSelectedProduct(null);
   };
-
+  if (!data) {
+    return <p>Loading products...</p>;
+  }
+  
   return (
     <div className="p-4">
       <div className="flex flex-col md:flex-row justify-between items-center">
@@ -51,10 +57,11 @@ console.log(data.data)
           <button className="text-md p-2 rounded-full border border-gray-500 hover:bg-gray-800 hover:text-primary m-3">Mouse</button>
         </div>
       </div>
-
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 my-10">
-        {products.map((product) => (
-          <div key={product.id} className="bg-black border border-gray-800 p-4 rounded-md w-64 mx-auto">
+{/* appearing all products according to the user condition */}
+     {
+      seeMore &&  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 my-10">
+      {products.map((product) => (
+          <div key={product._id} className="bg-black border border-gray-800 p-4 rounded-md w-64 mx-auto">
             <div>
               <Link to="/product/12321232" > 
               <img src={product.image} className="w-60 h-60 rounded-sm" alt="popular_image" />
@@ -62,7 +69,7 @@ console.log(data.data)
             </div>
             <div className="text-md mt-10 flex justify-between items-center mr-4">
               <div>
-                <Link to="/product/12321232" className="text-gray-300 text-xl font-semibold hover:text-primary mb-4">{product.name}</Link>
+                <Link to={`"/product/${product._id}`} className="text-gray-300 text-xl font-semibold hover:text-primary mb-4 hover:underline">{product.title}</Link>
                 <p className="mt-2 text-primary font-semibold">Price: ${product.price}</p>
               </div>
               <button
@@ -74,8 +81,39 @@ console.log(data.data)
             </div>
           </div>
         ))}
+       
       </div>
-
+     }
+     {
+      !seeMore && <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 my-10">
+        {
+          products.slice(0,8).map((product) => (
+            <div key={product._id} className="bg-black border border-gray-800 p-4 rounded-md w-64 mx-auto">
+              <div>
+                <Link to="/product/12321232" > 
+                <img src={product.image} className="w-60 h-60 rounded-sm" alt="popular_image" />
+                </Link>
+              </div>
+              <div className="text-md mt-10 flex justify-between items-center mr-4">
+                <div>
+                  <Link to={`"/product/${product._id}`} className="text-gray-300 text-xl font-semibold hover:text-primary mb-4 hover:underline">{product.title}</Link>
+                  <p className="mt-2 text-primary font-semibold">Price: ${product.price}</p>
+                </div>
+                <button
+                  className="hover:border hover:rounded-full hover:p-2 p-2 hover:border-primary"
+                  onClick={() => openModal(product)}
+                >
+                  <FaBagShopping className="text-3xl text-primary hover:text-white bg-transparent" />
+                </button>
+              </div>
+            </div>
+          ))
+        }
+      </div>
+     }
+      <div className="mx-auto flex justify-center md:justify-start md:ml-6 ">
+          <button onClick={()=>setSeeMore(!seeMore)} className="underline text-blue-400 hover:text-primary">{seeMore===true ?"See less":"See more"}</button>
+        </div>
       {/* Modal */}
       {isModalOpen && selectedProduct && (
   <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 overflow-y-auto">
