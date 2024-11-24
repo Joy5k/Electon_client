@@ -18,7 +18,8 @@ const PopularProduct = () => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [quantity, setQuantity] = useState<number>(1);
-
+// State to track selected color
+const [selectedColor, setSelectedColor] = useState<string | null>(null);
   // show product according to the user wise
   const [seeMore,setSeeMore]=useState<boolean>(false)
 
@@ -162,16 +163,23 @@ const PopularProduct = () => {
                 36
               </button>
             </div> */}
-            <p className="my-1">
-  Color:
-  <span className="ml-2 ">
-    {selectedProduct?.color?.map((clr, index) => (
-      <span key={index} className="inline-block mr-2 border rounded-full px-2 cursor-pointer hover:bg-gray-700">
-        {clr}
-      </span>
-    ))}
-  </span>
-</p>
+           <p className="my-1">
+                  Color:
+                  <span className="ml-2">
+                    {selectedProduct.color?.map((clr, index) => (
+                      <span
+                        key={index}
+                        onClick={() => setSelectedColor(clr)} // Update selected color
+                        className={`inline-block mr-2 border rounded-full px-2 cursor-pointer ${
+                          selectedColor === clr ? "bg-primary text-white" : "hover:bg-gray-700"
+                        }`}
+                      >
+                        {clr}
+                      </span>
+                    ))}
+                  </span>
+                </p>
+                <p className={`mt-4`}>Selected Color: <span className=" border-b border-dashed">{selectedColor || "None"}</span></p>
 
           </div>
           <div className="flex  sm:flex-row justify-start my-2 gap-2 items-center">
