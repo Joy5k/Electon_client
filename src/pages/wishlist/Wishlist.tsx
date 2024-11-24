@@ -1,11 +1,10 @@
-import React from 'react';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
 import { toast } from 'sonner';
 import { useCreateBookingMutation } from '../../redux/features/bookingManagement/bookingManagement';
 import { removeFromWishlist, updateQuantity } from '../../redux/features/admin/wishlistSlice';
 
-const Wishlist: React.FC = () => {
+const Wishlist = () => {
   const dispatch = useAppDispatch();
   const wishlist = useAppSelector((state: RootState) => state.wishlist.items);
   const [addToCart] = useCreateBookingMutation();
@@ -59,7 +58,10 @@ const Wishlist: React.FC = () => {
     localStorage.removeItem('wishlist');
     dispatch(removeFromWishlist("")); // Clear all wishlist items
   };
-
+  const handleContinueShopping = () => {
+    // Implement continue shopping logic here
+    alert('Continue shopping clicked!');
+  };
   return (
     <div className="container mx-auto p-4 my-10">
       <div className="flex flex-col md:flex-row lg:flex-row sm:space-x-8">
@@ -131,18 +133,26 @@ const Wishlist: React.FC = () => {
                   </td>
                 </tr>
               ))}
-              <tr>
-                <td colSpan={5} className="py-4 px-4">
-                  <div className="flex justify-between">
-                    <button
-                      onClick={handleClearData}
-                      className="px-4 py-2 bg-red-500 text-white rounded"
-                    >
-                      Clear Wishlist
-                    </button>
-                  </div>
-                </td>
-              </tr>
+            <tr>
+              <td colSpan={6} className="py-4 px-4">
+                <div className="flex justify-between">
+                  <button
+                    onClick={handleContinueShopping}
+                    className="px-4 py-2 bg-blue-500 text-white rounded"
+                  >
+                    Continue Shopping
+                  </button>
+                  
+                  <button
+                    onClick={handleClearData}
+                    className="px-4 py-2 bg-red-500 text-white rounded"
+                  >
+                    Clear Data
+                  </button>
+                </div>
+              </td>
+            </tr>
+           
             </tbody>
           </table>
         </div>
