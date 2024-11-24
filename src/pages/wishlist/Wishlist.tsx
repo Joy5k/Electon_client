@@ -10,6 +10,7 @@ const Wishlist: React.FC = () => {
   const wishlist = useAppSelector((state: RootState) => state.wishlist.items);
   const [addToCart] = useCreateBookingMutation();
 
+//   adding the product wishlist to cart
   const handleAddToCart = async (id: string) => {
     const product = wishlist.find((item) => item._id === id);
 
@@ -32,7 +33,7 @@ const Wishlist: React.FC = () => {
   };
 
 
-
+// handle the product quantity
   const handleQuantityChange = (id: string, quantity: string) => {
     const currentItem = wishlist.find((item) => item._id === id);
     if (!currentItem) return;
