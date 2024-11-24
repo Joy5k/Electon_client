@@ -34,8 +34,23 @@ const wishlistSlice = createSlice({
       // Save updated list to localStorage
       localStorage.setItem("wishlist", JSON.stringify(state.items));
     },
-  },
+    updateQuantity: (state, action: PayloadAction<{ _id: string; type: 'increment' | 'decrement' }>) => {
+        const product = state.items.find((item) => item._id === action.payload._id);
+        
+        if (product) {
+          // Ensure userSelectedQuantity is initialized
+          product.userSelectedQuantity = product.userSelectedQuantity || 0;
+  
+          if (action.payload.type === 'increment') {
+            product.userSelectedQuantity += 1;
+          } else if (action.payload.type === 'decrement' && product.userSelectedQuantity > 0) {
+            product.userSelectedQuantity -= 1;
+          }
+        }
+      },
+
+  }
 });
 
-export const { addToWishlist, removeFromWishlist } = wishlistSlice.actions;
+export const { addToWishlist, removeFromWishlist,updateQuantity } = wishlistSlice.actions;
 export default wishlistSlice.reducer;

@@ -3,7 +3,7 @@ import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
 import { toast } from 'sonner';
 import { useCreateBookingMutation } from '../../redux/features/bookingManagement/bookingManagement';
-import { removeFromWishlist } from '../../redux/features/admin/wishlistSlice';
+import { removeFromWishlist, updateQuantity } from '../../redux/features/admin/wishlistSlice';
 
 const Wishlist: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -31,9 +31,18 @@ const Wishlist: React.FC = () => {
     }
   };
 
+
+
   const handleQuantityChange = (id: string, quantity: string) => {
+    const currentItem = wishlist.find((item) => item._id === id);
+    if (!currentItem) return;
+  
     const updatedQuantity = Math.max(Number(quantity), 1); // Ensure at least 1
-    dispatch(updateQuantity({ id, quantity: updatedQuantity }));
+    if (updatedQuantity > currentItem.quantity) {
+      dispatch(updateQuantity({ _id: id, type: 'increment' }));
+    } else if (updatedQuantity < currentItem.quantity) {
+      dispatch(updateQuantity({ _id: id, type: 'decrement' }));
+    }
     localStorage.setItem(
       'wishlist',
       JSON.stringify(
@@ -43,10 +52,11 @@ const Wishlist: React.FC = () => {
       )
     );
   };
+  
 
   const handleClearData = () => {
     localStorage.removeItem('wishlist');
-    dispatch(removeFromWishlist(null)); // Clear all wishlist items
+    dispatch(removeFromWishlist("")); // Clear all wishlist items
   };
 
   return (
