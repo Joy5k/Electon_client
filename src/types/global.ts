@@ -75,6 +75,8 @@ export interface IProduct {
   color: string[];
   rating?: number;
   sellerId:string;
+  userSelectedQuantity?: number; // Optional field for user-selected quantity
+
 }
 
 export interface IUser {

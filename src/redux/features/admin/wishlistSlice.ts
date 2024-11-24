@@ -1,9 +1,8 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { IProduct } from "../../../types";
 
-
 interface WishlistState {
-  items: IProduct[]; // Adjust `Product` to match your Product interface
+  items: IProduct[];
 }
 
 const initialState: WishlistState = {
@@ -15,19 +14,28 @@ const wishlistSlice = createSlice({
   initialState,
   reducers: {
     addToWishlist: (state, action: PayloadAction<IProduct>) => {
-      const productExists = state.items.find((item) => item._id === action.payload._id);
-      if (!productExists) {
-        state.items.push(action.payload);
-        localStorage.setItem("wishlist", JSON.stringify(state.items)); // Save to localStorage
-      }
-    },
+        const productExists = state.items.find((item) => item._id === action.payload._id);
+      
+        if (productExists) {
+          // Safely increment the userSelectedQuantity
+          productExists.userSelectedQuantity = (productExists.userSelectedQuantity || 0) + 1;
+        } else {
+          // Add the product to the wishlist with userSelectedQuantity initialized to 1
+          state.items.push({ ...action.payload, userSelectedQuantity: 1 });
+        }
+      
+        // Save updated wishlist to localStorage
+        localStorage.setItem("wishlist", JSON.stringify(state.items));
+      },
+      
     removeFromWishlist: (state, action: PayloadAction<string>) => {
       state.items = state.items.filter((item) => item._id !== action.payload);
-      localStorage.setItem("wishlist", JSON.stringify(state.items)); // Save updated list
+
+      // Save updated list to localStorage
+      localStorage.setItem("wishlist", JSON.stringify(state.items));
     },
   },
 });
 
 export const { addToWishlist, removeFromWishlist } = wishlistSlice.actions;
-
 export default wishlistSlice.reducer;

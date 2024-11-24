@@ -5,33 +5,25 @@ import { useAllProductsQuery } from "../../redux/features/admin/productManagemen
 import { AppDispatch } from "../../redux/store";
 import { useDispatch } from "react-redux";
 import { addToWishlist } from "../../redux/features/admin/wishlistSlice";
+import { IProduct } from "../../types";
 
-// Define a type for the product data
-interface Product {
-  _id: string;
-  title: string;
-  price: number;
-  image: string;
-  quantity:number;
-  color?:string[]
-}
 
 const PopularProduct = () => {
   const dispatch = useDispatch<AppDispatch>();
   const{data}=useAllProductsQuery({})
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+  const [selectedProduct, setSelectedProduct] = useState<IProduct | null>(null);
   const [quantity, setQuantity] = useState<number>(1);
 // State to track selected color
 const [selectedColor, setSelectedColor] = useState<string | null>(null);
   // show product according to the user wise
   const [seeMore,setSeeMore]=useState<boolean>(false)
 
-  const products: Product[] = data?.data ?? [];
+  const products: IProduct[] = data?.data ?? [];
 
 
 
-  const handleAddToWishlist = (product: Product) => {
+  const handleAddToWishlist = (product: IProduct) => {
     dispatch(addToWishlist(product));
   };
 
@@ -44,7 +36,7 @@ const [selectedColor, setSelectedColor] = useState<string | null>(null);
       setQuantity(prevQuantity => prevQuantity - 1);
     }
   };
-  const openModal = (product: Product) => {
+  const openModal = (product: IProduct) => {
     setSelectedProduct(product);
     setIsModalOpen(true);
   };
