@@ -7,9 +7,11 @@ import { useDispatch } from "react-redux";
 import { addToWishlist } from "../../redux/features/admin/wishlistSlice";
 import { IProduct } from "../../types";
 import { toast } from "sonner";
+import { useCreateBookingMutation } from "../../redux/features/bookingManagement/bookingManagement";
 
 
 const PopularProduct = () => {
+  const [addToCart]=useCreateBookingMutation()
   const dispatch = useDispatch<AppDispatch>();
   const{data}=useAllProductsQuery({})
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
@@ -30,6 +32,12 @@ const [selectedColor, setSelectedColor] = useState<string | null>(null);
     toast.success("Product added wishlist successfully")
   };
 
+  const  handleAddToCart=async(product:IProduct)=>{
+    const res=await addToCart({productId:product._id}).unwrap()
+    if(res.success){
+        toast.success(`${product.title} is added successfully`)
+    }
+}
   const increaseQuantity = () => {
     setQuantity(prevQuantity => prevQuantity + 1);
   };
@@ -205,7 +213,7 @@ const [selectedColor, setSelectedColor] = useState<string | null>(null);
             </div>
           </div>
           <div className="flex flex-col md:flex-row lg:flex-row justify-center gap-1">
-            <button className="capitalize bg-primary p-3 hover:bg-gray-700 mt-6 hover:text-white rounded-full text-white w-full">
+            <button onClick={()=>handleAddToCart(selectedProduct)} className="capitalize bg-primary p-3 hover:bg-gray-700 mt-6 hover:text-white rounded-full text-white w-full">
               Add To Cart
             </button>
             <button  onClick={() => handleAddToWishlist(selectedProduct)} className="capitalize bg-gray-700 p-3 md:p-0 lg:p-  hover:bg-primary mt-6 hover:text-white rounded-full text-white w-full">

@@ -6,8 +6,10 @@ import { useDispatch } from "react-redux";
 import { IProduct } from "../../types";
 import { addToWishlist } from "../../redux/features/admin/wishlistSlice";
 import { toast } from "sonner";
+import { useCreateBookingMutation } from "../../redux/features/bookingManagement/bookingManagement";
 
 function ProductDetail() {
+    const [addToCart]=useCreateBookingMutation()
     const { productId } = useParams();
     const { data } = useGetSingleProductQuery(productId);
     const dispatch = useDispatch<AppDispatch>();
@@ -19,6 +21,13 @@ function ProductDetail() {
         dispatch(addToWishlist(product));
         toast.success("Product added to wishlist successfully");
     };
+
+const  handleAddToCart=async(product:IProduct)=>{
+    const res=await addToCart({productId:product._id}).unwrap()
+    if(res.success){
+        toast.success(`${product.title} is added successfully`)
+    }
+}
 
     // Handling quantity increase and decrease
     const increaseQuantity = () => setQuantity(prevQuantity => prevQuantity + 1);
@@ -92,7 +101,7 @@ function ProductDetail() {
                                     <p className="my-1">
                                         Color:
                                         <span className="ml-2">
-                                            {data?.data.color?.map((clr, index) => (
+                                            {data?.data.color?.map((clr:string, index:number) => (
                                                 <span
                                                     key={index}
                                                     onClick={() => setSelectedColor(clr)}
@@ -135,7 +144,7 @@ function ProductDetail() {
                                     </div>
                                 </div>
                                 <div className="flex flex-col md:flex-row lg:flex-row justify-center gap-1">
-                                    <button className="capitalize bg-primary p-3 hover:bg-gray-700 mt-6 hover:text-white rounded-full text-white w-full">
+                                    <button onClick={()=>handleAddToCart(data.data)} className="capitalize bg-primary p-3 hover:bg-gray-700 mt-6 hover:text-white rounded-full text-white w-full">
                                         Add To Cart
                                     </button>
                                     <button

@@ -42,7 +42,6 @@ const Booking: React.FC = () => {
     // Implement coupon logic here
     alert('Coupon applied!');
   };
-
 const subtotal = (products || []).reduce(
   (acc: number, product: { price: number; quantity: number }) => acc + product.price * product.quantity,
   0
@@ -86,7 +85,7 @@ const total = subtotal; // Add tax, shipping, etc. to total if needed
                   <div className="flex justify-center items-center">
                     <input
                       type="number"
-                      value={product.productId?.quantity}
+                      value={product?.userSelectedQuantity}
                       onChange={(e) => handleQuantityChange(index, e.target.value)}
                       className="w-16 px-2 py-1 border rounded"
                     />
@@ -94,7 +93,7 @@ const total = subtotal; // Add tax, shipping, etc. to total if needed
                 </td>
                 <td className="py-2 px-4 border-b">
   <div className="flex justify-center items-center">
-    {(product.productId?.price ?? 1) * (Number(product.productId?.quantity) ?? 1)}
+    {(product.productId?.price ?? 1) * (Number(product?.userSelectedQuantity) ?? 1)}
   </div>
 </td>
 
