@@ -11,6 +11,7 @@ import Profile from "../pages/profile/profile";
 import Dashboard from "../pages/dashboard/Dashboard";
 import ProtectedRoute from "../components/layout/ProtectedRoute";
 import Wishlist from "../pages/wishlist/Wishlist";
+import ProductDetail from "../pages/productDetails/ProductDetail";
 
 const router = createBrowserRouter([
   {
@@ -20,6 +21,10 @@ const router = createBrowserRouter([
       {
         path: "/",
         element: <HomePage />
+      },
+      {
+        path: "product/:productId",
+        element: <ProductDetail></ProductDetail>
       },
       {
         path: "about",

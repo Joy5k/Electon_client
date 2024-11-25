@@ -72,13 +72,13 @@ const [selectedColor, setSelectedColor] = useState<string | null>(null);
       {products.map((product) => (
           <div key={product._id} className="bg-black border border-gray-800 p-4 rounded-md w-64 mx-auto">
             <div>
-              <Link to="/product/12321232" > 
+              <Link to={`/product/${product._id}`} > 
               <img src={product.image} className="w-60 h-60 rounded-sm" alt="popular_image" />
               </Link>
             </div>
             <div className="text-md mt-10 flex justify-between items-center mr-4">
               <div>
-                <Link to={`"/product/${product._id}`} className="text-gray-300 text-xl font-semibold hover:text-primary mb-4 hover:underline">{product.title}</Link>
+                <Link to={`/product/${product._id}`} className="text-gray-300 text-xl font-semibold hover:text-primary mb-4 hover:underline">{product.title}</Link>
                 <p className="mt-2 text-primary font-semibold">Price: ${product.price}</p>
               </div>
               <button
@@ -99,13 +99,13 @@ const [selectedColor, setSelectedColor] = useState<string | null>(null);
           products.slice(0,8).map((product) => (
             <div key={product._id} className="bg-black border border-gray-800 p-4 rounded-md w-64 mx-auto">
               <div>
-                <Link to="/product/12321232" > 
+                <Link to={`/product/${product._id}`} > 
                 <img src={product.image} className="w-60 h-60 rounded-sm" alt="popular_image" />
                 </Link>
               </div>
               <div className="text-md mt-10 flex justify-between items-center mr-4">
                 <div>
-                  <Link to={`"/product/${product._id}`} className="text-gray-300 text-xl font-semibold hover:text-primary mb-4 hover:underline">{product.title}</Link>
+                  <Link to={`/product/${product._id}`} className="text-gray-300 text-xl font-semibold hover:text-primary mb-4 hover:underline">{product.title}</Link>
                   <p className="mt-2 text-primary font-semibold">Price: ${product.price}</p>
                 </div>
                 <button
