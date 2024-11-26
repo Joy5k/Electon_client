@@ -7,6 +7,7 @@ import { FaLocationDot, FaTruck } from "react-icons/fa6"
 import { MdOutlineFavoriteBorder } from "react-icons/md"
 import Cookies from 'js-cookie';
 import { useGetUserQuery } from "../../redux/features/userManagement/userManagement"
+import { useGetAllBookingsQuery } from "../../redux/features/bookingManagement/bookingManagement"
 
 const navigation = [
   { name: 'Home', href: '/', current: true },
@@ -16,9 +17,11 @@ const navigation = [
 ]
 
 function classNames(...classes:any[]) {
+
   return classes.filter(Boolean).join(' ')
 }
 const Navbar=()=>{
+  const {data}=useGetAllBookingsQuery({})
   const {data:userData}=useGetUserQuery({})
 
   const token=localStorage.getItem("token") 
@@ -146,7 +149,10 @@ const Navbar=()=>{
   >
     <span className="sr-only hover:text-primary">View Booking</span>
     <Link to="/booking">
-    <ShoppingCartIcon aria-hidden="true" className="h-6 w-6 fill-current text-primary " />
+    <ShoppingCartIcon aria-hidden="true" className="h-6 w-6 fill-current text-primary relative" />
+    <p className="absolute -top-2 -left-[2px]  bg-transparent  text-primary  text-xs font-bold rounded-full text-center">{
+      data?.data?.length>9 ? "9+":data?.data?.length
+      }</p>
     </Link>
   </button>
 
