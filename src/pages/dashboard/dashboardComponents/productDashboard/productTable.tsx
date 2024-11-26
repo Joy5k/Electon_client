@@ -17,6 +17,7 @@ const ProductTable = ({ products }: any) => {
       useEffect(() => {
         if (selectedProduct) {
           setProduct({
+            _id:selectedProduct._id,
             title: selectedProduct.title || "",
             description: selectedProduct.description || "",
             image: selectedProduct.image || "",
