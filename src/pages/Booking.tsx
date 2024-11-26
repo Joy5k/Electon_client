@@ -54,10 +54,10 @@ const total = subtotal; // Add tax, shipping, etc. to total if needed
       isLoading ? <Spinner></Spinner>:  <div className="flex flex-col md:flex-row lg:flex-row sm:space-x-8">
       {/* Product Booking Table */}
       <div  className=' overflow-x-auto' >
-        <table className="w-[785px] bg-white border rounded-md ">
+        <table className="w-full bg-white border rounded-md ">
           <thead>
             <tr>
-              <th className="py-2 px-4 border-b">Product</th>
+              <th className="py-2 px-4  border-b">Product</th>
               <th className="py-2 px-4 border-b">Price</th>
               <th className="py-2 px-4 border-b">Quantity</th>
               <th className="py-2 px-4 border-b">Subtotal</th>
