@@ -7,6 +7,7 @@ import { IProduct } from "../../types";
 import { addToWishlist } from "../../redux/features/admin/wishlistSlice";
 import { toast } from "sonner";
 import { useCreateBookingMutation } from "../../redux/features/bookingManagement/bookingManagement";
+import { FaRegHeart } from "react-icons/fa6";
 
 function ProductDetail() {
     const [addToCart]=useCreateBookingMutation()
@@ -149,9 +150,10 @@ const  handleAddToCart=async(product:IProduct)=>{
                                     </button>
                                     <button
                                         onClick={() => handleAddToWishlist(data.data)}
-                                        className="capitalize bg-gray-700 p-3 md:p-0 lg:p- hover:bg-primary mt-6 hover:text-white rounded-full text-white w-full"
+                                        
                                     >
-                                        Add to wishlist
+                                     <FaRegHeart className=" text-5xl   md:p-0  mt-6 hover:text-primary w-full  rounded-full" />
+
                                     </button>
                                 </div>
                             </div>
