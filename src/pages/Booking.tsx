@@ -201,7 +201,7 @@ const total = subtotal; // Add tax, shipping, etc. to total if needed
              <span>${total.toFixed(2)}</span>
            </div>
           {/* <Link to="/checkout"> */}
-            <button  onClick={handleProceedToCheckout} className="w-full px-4 py-2 bg-green-500 text-white rounded">
+            <button  onClick={handleProceedToCheckout} className={`w-full px-4 py-2  text-white rounded ${selectedProducts.length===0? "bg-gray-600 cursor-not-allowed":"bg-green-500"}`} disabled={selectedProducts.length===0}>
              Proceed to Checkout
           
            </button>
