@@ -5,11 +5,13 @@ import { useGetUserQuery } from "../redux/features/userManagement/userManagement
 import { CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
+import { useCreatePaymentIntentMutation } from "../redux/features/paymentMangement/paymentManagementApi";
 
-// Initialize Stripe
-const stripePromise = loadStripe("your-public-key-here");
+const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
+
 
 const Checkout = () => {
+    const [stripePayment]=useCreatePaymentIntentMutation()
   const { data } = useGetUserQuery({});
   const location = useLocation();
   const { selectedProducts } = location.state || { selectedProducts: [] };
@@ -17,7 +19,7 @@ const Checkout = () => {
   const user = data?.data || ({} as IUser);
   const stripe = useStripe();
   const elements = useElements();
-
+  const [openTransitionModal,setOpenTransitionModal]=useState<boolean>(false)
   // Sum total price
   useEffect(() => {
     if (selectedProducts && selectedProducts.length > 0) {
@@ -31,37 +33,70 @@ const Checkout = () => {
   }, [selectedProducts]);
 
   // Handle Payment Submission
-  const handlePayment = async (event: React.FormEvent) => {
-    event.preventDefault();
 
+  const handlePayment = async (event: any) => {
+    event.preventDefault();
+  
+    // Ensure Stripe and Elements are loaded before proceeding
     if (!stripe || !elements) {
-      console.log("Stripe is not loaded");
+      console.log("Stripe or Elements is not loaded");
       return;
     }
-
-    const cardElement = elements.getElement(CardElement);
-
+  
+    const card = elements.getElement(CardElement);
+  
+    // If no card element is found, log an error and return early
+    if (!card) {
+      console.log("Card element not found");
+      return;
+    }
+  
     try {
-      const { error, paymentIntent } = await stripe.confirmCardPayment("your-client-secret", {
-        payment_method: {
-          card: cardElement!,
-          billing_details: {
-            email: user?.email,
+      // Create the payment intent on the backend
+      const response = await stripePayment({ amount: totalPrice }).unwrap();
+      // Check if the response contains 'data' or 'error'
+      if ('data' in response) {
+        const paymentIntent = response.data;
+        
+        if (!paymentIntent || !paymentIntent.client_secret) {
+          console.log("Payment intent creation failed or missing client secret");
+          return;
+        }
+  
+        // Confirm the payment with Stripe
+        const { error, paymentIntent: confirmedPaymentIntent } = await stripe.confirmCardPayment(paymentIntent.client_secret, {
+          payment_method: {
+            card: card, // We can now safely use 'card' since it is guaranteed not to be null
+            billing_details: {
+              name: `${user?.firstName} ${user?.lastName}`,
+              email: user?.email,
+             
+            },
           },
-        },
-      });
-
-      if (error) {
-        console.error("Payment error:", error.message);
-      } else if (paymentIntent) {
-        console.log("Payment successful:", paymentIntent);
-        alert("Payment successful!");
+        });
+  
+        // Handle any errors that occur during the confirmation process
+        if (error) {
+          console.log("Payment failed", error.message);
+        } else {
+          // You can check the confirmed paymentIntent here for success or further status
+          if (confirmedPaymentIntent?.status === 'succeeded') {
+            console.log("Payment successful", confirmedPaymentIntent);
+            setOpenTransitionModal(true)
+          } else {
+            console.log("Payment not confirmed, status:", confirmedPaymentIntent?.status);
+          }
+        }
+      } else if ('error' in response) {
+        // Handle errors if the response contains 'error'
+        console.error("Error in payment intent creation", response.error);
       }
     } catch (error) {
-      console.error("Payment failed:", error);
+      console.error("Error in payment process", error);
     }
   };
-
+  
+  
   return (
     <div className="mt-10 w-11/12 mx-auto">
       <div className="flex flex-col-reverse md:flex-row lg:flex-row justify-evenly items-start ">
@@ -129,20 +164,29 @@ const Checkout = () => {
               <p className="border mb-8 border-green-600 p-4 text-start bg-green-950">
                 Credit card
               </p>
-              <div>
-              <CardElement
-                      options={{
-    style: {
-      base: {
-        color: "#ffffff",  // Change text color to white
-        fontSize: "16px",   // Optional: Adjust font size if needed
-        "::placeholder": {
-          color: "#ffffff", // Change placeholder text color to white
+
+              {/* payment input field */}
+              <div className="bg-gray-600 p-4">
+              {!stripe || !elements ? (
+  <p>Loading...</p> // Show loading text or spinner while Stripe is being initialized
+) : (
+  <CardElement
+    options={{
+      style: {
+        base: {
+            backgroundColor:"transparent",
+         
+          color: "#ffffff",  // Change text color to white
+          fontSize: "16px",   // Optional: Adjust font size if needed
+          "::placeholder": {
+            color: "#ffffff", // Change placeholder text color to white
+          },
         },
       },
-    },
-                      }}
-                    />
+    }}
+  />
+)}
+
 
               </div>
               <button
@@ -155,7 +199,20 @@ const Checkout = () => {
             </form>
           </div>
         </div>
-
+ {/* Modal */}
+      {openTransitionModal && (
+        <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50">
+          <div className="bg-white p-6 rounded shadow-lg w-1/3">
+            <h2 className="text-xl font-bold">Hello, World!</h2>
+            <button
+              onClick={()=>setOpenTransitionModal(!openTransitionModal)}
+              className="mt-4 bg-red-500 text-white py-2 px-4 rounded"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      )}
         {/* Selected Products Section */}
         <div>
           <div>
