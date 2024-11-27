@@ -16,7 +16,7 @@ const Checkout = () => {
   const { data } = useGetUserQuery({});
   const location = useLocation();
   const { selectedProducts } = location.state || { selectedProducts: [] };
-  const [totalPrice, setTotalPrice] = useState<number>(0);
+  const [eachProductSubTotal, setEachProductSubTotal] = useState<number>(0);
   const user = data?.data || ({} as IUser);
   const stripe = useStripe();
   const elements = useElements();
@@ -25,15 +25,22 @@ const Checkout = () => {
   const [paymentTransitionText,setPaymentTransitionText]=useState<string>("")
   const [copyButtonText, setCopyButtonText] = useState("Copy");
 
+
+
+  const subtotal = (selectedProducts || []).reduce((acc: number, product: any) => {
+    return acc + product.productId.price * product.userSelectedQuantity;
+  }, 0);
+  
+
   // Sum total price
   useEffect(() => {
     if (selectedProducts && selectedProducts.length > 0) {
-      const total = selectedProducts.reduce(
+      const eachProductSubtotal = selectedProducts.reduce(
         (accumulator: number, product: { productId: IProduct }) =>
           accumulator + (product.productId?.price || 0),
         0
       );
-      setTotalPrice(total);
+      setEachProductSubTotal(eachProductSubtotal);
     }
   }, [selectedProducts]);
   const handleCopy = () => {
@@ -64,22 +71,25 @@ const Checkout = () => {
       y += 10;
       doc.text(`- Name: ${product?.productId?.title || "N/A"}`, 10, y);
       y += 10;
-      doc.text(`- Price: $${product?.productId?.price || "0"}`, 10, y);
+      doc.text(`-Product-Price: $${product?.productId?.price || "0"}`, 10, y);
       y += 10;
       doc.text(`- Quantity: ${product?.userSelectedQuantity || "1"}`, 10, y);
       y += 10;
-  
+      doc.text(`-sub-total: $${product?.productId?.price * product?.userSelectedQuantity|| "0"}`, 10, y);
+      y += 10;
+    
+      
       // Check if the content exceeds the page height (297mm for A4) and add a new page if necessary
       if (y > 280) {
         doc.addPage();
         y = 10; // Reset Y-coordinate for the new page
       }
     });
-  
+    doc.text(`- Total Price(with shipping): ${subtotal.toFixed(2) +50}`, 10, y);
+    y += 10;
     // Save the PDF
     doc.save("Product_Summary.pdf");
   };
-  
   
 
   // Handle Payment Submission
@@ -108,7 +118,7 @@ const Checkout = () => {
   
     try {
       // Create the payment intent on the backend
-      const response = await stripePayment({ amount: totalPrice }).unwrap();
+      const response = await stripePayment({ amount: eachProductSubTotal }).unwrap();
       // Check if the response contains 'data' or 'error'
       if ('data' in response) {
         const paymentIntent = response.data;
@@ -326,7 +336,7 @@ const Checkout = () => {
                         <p>Color: {prod?.productId.color || "Unknown"}</p>
                       </div>
                       <p>Quantity: {prod?.userSelectedQuantity || 1}</p>
-                      <p>{prod?.productId.price ? `$${prod.productId.price}` : "Price not available"}</p>
+                      <p>{prod?.productId.price ? `$${prod.productId.price * prod.userSelectedQuantity}` : "Price not available"}</p>
                     </div>
                   </div>
                 )
@@ -342,9 +352,9 @@ const Checkout = () => {
             </div>
 
             <div>
-              <p>{totalPrice} $</p>
+              <p>{subtotal.toFixed(2)} $</p>
               <p>50 $</p>
-              <p className="mt-10 font-bold">{totalPrice + 50}</p>
+              <p className="mt-10 font-bold">{subtotal.toFixed(2) + 50}</p>
             </div>
           </div>
         </div>
