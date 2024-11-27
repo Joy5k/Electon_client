@@ -2,12 +2,17 @@
 import { useLocation } from "react-router-dom";
 import { IProduct, IUser } from "../types";
 import { useEffect, useState } from "react";
+import { useGetUserQuery } from "../redux/features/userManagement/userManagement";
 
 const Checkout=()=>{
+    const {data}=useGetUserQuery({})
+   
     const location = useLocation();
     const { selectedProducts } = location.state || { selectedProducts: [] };
     const [totalPrice, setTotalPrice] = useState<number>(0);
+    const  user=data?.data||{} as IUser
 
+    // sum total price
     useEffect(() => {
       if (selectedProducts && selectedProducts.length > 0) {
         const total = selectedProducts.reduce(
@@ -18,13 +23,13 @@ const Checkout=()=>{
         setTotalPrice(total);
       }
     }, [selectedProducts]);
-    
+    console.log(user)
     return(
         <div className="mt-10 w-11/12 mx-auto">
             <div className="flex flex-col-reverse md:flex-row lg:flex-row justify-evenly items-start ">
                 <div className="">
                     <p>Account</p>
-                    <p className="my-1">Email:web@gmail.com</p>
+                    <p className="my-1">Email:{user?.email}</p>
                     <input type="checkbox" name="subscribe" id="" /><span>Email me with news and offers
                     </span>
                     <hr  className="my-6"/>
@@ -39,14 +44,14 @@ const Checkout=()=>{
                                 <option value="canada">Canada</option>
                             </select>
                             <div className="flex flex-col md:flex-row lg:flex-row justify-start">
-                            <input type="text" className="p-3 rounded-sm mt-4 w-full md:w-[300px] lg:w-[300px] border border-gray-600 mr-2" name="fistName" placeholder="First Name" />
-                            <input type="text" className="p-3 rounded-sm mt-4 w-full md:w-[300px] lg:w-[300px] border border-gray-600" name="lastName" placeholder="Last Name" />
+                            <input type="text" className="p-3 rounded-sm mt-4 w-full md:w-[300px] lg:w-[300px] border border-gray-600 mr-2" name="fistName" placeholder={user?.firstName||"First Name *"} />
+                            <input type="text" className="p-3 rounded-sm mt-4 w-full md:w-[300px] lg:w-[300px] border border-gray-600" name="lastName" placeholder={user.lastName||"Last Name *"} />
                             </div>
-                        <input type="text" className="w-full border border-gray-600 p-3 rounded-sm mt-4" name="address" id="" placeholder="Address" />
+                        <input type="text" className="w-full border border-gray-600 p-3 rounded-sm mt-4" name="address" id="" placeholder="Your full address *" required/>
                         <input type="text" className="w-full border border-gray-600 p-3 rounded-sm mt-4" name="apartment" id="" placeholder="Apartment (optional)" />
                         <div className="flex flex-col md:flex-row lg:flex-row justify-start mb-10">
-                        <input type="text" className="p-3 rounded-sm mt-4 w-full md:w-[300px] lg:w-[300px] border border-gray-600 mr-2" name="city" placeholder="City" />
-                        <input type="text" className="p-3 rounded-sm mt-4 w-full md:w-[300px] lg:w-[300px] border border-gray-600" name="postCode" placeholder="Post Code (optional)" />
+                        <input type="text" className="p-3 rounded-sm mt-4 w-full md:w-[300px] lg:w-[300px] border border-gray-600 mr-2" name="city" placeholder={user?.address?.district||"Patuakhali"} />
+                        <input type="text" className="p-3 rounded-sm mt-4 w-full md:w-[300px] lg:w-[300px] border border-gray-600" name="postCode" placeholder={user?.address?.postCode||"8600"} />
                         
                         </div>
                       
