@@ -3,6 +3,8 @@ import { useLocation } from "react-router-dom";
 import { IProduct, IUser } from "../types";
 import { useEffect, useState } from "react";
 import { useGetUserQuery } from "../redux/features/userManagement/userManagement";
+const stripePromise = loadStripe("your-publishable-key"); 
+import { Elements, CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
 
 const Checkout=()=>{
     const {data}=useGetUserQuery({})
@@ -11,7 +13,8 @@ const Checkout=()=>{
     const { selectedProducts } = location.state || { selectedProducts: [] };
     const [totalPrice, setTotalPrice] = useState<number>(0);
     const  user=data?.data||{} as IUser
-
+    const stripe = useStripe();
+    const elements = useElements();
     // sum total price
     useEffect(() => {
       if (selectedProducts && selectedProducts.length > 0) {
@@ -24,6 +27,38 @@ const Checkout=()=>{
       }
     }, [selectedProducts]);
     console.log(user)
+
+  // Handle Payment Submission
+  const handlePayment = async (event: React.FormEvent) => {
+    event.preventDefault();
+
+    if (!stripe || !elements) {
+      console.log("Stripe is not loaded");
+      return;
+    }
+
+    const cardElement = elements.getElement(CardElement);
+
+    try {
+      const { error, paymentIntent } = await stripe.confirmCardPayment("your-client-secret", {
+        payment_method: {
+          card: cardElement!,
+          billing_details: {
+            email: user?.email,
+          },
+        },
+      });
+
+      if (error) {
+        console.error("Payment error:", error.message);
+      } else if (paymentIntent) {
+        console.log("Payment successful:", paymentIntent);
+        alert("Payment successful!");
+      }
+    } catch (error) {
+      console.error("Payment failed:", error);
+    }
+  };
     return(
         <div className="mt-10 w-11/12 mx-auto">
             <div className="flex flex-col-reverse md:flex-row lg:flex-row justify-evenly items-start ">
@@ -120,3 +155,5 @@ const Checkout=()=>{
     )
 }
 export default Checkout
+
+
