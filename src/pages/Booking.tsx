@@ -65,12 +65,11 @@ console.log(country)
     // Implement coupon logic here
     alert('Coupon applied!');
   };
-const subtotal = (products || []).reduce(
-  (acc: number, product: { price: number; quantity: number }) => acc + product.price * product.quantity,
-  0
-);
+  const subtotal = (selectedProducts || []).reduce((acc: number, product: any) => {
+    return acc + product.productId.price * product.userSelectedQuantity;
+  }, 0);
+  
 const total = subtotal; // Add tax, shipping, etc. to total if needed
-
   return (
     <div className="container mx-auto p-4 my-10">
   {
@@ -171,7 +170,7 @@ const total = subtotal; // Add tax, shipping, etc. to total if needed
          <div className="mb-4">
            <div className="flex justify-between mb-2">
              <span>Subtotal:</span>
-             <span>${subtotal}</span>
+             <span>${total.toFixed(2)}</span>
            </div>
            <div className="flex items-center mb-4">
              <input
@@ -199,7 +198,7 @@ const total = subtotal; // Add tax, shipping, etc. to total if needed
            </div>
            <div className="flex justify-between mb-4">
              <span>Total:</span>
-             <span>${total}</span>
+             <span>${total.toFixed(2)}</span>
            </div>
           {/* <Link to="/checkout"> */}
             <button  onClick={handleProceedToCheckout} className="w-full px-4 py-2 bg-green-500 text-white rounded">

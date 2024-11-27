@@ -6,6 +6,7 @@ import { CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
 import { useCreatePaymentIntentMutation } from "../redux/features/paymentMangement/paymentManagementApi";
+import Spinner from "../components/Spinner/Spinner";
 
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
 
@@ -20,6 +21,7 @@ const Checkout = () => {
   const stripe = useStripe();
   const elements = useElements();
   const [openTransitionModal,setOpenTransitionModal]=useState<boolean>(false)
+  const [paymentLoader,setPaymentLoader]=useState<boolean>(false)
   // Sum total price
   useEffect(() => {
     if (selectedProducts && selectedProducts.length > 0) {
@@ -35,11 +37,14 @@ const Checkout = () => {
   // Handle Payment Submission
 
   const handlePayment = async (event: any) => {
+    setPaymentLoader(true)
     event.preventDefault();
   
     // Ensure Stripe and Elements are loaded before proceeding
     if (!stripe || !elements) {
       console.log("Stripe or Elements is not loaded");
+      setPaymentLoader(false)
+
       return;
     }
   
@@ -48,6 +53,8 @@ const Checkout = () => {
     // If no card element is found, log an error and return early
     if (!card) {
       console.log("Card element not found");
+      setPaymentLoader(false)
+
       return;
     }
   
@@ -83,15 +90,23 @@ const Checkout = () => {
           if (confirmedPaymentIntent?.status === 'succeeded') {
             console.log("Payment successful", confirmedPaymentIntent);
             setOpenTransitionModal(true)
+            setPaymentLoader(false)
+
           } else {
+            setPaymentLoader(false)
+
             console.log("Payment not confirmed, status:", confirmedPaymentIntent?.status);
           }
         }
       } else if ('error' in response) {
+        setPaymentLoader(false)
+
         // Handle errors if the response contains 'error'
         console.error("Error in payment intent creation", response.error);
       }
     } catch (error) {
+      setPaymentLoader(false)
+
       console.error("Error in payment process", error);
     }
   };
@@ -194,7 +209,7 @@ const Checkout = () => {
                 className="hover:bg-green-600 text-white p-4 rounded-md text-center font-semibold w-full my-5 bg-green-800"
                 disabled={!stripe || !elements}
               >
-                Pay Now
+              {paymentLoader ? <Spinner></Spinner> : "Pay Now"}
               </button>
             </form>
           </div>
