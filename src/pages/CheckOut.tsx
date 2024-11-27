@@ -1,11 +1,24 @@
 
 import { useLocation } from "react-router-dom";
-import speaker from "../assets/images/blueSpeaker.jpg"
+import { IProduct, IUser } from "../types";
+import { useEffect, useState } from "react";
 
 const Checkout=()=>{
     const location = useLocation();
     const { selectedProducts } = location.state || { selectedProducts: [] };
-    console.log(selectedProducts)
+    const [totalPrice, setTotalPrice] = useState<number>(0);
+
+    useEffect(() => {
+      if (selectedProducts && selectedProducts.length > 0) {
+        const total = selectedProducts.reduce(
+          (accumulator:number, product:{productId:IProduct}) =>
+            accumulator + (product.productId?.price || 0),
+          0
+        );
+        setTotalPrice(total);
+      }
+    }, [selectedProducts]);
+    
     return(
         <div className="mt-10 w-11/12 mx-auto">
             <div className="flex flex-col-reverse md:flex-row lg:flex-row justify-evenly items-start ">
@@ -54,33 +67,32 @@ const Checkout=()=>{
                         </div>
                     </div>
                 </div>
-            
+           {/* selected products section */}
               <div>
                  <div>
-                 <div className="flex  md:flex-row lg:flex-row justify-start mt-6 items-center ">
-                    <img src={speaker} className=" w-24 h-24 rounded-lg mr-1" alt="product_image" />
-                    <div className="flex justify-between gap-4 md:gap-8 lg:gap-8">
-                    <div className="">
-                        <p className="text-md font-bold">Bluetooth Speaker</p>
-                        <p>color:black</p>
-                    </div>
-                    <p>quantity: 2</p>
-                    <p>234 $</p>
-                    </div>
-                  
-                </div>
-              <div className="flex  md:flex-row lg:flex-row justify-start mt-6 items-center ">
-                    <img src={speaker} className=" w-24 h-24 rounded-lg mr-1" alt="product_image" />
-                    <div className="flex justify-between gap-4 md:gap-8 lg:gap-8">
-                    <div className="">
-                        <p className="text-md font-bold">Bluetooth Speaker</p>
-                        <p>color:black</p>
-                    </div>
-                    <p>quantity: 2</p>
-                    <p>234 $</p>
-                    </div>
-                  
-                </div>
+                 {
+                  selectedProducts &&
+                     selectedProducts?.map((prod:{userId:IUser,productId:IProduct,userSelectedQuantity:number}, index:number) => (
+    <div
+      key={index}
+      className="flex md:flex-row lg:flex-row justify-start mt-6 items-center"
+    >
+      <img
+        src={prod?.productId.image}
+        className="w-24 h-24 rounded-lg mr-1"
+        alt="product_image"
+      />
+      <div className="flex justify-between gap-4 md:gap-8 lg:gap-8">
+        <div>
+          <p className="text-md font-bold">{prod?.productId.title || 'Product Name'}</p>
+          <p>Color: {prod?.productId.color || 'Unknown'}</p>
+        </div>
+        <p>Quantity: {prod?.userSelectedQuantity || 1}</p>
+        <p>{prod?.productId.price ? `$${prod.productId.price}` : 'Price not available'}</p>
+      </div>
+    </div>
+                  ))
+                    }
                 </div>
         {/* shipping summery */}
                 <div className="mt-36 flex  justify-between border-b mb-20">
@@ -91,9 +103,9 @@ const Checkout=()=>{
                     </div>
                     
                     <div>
-                        <p>234 $</p>
+                        <p>{totalPrice} $</p>
                         <p>50 $</p>
-                        <p className="mt-10 font-bold">284</p>
+                        <p className="mt-10 font-bold">{totalPrice+50}</p>
                     </div>
                   
                   </div>
