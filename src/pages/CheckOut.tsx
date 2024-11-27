@@ -6,7 +6,7 @@ import { CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
 import { useCreatePaymentIntentMutation } from "../redux/features/paymentMangement/paymentManagementApi";
-import Spinner from "../components/Spinner/Spinner";
+import jsPDF from "jspdf";
 
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
 
@@ -22,6 +22,9 @@ const Checkout = () => {
   const elements = useElements();
   const [openTransitionModal,setOpenTransitionModal]=useState<boolean>(false)
   const [paymentLoader,setPaymentLoader]=useState<boolean>(false)
+  const [paymentTransitionText,setPaymentTransitionText]=useState<string>("")
+  const [copyButtonText, setCopyButtonText] = useState("Copy");
+
   // Sum total price
   useEffect(() => {
     if (selectedProducts && selectedProducts.length > 0) {
@@ -33,6 +36,51 @@ const Checkout = () => {
       setTotalPrice(total);
     }
   }, [selectedProducts]);
+  const handleCopy = () => {
+    navigator.clipboard.writeText(paymentTransitionText).then(() => {
+      setCopyButtonText("Copied");
+      setTimeout(() => setCopyButtonText("Copy"), 2000); // Reset the button text after 2 seconds
+    });
+  };
+  const handleDownloadPDF = () => {
+    const doc = new jsPDF();
+    
+    // Add title
+    doc.setFontSize(16);
+    doc.text("Product Summary from ELECTON", 10, 10);
+  
+    // Add transaction ID
+    doc.setFontSize(12);
+    doc.text(`Transaction ID: ${paymentTransitionText}`, 10, 20);
+  
+    // Add headers for product details
+    let y = 30; // Y-coordinate to start the product details
+    doc.text("Product Details:", 10, y);
+    y += 10; // Move to the next line
+  
+    // Loop through the products and add details
+    selectedProducts.forEach((product:any, index:number) => {
+      doc.text(`Product ${index + 1}:`, 10, y);
+      y += 10;
+      doc.text(`- Name: ${product?.productId?.title || "N/A"}`, 10, y);
+      y += 10;
+      doc.text(`- Price: $${product?.productId?.price || "0"}`, 10, y);
+      y += 10;
+      doc.text(`- Quantity: ${product?.userSelectedQuantity || "1"}`, 10, y);
+      y += 10;
+  
+      // Check if the content exceeds the page height (297mm for A4) and add a new page if necessary
+      if (y > 280) {
+        doc.addPage();
+        y = 10; // Reset Y-coordinate for the new page
+      }
+    });
+  
+    // Save the PDF
+    doc.save("Product_Summary.pdf");
+  };
+  
+  
 
   // Handle Payment Submission
 
@@ -89,6 +137,7 @@ const Checkout = () => {
           // You can check the confirmed paymentIntent here for success or further status
           if (confirmedPaymentIntent?.status === 'succeeded') {
             console.log("Payment successful", confirmedPaymentIntent);
+            setPaymentTransitionText(confirmedPaymentIntent.id)
             setOpenTransitionModal(true)
             setPaymentLoader(false)
 
@@ -179,7 +228,11 @@ const Checkout = () => {
               <p className="border mb-8 border-green-600 p-4 text-start bg-green-950">
                 Credit card
               </p>
-
+                <p className="mb-4 border border-green-400 p-2 ">For Testing: cartNumber: 4242 4242 4242 4242 <br />
+                MM: 04/26 <br />
+                YY: 242 <br />
+                CVC: 24242
+                </p>
               {/* payment input field */}
               <div className=" p-4">
               {!stripe || !elements ? (
@@ -213,19 +266,44 @@ const Checkout = () => {
             </form>
           </div>
         </div>
- {/* Modal */}
+ {/*After successful Payment Modal */}
       {openTransitionModal && (
-        <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50">
-          <div className="bg-white p-6 rounded shadow-lg w-1/3">
-            <h2 className="text-xl font-bold">Hello, World!</h2>
-            <button
-              onClick={()=>setOpenTransitionModal(!openTransitionModal)}
-              className="mt-4 bg-red-500 text-white py-2 px-4 rounded"
-            >
-              Close
-            </button>
-          </div>
-        </div>
+     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+     <div className="p-6 rounded shadow-lg w-1/3 bg-black border border-gray-600">
+       <h2 className="text-xl font-bold text-center mb-4">Save your Transition ID!</h2>
+       <p className="text-center m-2 text-green-400">Payment Successfully submitted</p>
+       <div className="flex items-center">
+         <input
+           type="text"
+           name="transitionText"
+           value={paymentTransitionText}
+           readOnly
+           className="flex-grow p-2 border border-gray-700 rounded-l-md bg-gray-900 text-white"
+         />
+         <button
+           onClick={handleCopy}
+           className="bg-green-900 text-white px-4 py-2 rounded-r-md"
+         >
+           {copyButtonText}
+         </button>
+       </div>
+       <div className="flex flex-col md:flex-row lg:flex-row justify-between mt-8">
+         <button
+           onClick={() => setOpenTransitionModal(false)}
+           className="mt-4 bg-red-500 text-white py-2 px-4 rounded"
+         >
+           Close
+         </button>
+         <button
+           onClick={handleDownloadPDF}
+           className="mt-4 bg-green-600 text-white py-2 px-4 rounded"
+         >
+           Download
+         </button>
+       </div>
+     </div>
+   </div>
+     
       )}
         {/* Selected Products Section */}
         <div>
