@@ -16,6 +16,7 @@ const Checkout = () => {
   const { data } = useGetUserQuery({});
   const location = useLocation();
   const { selectedProducts } = location.state || { selectedProducts: [] };
+  
   const [eachProductSubTotal, setEachProductSubTotal] = useState<number>(0);
   const user = data?.data || ({} as IUser);
   const stripe = useStripe();
@@ -26,7 +27,7 @@ const Checkout = () => {
   const [copyButtonText, setCopyButtonText] = useState("Copy");
 
 
-
+// adding all products price with user selected quantity
   const subtotal = (selectedProducts || []).reduce((acc: number, product: any) => {
     return acc + product.productId.price * product.userSelectedQuantity;
   }, 0);
@@ -43,12 +44,16 @@ const Checkout = () => {
       setEachProductSubTotal(eachProductSubtotal);
     }
   }, [selectedProducts]);
+
+  // handle the transtion id copy from the payment modal input
   const handleCopy = () => {
     navigator.clipboard.writeText(paymentTransitionText).then(() => {
       setCopyButtonText("Copied");
       setTimeout(() => setCopyButtonText("Copy"), 2000); // Reset the button text after 2 seconds
     });
   };
+  
+  // download the transition from payment modal 
   const handleDownloadPDF = () => {
     const doc = new jsPDF();
     
