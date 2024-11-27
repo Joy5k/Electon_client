@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
 import { useDeleteBookingMutation, useGetAllBookingsQuery } from '../redux/features/bookingManagement/bookingManagement';
 import Spinner from '../components/Spinner/Spinner';
 import { toast } from 'sonner';
+import { useNavigate } from 'react-router-dom';
+import { IProduct } from '../types';
 
 
 
@@ -11,9 +12,31 @@ const Booking: React.FC = () => {
   const [deleteBookingProduct]=useDeleteBookingMutation()
   const [country,setCountry]=useState<string>("")
   const products = data?.data || []; // Default to empty array if undefined
+  const [selectedProducts, setSelectedProducts] = useState<IProduct[]>([]); // State to track selected products
+  const navigate = useNavigate();
 
 
+  const handleCheckboxChange = (product: IProduct) => {
+    setSelectedProducts((prevSelected) => {
+      if (prevSelected.some((item) => item._id === product._id)) {
+        return prevSelected.filter((item) => item._id !== product._id);
+      } else {
+        return [...prevSelected, product];
+      }
+    });
+  };
 
+  const handleProceedToCheckout = () => {
+    if (selectedProducts.length === 0) {
+      alert('Please select at least one product to proceed.');
+      return;
+    }
+console.log(country)
+    // Proceed with the selected products (You can pass `selectedProducts` to the next route)
+    navigate('/checkout', { state: { selectedProducts } });
+
+  };
+  
   const handleDelete = async(id: string) => {
     try {
       const res=await deleteBookingProduct(id).unwrap()
@@ -59,6 +82,7 @@ const total = subtotal; // Add tax, shipping, etc. to total if needed
          <table className="w-full bg-white border rounded-md ">
            <thead>
              <tr>
+               <th className="py-2 px-4  border-b">select</th>
                <th className="py-2 px-4  border-b">Product</th>
                <th className="py-2 px-4 border-b">Price</th>
                <th className="py-2 px-4 border-b">Quantity</th>
@@ -69,6 +93,16 @@ const total = subtotal; // Add tax, shipping, etc. to total if needed
            <tbody>
              {products.map((product:any, index:number) => (
                <tr key={index}>
+                 <td className="py-2 pl-8 border-b">
+                   <div className="flex items-center">
+                   <input
+                              type="checkbox"
+                              checked={selectedProducts.some((item) => item._id === product._id)}
+                              onChange={() => handleCheckboxChange(product)}
+                              className="text-3xl"
+                            />
+                   </div>
+                 </td>
                  <td className="py-2 px-4 border-b">
                    <div className="flex items-center">
                      <img src={product.productId?.image} alt={product.title} className="w-16 h-16 object-cover mr-4" />
@@ -110,7 +144,7 @@ const total = subtotal; // Add tax, shipping, etc. to total if needed
              ))}
              {/* Additional Row for Buttons */}
              <tr>
-               <td colSpan={5} className="py-4 px-4">
+               <td colSpan={6} className="py-4 px-4">
                  <div className="flex justify-between">
                    <button
                      onClick={handleContinueShopping}
@@ -167,9 +201,12 @@ const total = subtotal; // Add tax, shipping, etc. to total if needed
              <span>Total:</span>
              <span>${total}</span>
            </div>
-          <Link to="/checkout">  <button className="w-full px-4 py-2 bg-green-500 text-white rounded">
+          {/* <Link to="/checkout"> */}
+            <button  onClick={handleProceedToCheckout} className="w-full px-4 py-2 bg-green-500 text-white rounded">
              Proceed to Checkout
-           </button></Link>
+          
+           </button>
+           {/* </Link> */}
          </div>
        </div>
      </div>

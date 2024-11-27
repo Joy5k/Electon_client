@@ -1,8 +1,11 @@
 
+import { useLocation } from "react-router-dom";
 import speaker from "../assets/images/blueSpeaker.jpg"
 
 const Checkout=()=>{
-
+    const location = useLocation();
+    const { selectedProducts } = location.state || { selectedProducts: [] };
+    console.log(selectedProducts)
     return(
         <div className="mt-10 w-11/12 mx-auto">
             <div className="flex flex-col-reverse md:flex-row lg:flex-row justify-evenly items-start ">

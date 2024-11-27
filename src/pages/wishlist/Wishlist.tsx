@@ -3,8 +3,10 @@ import { RootState } from '../../redux/store';
 import { toast } from 'sonner';
 import { useCreateBookingMutation } from '../../redux/features/bookingManagement/bookingManagement';
 import { removeFromWishlist, updateQuantity } from '../../redux/features/admin/wishlistSlice';
+import { useNavigate } from 'react-router-dom';
 
 const Wishlist = () => {
+  const navigate=useNavigate()
   const dispatch = useAppDispatch();
   const wishlist = useAppSelector((state: RootState) => state.wishlist.items);
   const [addToCart] = useCreateBookingMutation();
@@ -60,7 +62,7 @@ const Wishlist = () => {
   };
   const handleContinueShopping = () => {
     // Implement continue shopping logic here
-    alert('Continue shopping clicked!');
+    navigate("/")
   };
   return (
     <div className="container mx-auto p-4 my-10">
