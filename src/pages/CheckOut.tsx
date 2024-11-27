@@ -3,8 +3,11 @@ import { useLocation } from "react-router-dom";
 import { IProduct, IUser } from "../types";
 import { useEffect, useState } from "react";
 import { useGetUserQuery } from "../redux/features/userManagement/userManagement";
-const stripePromise = loadStripe("your-publishable-key"); 
-import { Elements, CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
+import { CardElement, useStripe, useElements, Elements } from "@stripe/react-stripe-js";
+import StripePayment from "./dashboard/payment/StripePayment";
+import { loadStripe } from "@stripe/stripe-js";
+
+const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
 
 const Checkout=()=>{
     const {data}=useGetUserQuery({})
@@ -91,20 +94,12 @@ const Checkout=()=>{
                         </div>
                       
                         </form>
-                        <div>
-                            <p className="mt-16 mb-4 font-bold text-xl">Shipping method
-                            </p>
-                        <p className="border mb-8 border-green-600  p-4 text-start  bg-green-950">Credit card
-                        </p>
-                        <form >
-                            <input type="text" className="p-3 border border-gray-600 w-full" placeholder="cart number" name="cartNumber" id="" />
-                         <div className="flex flex-col md:flex-row lg:flex-row justify-start">
-                            <input type="text" className="p-3 rounded-sm mt-4 w-full md:w-[300px] lg:w-[300px] border border-gray-600 mr-2" name="expirationDate" placeholder="Expiration Date" />
-                            <input type="text" className="p-3 rounded-sm mt-4 w-full md:w-[300px] lg:w-[300px] border border-gray-600 " name="securityCode" placeholder="Security Code" />
-                         </div>
-                        <button className="hover:bg-green-600 text-white p-4 rounded-md text-center font-semibold w-full  my-5 bg-green-800"> Pay Now</button>
-                        </form>
-                        </div>
+                      <div>
+                        <button onClick={handlePayment}>Click to buy</button>
+                        <Elements stripe={stripePromise}>
+                            <StripePayment></StripePayment>
+                        </Elements>
+                      </div>
                     </div>
                 </div>
            {/* selected products section */}
