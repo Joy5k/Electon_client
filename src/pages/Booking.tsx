@@ -58,7 +58,7 @@ console.log(country)
 
   const handleContinueShopping = () => {
     // Implement continue shopping logic here
-    alert('Continue shopping clicked!');
+    navigate("/")
   };
 
   const handleApplyCoupon = () => {

@@ -181,7 +181,7 @@ const Checkout = () => {
               </p>
 
               {/* payment input field */}
-              <div className="bg-gray-600 p-4">
+              <div className=" p-4">
               {!stripe || !elements ? (
   <p>Loading...</p> // Show loading text or spinner while Stripe is being initialized
 ) : (
@@ -189,8 +189,7 @@ const Checkout = () => {
     options={{
       style: {
         base: {
-            backgroundColor:"transparent",
-         
+          
           color: "#ffffff",  // Change text color to white
           fontSize: "16px",   // Optional: Adjust font size if needed
           "::placeholder": {
@@ -209,7 +208,7 @@ const Checkout = () => {
                 className="hover:bg-green-600 text-white p-4 rounded-md text-center font-semibold w-full my-5 bg-green-800"
                 disabled={!stripe || !elements}
               >
-              {paymentLoader ? <Spinner></Spinner> : "Pay Now"}
+              {paymentLoader ? <p className="animate-pulse text-white font-semibold  bg-transparent text-lg">Loading...</p> : "Pay Now"}
               </button>
             </form>
           </div>
