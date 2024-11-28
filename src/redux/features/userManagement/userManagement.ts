@@ -17,10 +17,18 @@ const userManagementApi = baseApi.injectEndpoints({
         body: data,
       }),
     }),
+    updateRoleUserToSeller: builder.mutation({
+      query: () => ({
+        url: "/user/userToSeller",
+        method: "PUT",
+       
+      }),
+    }),
   
   }),
 });
 export const {
+  useUpdateRoleUserToSellerMutation,
     useUpdateUserMutation,
     useGetUserQuery
 } = userManagementApi;
