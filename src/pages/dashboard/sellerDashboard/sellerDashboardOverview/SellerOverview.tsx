@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import PieChart from "../../dashboardComponents/charts/PieChart";
 import { useGetAllMyProductsQuery } from "../../../../redux/features/products/productsApi";
 import Spinner from "../../../../components/Spinner/Spinner";
+import MyProducts from "../myProducts/MyProducts";
 
 
 
@@ -105,6 +106,9 @@ return (
  </div>
  </div>
      }
+     <div>
+        <MyProducts products={products}></MyProducts>
+     </div>
     </div>
   )
 }
