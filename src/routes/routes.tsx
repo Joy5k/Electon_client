@@ -12,6 +12,7 @@ import Dashboard from "../pages/dashboard/Dashboard";
 import ProtectedRoute from "../components/layout/ProtectedRoute";
 import Wishlist from "../pages/wishlist/Wishlist";
 import ProductDetail from "../pages/productDetails/ProductDetail";
+import PrivateRoute from "../components/layout/privateRoute";
 
 const router = createBrowserRouter([
   {
@@ -32,7 +33,7 @@ const router = createBrowserRouter([
       },
       {
         path: "booking",
-        element: <Booking />
+        element:<PrivateRoute> <Booking /></PrivateRoute>
       },
       {
         path: "wishlist",
@@ -40,11 +41,11 @@ const router = createBrowserRouter([
       },
       {
         path: "checkout",
-        element: <Checkout />
+        element: <PrivateRoute><Checkout /></PrivateRoute>
       },
       {
         path: "chat",
-        element: <Chat />
+        element: <PrivateRoute><Chat /></PrivateRoute>
       },
       {
         path: "profile",

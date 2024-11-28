@@ -8,6 +8,7 @@ import Spinner from "../../../components/Spinner/Spinner";
 import { useGetAllUsersQuery } from "../../../redux/features/admin/userManagementApi";
 import PieChart from "./charts/PieChart";
 import { useEffect, useState } from "react";
+import StackedLineChart from "./charts/StackedChart";
 
 
 
@@ -21,19 +22,26 @@ function Overview() {
         labels: ["Products", "Users"], // Labels for the datasets
         datasets: [
           {
-            label: "Product Count",
-            data: [products.data.length, 0], // Product count
-            backgroundColor: ["rgba(54, 162, 235, 0.6)", "rgba(255, 99, 132, 0.6)"], // Product colors
+            label: "Products",
+            data: [products.data.length, 0],
+            backgroundColor: "rgba(54, 162, 235, 0.2)",
+            borderColor: "rgba(54, 162, 235, 1)",
+            borderWidth: 2,
+            fill: true,
           },
           {
-            label: "User Count",
-            data: [0, users.data.length], // User count
-            backgroundColor: ["rgba(153, 102, 255, 0.6)", "rgba(255, 159, 64, 0.6)"], // User colors
+            label: "Users",
+            data: [0, users.data.length],
+            backgroundColor: "rgba(255, 99, 132, 0.2)",
+            borderColor: "rgba(255, 99, 132, 1)",
+            borderWidth: 2,
+            fill: true,
           },
         ],
       });
     }
   }, [products, users]);
+  
 return (
     <div className="w-full" >
      {
@@ -115,9 +123,27 @@ return (
       </div>
 
     {/* chart section start here */}
-    <div>
+    <h3 className="my-6 text-xl text-green-100 border border-b-8 px-2">Product and User Progress with Pie chart</h3>
+ {/* Charts section started here */}
+ <div className="flex flex-col md:flex-row lg:flex-row justify-center align-middle items-center gap-3">
+ <div className="w-full md:w-1/2 lg:w-1/2">
       {chartData && <PieChart chartData={chartData} />}
     </div>
+
+    <div className="w-full md:w-1/2 lg:w-1/2">
+
+
+  {chartData ? (
+    <StackedLineChart data={chartData} />
+  ) : (
+    <p className="text-center text-white">Loading Chart Data...</p>
+  )}
+</div>
+ </div>
+
+
+
+
     </div>
      }
     </div>
