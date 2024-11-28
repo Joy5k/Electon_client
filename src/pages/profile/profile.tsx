@@ -308,10 +308,14 @@ console.log(userData?.data.role)
                     </div>
 
                     {/* change the user role user to seller or seller to user */}
-                    <div className='mt-2 md:mt-9 lg:mt-9 '>
-                      <p className="capitalize font-semibold mb-1">change role</p>
-                      <button onClick={()=>handleUserRole()} className={`bg-green-900 p-[9px] ${userData?.data?.role!=="seller"||userData?.data?.role!=="user" && "hidden"}} `}>{userData?.data?.role==="seller"&& "Become User"} {userData?.data?.role==="user"&& "Become seller"}</button>
-                    </div>
+                    <div className={`mt-2 md:mt-9 lg:mt-9 ${userData?.data?.role === "seller" || userData?.data?.role === "user" ? "block" : "hidden"}`}>
+  <p className="capitalize font-semibold mb-1">change role</p>
+  <button onClick={() => handleUserRole()} className={`bg-green-900 p-[9px]`}>
+    {userData?.data?.role === "seller" && "Become User"}
+    {userData?.data?.role === "user" && "Become seller"}
+  </button>
+</div>
+
                 </div>
            
                 <label>About Me</label>
