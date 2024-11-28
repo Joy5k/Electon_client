@@ -159,6 +159,11 @@ const handleVerifySecret=async():Promise<void>=>{
     setOpenModal(false)
   }
 }
+
+// user role handler
+const handleUserRole=async()=>{
+ 
+}
   return (
     <div>
        {updatingUserInfo ? (
@@ -251,8 +256,8 @@ const handleVerifySecret=async():Promise<void>=>{
 
                   {/* Two-step authentication */}
                   <div className="mb-5">
-                    <label htmlFor="twoStep">Two-step Authentication</label> <br />
-                    <span>
+                    <label htmlFor="twoStep" className="mb-2">Two-step Authentication</label> <br />
+                    <div className="mt-2">
                       {
                         userData?.data?.auth2 ?  <>
                         <p className="text-green-500">Enabled </p>
@@ -262,7 +267,7 @@ const handleVerifySecret=async():Promise<void>=>{
                         <button onClick={toggleModal} className="text-red-500 bg-gray-900 px-2 hover:bg-slate-800 ">Enable </button> <FiAlertTriangle className="animate-pulse text-xl" />
                        </div>
                       }
-                    </span>
+                    </div>
                   </div>
                   
                 </div>
@@ -287,6 +292,13 @@ const handleVerifySecret=async():Promise<void>=>{
                            className='border border-gray-400 p-2 w-40' 
                            placeholder={userData?.data?.address.postCode ||"8888"} />
                       </div>
+                     
+                    </div>
+
+                    {/* change the user role user to seller or seller to user */}
+                    <div className='mt-2 md:mt-9 lg:mt-9 '>
+                      <p className="capitalize font-semibold mb-1">change role</p>
+                      <button onClick={()=>handleUserRole()} className="bg-green-900 p-[9px] ">Become seller</button>
                     </div>
                 </div>
            
