@@ -35,7 +35,7 @@ const Navbar=()=>{
     // Remove token from local storage
     localStorage.removeItem('token');
   };
-
+console.log(userData)
 
     return (
         <div>
@@ -177,11 +177,17 @@ const Navbar=()=>{
           Your Profile
         </a>
       </MenuItem>
-      <MenuItem>
-        <a href="/dashboard" className="block px-4 py-2 text-sm text-white  hover:text-primary ">
-          Dashboard
-        </a>
-      </MenuItem>
+      <Menu.Item as="div"> {/* Change to a div or any valid HTML element */}
+  {
+    userData?.data?.role !== "user" && (
+      <a href="/dashboard" className="block px-4 py-2 text-sm text-white hover:text-primary">
+        Dashboard
+      </a>
+    )
+  }
+</Menu.Item>
+
+
       {
         token ?  <MenuItem>
         <a onClick={handleSignOut} href="" className="block px-4 py-2 text-sm text-white  hover:text-primary">
