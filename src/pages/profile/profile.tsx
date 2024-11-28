@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import axios from 'axios';
 import { IAuthResponse, ImgBBResponseData, IQrCodeData } from "../../types";
-import { useGetUserQuery, useUpdateUserMutation } from "../../redux/features/userManagement/userManagement";
+import { useGetUserQuery, useUpdateRoleUserToSellerMutation, useUpdateUserMutation } from "../../redux/features/userManagement/userManagement";
 import { useAuth2Mutation, useVerifyAuth2Mutation } from "../../redux/features/auth/authApi";
 import SelectDivision from "../../components/selectDivision/selectDivision";
 import { MdEdit } from "react-icons/md";
@@ -26,6 +26,9 @@ const Profile = () => {
   const [qrCodeData]=useAuth2Mutation()
   const { data: userData } = useGetUserQuery({});
   const [qrCodeVerify]=useVerifyAuth2Mutation({})
+  const [changeUserRole]=useUpdateRoleUserToSellerMutation()
+
+
   const [formData, setFormData] = useState({
     firstName: "",
     image: "",
@@ -50,11 +53,11 @@ useEffect(() => {
   setFormData((prevFormData) => ({
     ...prevFormData,
     address: {
-      subDistrict: address?.subDistrict || userData?.data?.address.subDistrict|| '',
-      district: address?.district || userData?.data?.address.district|| '',
-      division: address?.division  ||  userData?.data?.address.division||'',
-      roadNo: roadNo ||  userData?.data?.address.roadNo|| '',
-      postCode: postCode ||userData?.data?.address.postCode || 8888,
+      subDistrict: address?.subDistrict || userData?.data?.address?.subDistrict|| '',
+      district: address?.district || userData?.data?.address?.district|| '',
+      division: address?.division  ||  userData?.data?.address?.division||'',
+      roadNo: roadNo ||  userData?.data?.address?.roadNo|| '',
+      postCode: postCode ||userData?.data?.address?.postCode || 8888,
     },
   }));
   
@@ -162,7 +165,15 @@ const handleVerifySecret=async():Promise<void>=>{
 
 // user role handler
 const handleUserRole=async()=>{
- 
+ try {
+    const res=await changeUserRole({}).unwrap()
+    if(res.success){
+      toast.success(`Change ${userData.firstName} role  ${userData.role} to ${userData.role==="user" ? "seller":"user"}`)
+    }
+ } catch (error) {
+  console.log(error)
+  toast.error("Something went wrong to change role")
+ }
 }
   return (
     <div>
@@ -281,7 +292,7 @@ const handleUserRole=async()=>{
                                 type="text"
                                  className='border border-gray-400 p-2 w-40'
                                  disabled={!isEditing}
-                                 placeholder={userData?.data?.address.roadNo ||"street address"} />
+                                 placeholder={userData?.data?.address?.roadNo ||"street address"} />
                        </div>
                      <div className='mt-2 md:mt-20 lg:mt-4'>
                          <label htmlFor="postCode">Postcode</label> <br />
@@ -290,7 +301,7 @@ const handleUserRole=async()=>{
                           type="number"
                           disabled={!isEditing}
                            className='border border-gray-400 p-2 w-40' 
-                           placeholder={userData?.data?.address.postCode ||"8888"} />
+                           placeholder={userData?.data?.address?.postCode ||"8888"} />
                       </div>
                      
                     </div>

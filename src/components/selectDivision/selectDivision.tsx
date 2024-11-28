@@ -31,7 +31,7 @@ const SelectDivision = ({ setAddress,disabled,userData }: any) => {
     const fetchDivisions = async () => {
       try {
         const response: any = await axios.get<IDivision[]>('https://bdapis.com/api/v1.2/divisions');
-        setDivisions(response.data?.data);
+        setDivisions(response?.data?.data);
       } catch (error) {
         console.error('Error fetching divisions:', error);
       }
@@ -45,7 +45,7 @@ const SelectDivision = ({ setAddress,disabled,userData }: any) => {
       if (selectedDivision) {
         try {
           const response: any = await axios.get<IDistrict[]>(`https://bdapis.com/api/v1.2/division/${selectedDivision}`);
-          setDistricts(response.data.data);
+          setDistricts(response?.data?.data);
           setSelectedDistrict('');
           setSelectedSubDistrict('');
         } catch (error) {
@@ -85,12 +85,12 @@ const SelectDivision = ({ setAddress,disabled,userData }: any) => {
           value={selectedDivision}
           disabled={disabled}
           onChange={(e) => setSelectedDivision(e.target.value)}
-        defaultValue={userData?.data?.address.division}
+        defaultValue={userData?.data?.address?.division}
           className="border p-2 w-40"
         >
-          <option value="">{userData?.data?.address.division ||"-- Select Division --"}</option>
+          <option value="">{userData?.data?.address?.division ||"-- Select Division --"}</option>
           {divisions?.map((division) => (
-            <option key={division.division} value={division.id}>{division.division}</option>
+            <option key={division?.division} value={division?.id}>{division?.division}</option>
           ))}
         </select>
       </div>
@@ -104,9 +104,9 @@ const SelectDivision = ({ setAddress,disabled,userData }: any) => {
           className="border p-2 w-40"
           disabled={!selectedDivision}
         >
-          <option value="">{userData?.data?.address.district ||"-- Select District --"}</option>
+          <option value="">{userData?.data?.address?.district ||"-- Select District --"}</option>
           {districts?.map((district) => (
-            <option key={district.id} value={district.id}>{district.district}</option>
+            <option key={district.id} value={district?.id}>{district?.district}</option>
           ))}
         </select>
       </div>
@@ -120,7 +120,7 @@ const SelectDivision = ({ setAddress,disabled,userData }: any) => {
           className="border p-2 w-40"
           disabled={!selectedDistrict}
         >
-          <option value="">{userData?.data?.address.subDistrict ||"-- Select Sub-District --"}</option>
+          <option value="">{userData?.data?.address?.subDistrict ||"-- Select Sub-District --"}</option>
           {subDistricts?.map((UP: any) => (
             <option key={UP.id} value={UP.id}>{UP}</option>
           ))}
