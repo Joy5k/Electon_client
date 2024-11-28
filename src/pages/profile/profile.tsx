@@ -168,13 +168,14 @@ const handleUserRole=async()=>{
  try {
     const res=await changeUserRole({}).unwrap()
     if(res.success){
-      toast.success(`Change ${userData.firstName} role  ${userData.role} to ${userData.role==="user" ? "seller":"user"}`)
+      toast.success(`Change ${userData?.data?.firstName} role  ${userData?.data?.role} to ${userData?.data?.role==="user" ? "seller":"user"}`)
     }
  } catch (error) {
   console.log(error)
   toast.error("Something went wrong to change role")
  }
 }
+console.log(userData?.data.role)
   return (
     <div>
        {updatingUserInfo ? (
@@ -331,7 +332,7 @@ const handleUserRole=async()=>{
                if (isEditing) handleUserProfileUpdate();
              toggleEdit();
             }}
-          className="bg-green-500  text-white px-4 py-2 rounded mr-2"
+          className="bg-green-900  text-white px-4 py-2 rounded mr-2"
 >
   {isEditing ? "Save" : "Edit Profile"}
 </button>

@@ -4,25 +4,32 @@ const userManagementApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
   
     getUser: builder.query({
-      query: () => ({
-        url: "/user/getMe",
-        method: "GET",
-       
-      }),
+      query: () => {
+      return  {
+          url: "/user/getMe",
+          method: "GET",
+         
+        }
+      }, providesTags: [{ type: 'users' }]
+
+
     }),
     updateUser: builder.mutation({
-      query: (data) => ({
-        url: "/user/update",
-        method: "PUT",
-        body: data,
-      }),
+      query: (data) => {
+        return {
+          url: "/user/update",
+          method: "PUT",
+          body: data,
+        }
+      },
+      invalidatesTags:["users"],
     }),
     updateRoleUserToSeller: builder.mutation({
       query: () => ({
         url: "/user/userToSeller",
         method: "PUT",
        
-      }),
+      }),invalidatesTags:["users"]
     }),
   
   }),
