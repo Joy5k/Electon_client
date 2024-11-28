@@ -12,6 +12,16 @@ const productManagementApi = baseApi.injectEndpoints({
       },providesTags:["products"],
 
     }),
+
+    getAllMyProducts: builder.query({
+      query: () =>{
+      return  {
+          url: `product/my-products`,
+          method: "GET",
+        }
+      },providesTags:["products"],
+
+    }),
  
     createBooking: builder.mutation({
       query: (productId) => {
@@ -46,6 +56,7 @@ const productManagementApi = baseApi.injectEndpoints({
 });
 
 export const {
+  useGetAllMyProductsQuery,
   useGetSingleProductQuery,
   useCreateBookingMutation,
   useUpdateProductMutation,
