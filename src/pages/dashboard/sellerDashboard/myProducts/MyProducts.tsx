@@ -38,13 +38,12 @@ const MyProducts = ({ products }: any) => {
   const [currentPage, setCurrentPage] = useState(1);
   const rowsPerPage = 10;
 
-  // Calculate pagination variables
-  const totalPages = Math.ceil(products.length / rowsPerPage);
-  const indexOfLastRow = currentPage * rowsPerPage;
-  const indexOfFirstRow = indexOfLastRow - rowsPerPage;
-  const currentRows = products.slice(indexOfFirstRow, indexOfLastRow);
+// Ensure products is an array with a fallback
+const totalPages = Math.ceil((products?.length || 0) / rowsPerPage);
+const indexOfLastRow = currentPage * rowsPerPage;
+const indexOfFirstRow = indexOfLastRow - rowsPerPage;
+const currentRows = products?.slice(indexOfFirstRow, indexOfLastRow) || [];
 
-  
     // Only update product when sellerId changes
   // Deleting product
 

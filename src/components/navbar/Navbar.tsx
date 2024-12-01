@@ -35,7 +35,6 @@ const Navbar=()=>{
     // Remove token from local storage
     localStorage.removeItem('token');
   };
-console.log(userData)
 
     return (
         <div>

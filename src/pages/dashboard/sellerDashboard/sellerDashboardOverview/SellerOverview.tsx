@@ -7,20 +7,22 @@ import PieChart from "../../dashboardComponents/charts/PieChart";
 import { useGetAllMyProductsQuery } from "../../../../redux/features/products/productsApi";
 import Spinner from "../../../../components/Spinner/Spinner";
 import MyProducts from "../myProducts/MyProducts";
+import { IProduct } from "../../../../types";
 
 
 
 function SellerOverview() {
   const {data:products,isLoading}=useGetAllMyProductsQuery({})
   const [chartData, setChartData] = useState<any>(null);
+  console.log(products)
   useEffect(() => {
-    if (products.data ) {
+    if (products?.data as IProduct) {
       setChartData({
         labels: ["Products", "Users"], // Labels for the datasets
         datasets: [
           {
             label: "Products",
-            data: [products.data.length, 0],
+            data: [50, 0],
             backgroundColor: "rgba(54, 162, 235, 0.2)",
             borderColor: "rgba(54, 162, 235, 1)",
             borderWidth: 2,
@@ -32,7 +34,8 @@ function SellerOverview() {
     }
   }, [products]);
 return (
-    <div className="w-full" >
+   <div>
+     <div className="w-full" >
      {
       isLoading ? <div className="flex justify-center items-center align-middle mx-auto w-11/12"><Spinner></Spinner></div> :
       <div className="">
@@ -46,11 +49,11 @@ return (
 
         <div className="bg-transparent">
         <p className="text-white  bg-transparent"> Products</p>
-        <p className="text-white text-4xl py-5 bg-transparent">{products?.data.length}</p>
+        <p className="text-white text-4xl py-5 bg-transparent">{products?.data?.length||0}</p>
         </div>
         </div>
         <hr />
-        <p className="font-mono text-white bg-transparent relative">{(Number(products?.data?.length) * 3.67).toFixed(2)}% Increase <BsGraphUpArrow className="bg-transparent absolute right-4 top-[6px] font-bold bold" />
+        <p className="font-mono text-white bg-transparent relative">{(Number(products?.data?.length||0) * 3.67).toFixed(2)}% Increase <BsGraphUpArrow className="bg-transparent absolute right-4 top-[6px] font-bold bold" />
         </p>
         <div>
 
@@ -65,11 +68,11 @@ return (
 
         <div className="bg-transparent">
         <p className="text-white  bg-transparent"> Sells</p>
-        <p className="text-white text-4xl py-5 bg-transparent">{products?.data?.length}</p>
+        <p className="text-white text-4xl py-5 bg-transparent">{products?.data?.length||0}</p>
         </div>
         </div>
         <hr />
-        <p className="font-mono text-white bg-transparent relative">{(products?.data?.length * 3.67).toFixed(2)}% Increase <BsGraphUpArrow className="bg-transparent absolute right-4 top-[6px] font-bold bold" />
+        <p className="font-mono text-white bg-transparent relative">{(products?.data?.length||0 * 3.67).toFixed(2)}% Increase <BsGraphUpArrow className="bg-transparent absolute right-4 top-[6px] font-bold bold" />
         </p>
         <div>
 
@@ -82,11 +85,11 @@ return (
 
         <div className="bg-transparent">
         <p className="text-white  bg-transparent"> Reported items</p>
-        <p className="text-white text-4xl py-5 bg-transparent">{products?.data?.length}</p>
+        <p className="text-white text-4xl py-5 bg-transparent">{products?.data?.length||0}</p>
         </div>
         </div>
         <hr />
-        <p className="font-mono text-white bg-transparent relative">{(products?.data?.length * 3.67).toFixed(2)}% Increase <BsGraphUpArrow className="bg-transparent absolute right-4 top-[6px] font-bold bold" />
+        <p className="font-mono text-white bg-transparent relative">{(products?.data?.length ||0* 3.67).toFixed(2)}% Increase <BsGraphUpArrow className="bg-transparent absolute right-4 top-[6px] font-bold bold" />
         </p>
         <div>
 
@@ -106,9 +109,11 @@ return (
  </div>
      }
      <div>
-        <MyProducts products={products}></MyProducts>
+       <MyProducts products={products}></MyProducts>
+       
      </div>
     </div>
+   </div>
   )
 }
 
