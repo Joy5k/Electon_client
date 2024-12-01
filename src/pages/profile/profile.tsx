@@ -8,8 +8,17 @@ import SelectDivision from "../../components/selectDivision/selectDivision";
 import { MdEdit } from "react-icons/md";
 import Spinner from "../../components/Spinner/Spinner";
 import { FiAlertTriangle } from "react-icons/fi";
+import Cookies from 'js-cookie';
+import { useNavigate } from "react-router-dom";
 
 const Profile = () => {
+   // redux queries and mutations
+   const [userUpdate, { isLoading: updatingUserInfo }] = useUpdateUserMutation();
+   const [qrCodeData]=useAuth2Mutation()
+   const { data: userData } = useGetUserQuery({});
+   const [qrCodeVerify]=useVerifyAuth2Mutation({})
+   const [changeUserRole]=useUpdateRoleUserToSellerMutation()
+  
   const [isEditing, setIsEditing] = useState(false);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [imageUploading, setImageUploadLoading] = useState<boolean>(false);
@@ -21,12 +30,7 @@ const Profile = () => {
 
   const [roadNo,setRoadNo]=useState<string>("")
   const [postCode,setPostCode]=useState<number>()
-  // redux queries and mutations
-  const [userUpdate, { isLoading: updatingUserInfo }] = useUpdateUserMutation();
-  const [qrCodeData]=useAuth2Mutation()
-  const { data: userData } = useGetUserQuery({});
-  const [qrCodeVerify]=useVerifyAuth2Mutation({})
-  const [changeUserRole]=useUpdateRoleUserToSellerMutation()
+  const navigate=useNavigate()
 
 
   const [formData, setFormData] = useState({
@@ -82,6 +86,17 @@ useEffect(() => {
   }, [userData]);
 
   const toggleEdit = () => setIsEditing(!isEditing);
+
+  
+  const handleSignOut = () => {
+    // Remove the refreshToken cookie
+    Cookies.remove('refreshToken');
+    
+    // Remove token from local storage
+    localStorage.removeItem('token');
+    navigate("/login")
+  };
+
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -169,14 +184,18 @@ const handleUserRole=async()=>{
     const res=await changeUserRole({}).unwrap()
     if(res.success){
       toast.success(`Change ${userData?.data?.firstName} role  ${userData?.data?.role} to ${userData?.data?.role==="user" ? "seller":"user"}`)
+      handleSignOut()
     }
  } catch (error) {
   console.log(error)
   toast.error("Something went wrong to change role")
  }
 }
-console.log(userData?.data.role)
-  return (
+
+
+
+
+return (
     <div>
        {updatingUserInfo ? (
          <Spinner/>
