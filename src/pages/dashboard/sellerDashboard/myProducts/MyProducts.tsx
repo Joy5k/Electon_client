@@ -4,6 +4,7 @@ import { useDeleteProductMutation, useUpdateProductMutation } from "../../../../
 import { ImgBBResponseData, IProduct } from "../../../../types";
 import Spinner from "../../../../components/Spinner/Spinner";
 import axios from "axios";
+import { RiEmotionSadFill } from "react-icons/ri";
 
 const MyProducts = ({ products }: any) => {
   const [deleteProduct] = useDeleteProductMutation();
@@ -30,7 +31,6 @@ const MyProducts = ({ products }: any) => {
         }
       }, [selectedProduct]);
   
-console.log(products)
   // State for modal
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -145,7 +145,10 @@ const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaE
 
 
   return (
-    <div className="overflow-x-auto mr-5">
+    <div>
+      {
+        products?.length>0 ? <>
+        <div className="overflow-x-auto mr-5">
       <table className="w-full bg-white border-collapse overflow-scroll">
         <thead>
           <tr className="border bg-gray-100">
@@ -368,6 +371,19 @@ const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaE
   </div>
 )}
 
+    </div></> :
+    
+    
+<div className="flex justify-center flex-col md:flex-row lg:flex-row gap-2 align-middle items-center m-0  md:m-16 lg:m-20">
+<p className="text-4xl font-semibold text-gray-400 animate-bounce text-center">
+  You haven't any products available, Buddy! 
+</p>
+  <RiEmotionSadFill className=" fill-yellow-500 text-4xl" />
+</div>
+
+
+
+      }
     </div>
   );
 };

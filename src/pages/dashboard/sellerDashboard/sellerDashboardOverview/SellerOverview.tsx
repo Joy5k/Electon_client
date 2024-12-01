@@ -40,9 +40,9 @@ return (
       <div className="">
       {/* overview carts */}
       <h3 className="text-xl font-bold mb-5 bg-transparent">Overview</h3>
-    <div className="flex flex-col md:flex-row lg:flex-row mb-5 gap-3">
+    <div className="flex flex-col md:flex-row lg:flex-row mb-5 gap-3 ">
       {/* products cart */}
-      <div className=" bg-emerald-800 p-3 w-52 h-36 rounded-lg ">
+      <div className=" bg-emerald-800 p-3 min-w-52 min-h-36 w-72 rounded-lg ">
         <div className=" flex flex-row-reverse justify-between bg-transparent ">
         <CiBoxes className="bg-transparent text-7xl mt-5 " />
 
@@ -60,7 +60,7 @@ return (
       </div>
     
       {/* Total Sells products */}
-      <div className=" bg-lime-800 p-3 w-52 h-36 rounded-lg ">
+      <div className=" bg-lime-800 p-3 min-w-52 min-h-36 w-72 rounded-lg ">
         <div className=" flex flex-row-reverse justify-between bg-transparent ">
         <FaSackDollar className="bg-transparent text-7xl mt-5 " />
       
@@ -77,7 +77,7 @@ return (
 
         </div>
       </div>
-      <div className=" bg-yellow-600 p-3 w-52 h-36 rounded-lg bg-transparent">
+      <div className=" bg-yellow-600 p-3 min-w-52 min-h-36 w-72 rounded-lg bg-transparent">
         <div className=" flex flex-row-reverse justify-between bg-transparent ">
        
         < MdOutlineReportProblem  className="bg-transparent text-7xl mt-5 " />
@@ -97,7 +97,7 @@ return (
       </div>
 
     {/* chart section start here */}
-    <h3 className="my-6 text-xl text-green-100 border border-b-8 px-2">Product and User Progress with Pie chart</h3>
+    <h3 className="my-6 text-xl   font-bold  ">Product with Pie chart</h3>
  {/* Charts section started here */}
  <div className="flex flex-col md:flex-row lg:flex-row justify-center align-middle items-center gap-3">
  <div className="w-full md:w-1/2 lg:w-1/2">
@@ -107,7 +107,7 @@ return (
  </div>
  </div>
      }
-     <div>
+     <div className="mt-10">
        <MyProducts products={products?.data}></MyProducts>
        
      </div>
