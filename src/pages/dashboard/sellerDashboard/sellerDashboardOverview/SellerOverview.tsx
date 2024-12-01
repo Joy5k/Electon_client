@@ -14,7 +14,7 @@ function SellerOverview() {
   const {data:products,isLoading}=useGetAllMyProductsQuery({})
   const [chartData, setChartData] = useState<any>(null);
   useEffect(() => {
-    if (products?.data ) {
+    if (products.data ) {
       setChartData({
         labels: ["Products", "Users"], // Labels for the datasets
         datasets: [
@@ -31,7 +31,6 @@ function SellerOverview() {
       });
     }
   }, [products]);
-  
 return (
     <div className="w-full" >
      {

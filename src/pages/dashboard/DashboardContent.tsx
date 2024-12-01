@@ -5,12 +5,16 @@ import UsersManagement from './dashboardComponents/UsersManagement';
 import MyProducts from './sellerDashboard/myProducts/MyProducts';
 import SellsProducts from './dashboardComponents/sellsProducts/SellsProducts';
 import SellerOverview from './sellerDashboard/sellerDashboardOverview/SellerOverview';
+import { verifyToken } from '../../utils/verifyToken';
 
 type DashboardContentProps = {
   activePage: string;
 };
 
 const DashboardContent: React.FC<DashboardContentProps> = ({ activePage }) => {
+  const token=localStorage.getItem("token") as string;
+  const decoded=verifyToken(token) as {role:string}
+
   return (
     <div className="flex-1 pr-5">
       {activePage === 'Overview' && <div><Overview></Overview></div>}

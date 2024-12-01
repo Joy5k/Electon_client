@@ -8,13 +8,7 @@ const userManagementApi = baseApi.injectEndpoints({
       method:"GET"
     }),providesTags:["users"]
   }),
-    addStudent: builder.mutation({
-      query: (data) => ({
-        url: "/users/create-student",
-        method: "POST",
-        body: data,
-      }),
-    }),
+    
     updateUserStatus: builder.mutation({
       query: (id) => {
         return {
@@ -51,7 +45,6 @@ const userManagementApi = baseApi.injectEndpoints({
 
 export const {
   useGetAllUsersQuery,
-  useAddStudentMutation,
   useUpdateUserStatusMutation,
   useCreateAdminMutation,
   useDeleteUserMutation

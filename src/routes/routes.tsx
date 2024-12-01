@@ -5,7 +5,7 @@ import Login from "../pages/Login";
 import About from "../pages/About";
 import HomePage from "../pages/Home";
 import Booking from "../pages/Booking";
-import Checkout from "../pages/CheckOut";
+import Checkout from "../pages/payment/CheckOut";
 import Chat from "../pages/chat/chat";
 import Profile from "../pages/profile/profile";
 import Dashboard from "../pages/dashboard/Dashboard";

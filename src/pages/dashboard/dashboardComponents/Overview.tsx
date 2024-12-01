@@ -9,6 +9,7 @@ import { useGetAllUsersQuery } from "../../../redux/features/admin/userManagemen
 import PieChart from "./charts/PieChart";
 import { useEffect, useState } from "react";
 import StackedLineChart from "./charts/StackedChart";
+import { verifyToken } from "../../../utils/verifyToken";
 
 
 
@@ -41,7 +42,9 @@ function Overview() {
       });
     }
   }, [products, users]);
-  
+  const token=localStorage.getItem("token") as string;
+  const decoded=verifyToken(token) as {role:string}
+ 
 return (
     <div className="w-full" >
      {
@@ -68,7 +71,9 @@ return (
         </div>
       </div>
       {/* users cart */}
-      <div className=" bg-purple-900 p-3 w-52 h-36 rounded-lg ">
+    {  
+           decoded.role!=="seller" &&
+<div className=" bg-purple-900 p-3 w-52 h-36 rounded-lg ">
         <div className=" flex flex-row-reverse justify-between bg-transparent ">
        
         <TiGroup className="bg-transparent text-7xl mt-5 "  />
@@ -84,7 +89,7 @@ return (
         <div>
 
         </div>
-      </div>
+      </div>}
       {/* Total Sells products */}
       <div className=" bg-lime-800 p-3 w-52 h-36 rounded-lg ">
         <div className=" flex flex-row-reverse justify-between bg-transparent ">

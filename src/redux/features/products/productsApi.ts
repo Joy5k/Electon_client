@@ -16,7 +16,7 @@ const productManagementApi = baseApi.injectEndpoints({
     getAllMyProducts: builder.query({
       query: () =>{
       return  {
-          url: `product/my-products`,
+          url: `/product/my-products`,
           method: "GET",
         }
       },providesTags:["products"],

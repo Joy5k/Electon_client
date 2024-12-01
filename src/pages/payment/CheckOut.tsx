@@ -1,11 +1,11 @@
 import { useLocation } from "react-router-dom";
-import { IProduct, IUser } from "../types";
+import { IProduct, IUser } from "../../types";
 import { useEffect, useState } from "react";
-import { useGetUserQuery } from "../redux/features/userManagement/userManagement";
+import { useGetUserQuery } from "../../redux/features/userManagement/userManagement";
 import { CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
-import { useCreatePaymentIntentMutation } from "../redux/features/paymentMangement/paymentManagementApi";
+import { useCreatePaymentIntentMutation } from "../../redux/features/paymentMangement/paymentManagementApi";
 import jsPDF from "jspdf";
 
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
@@ -123,12 +123,12 @@ const Checkout = () => {
   
     try {
       // Create the payment intent on the backend
-      const response = await stripePayment({ amount: eachProductSubTotal }).unwrap();
+      const response = await stripePayment(selectedProducts).unwrap();
       // Check if the response contains 'data' or 'error'
       if ('data' in response) {
         const paymentIntent = response.data;
-        
-        if (!paymentIntent || !paymentIntent.client_secret) {
+
+        if (!paymentIntent || !paymentIntent.paymentIntent.client_secret) {
           console.log("Payment intent creation failed or missing client secret");
           return;
         }
