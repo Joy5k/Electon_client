@@ -14,7 +14,6 @@ import { IProduct } from "../../../../types";
 function SellerOverview() {
   const {data:products,isLoading}=useGetAllMyProductsQuery({})
   const [chartData, setChartData] = useState<any>(null);
-  console.log(products)
   useEffect(() => {
     if (products?.data as IProduct) {
       setChartData({
