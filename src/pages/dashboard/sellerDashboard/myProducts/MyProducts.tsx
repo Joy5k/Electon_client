@@ -30,7 +30,7 @@ const MyProducts = ({ products }: any) => {
         }
       }, [selectedProduct]);
   
-
+console.log(products)
   // State for modal
   const [isModalOpen, setIsModalOpen] = useState(false);
 

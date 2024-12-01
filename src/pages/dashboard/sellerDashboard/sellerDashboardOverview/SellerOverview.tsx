@@ -109,7 +109,7 @@ return (
  </div>
      }
      <div>
-       <MyProducts products={products}></MyProducts>
+       <MyProducts products={products?.data}></MyProducts>
        
      </div>
     </div>
