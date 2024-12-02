@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import  { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { useDeleteProductMutation, useUpdateProductMutation } from "../../../../redux/features/admin/productManagementApi";
 import { ImgBBResponseData, IProduct } from "../../../../types";

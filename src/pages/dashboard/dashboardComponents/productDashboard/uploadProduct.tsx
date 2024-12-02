@@ -13,6 +13,7 @@ const ProductUploadForm = () => {
      const navigate = useNavigate();
      const [sellerId, setSellerId] = useState<string>("");
      const [product, setProduct] = useState<IProduct>({
+    _id:"",
     title: "",
     description: "",
     image: "",
@@ -118,6 +119,7 @@ const ProductUploadForm = () => {
   
         // Reset form fields to initial state (clear the form)
         setProduct({
+          _id:"",
           title: "",
           description: "",
           color: [""],

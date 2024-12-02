@@ -1,14 +1,14 @@
 
 import MainLayout from "./components/layout/MainLayout";
-import PrivateRoute from "./components/layout/privateRoute";
+import ProtectedRoute from "./components/layout/ProtectedRoute";
 
 function App() {
   return (
     <div className="">
     
-      <PrivateRoute>
+      <ProtectedRoute>
     <MainLayout></MainLayout>
-    </PrivateRoute>
+    </ProtectedRoute>
      
     </div>
   );
