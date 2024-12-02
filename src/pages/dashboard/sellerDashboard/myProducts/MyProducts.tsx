@@ -47,12 +47,10 @@ const indexOfLastRow = currentPage * rowsPerPage;
 const indexOfFirstRow = indexOfLastRow - rowsPerPage;
 const currentRows = products?.data?.slice(indexOfFirstRow, indexOfLastRow) || [];
 
-    // Only update product when sellerId changes
   // Deleting product
 
   const handleDeleteProduct = async (id: string) => {
     const res = await deleteProduct(id).unwrap();
-
     if (res?.success) {
       toast.success("Product deleted successfully");
     }

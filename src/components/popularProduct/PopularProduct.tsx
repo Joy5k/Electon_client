@@ -11,7 +11,7 @@ import { useCreateBookingMutation } from "../../redux/features/bookingManagement
 
 
 const PopularProduct = () => {
-  const [addToCart]=useCreateBookingMutation()
+  const [addToCart,{isLoading:bookingLoader}]=useCreateBookingMutation()
   const dispatch = useDispatch<AppDispatch>();
   const{data}=useAllProductsQuery({})
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
@@ -214,7 +214,9 @@ const [selectedColor, setSelectedColor] = useState<string | null>(null);
           </div>
           <div className="flex flex-col md:flex-row lg:flex-row justify-center gap-1">
             <button onClick={()=>handleAddToCart(selectedProduct)} className="capitalize bg-primary p-3 hover:bg-gray-700 mt-6 hover:text-white rounded-full text-white w-full">
-              Add To Cart
+            {
+              bookingLoader ? <div className="flex justify-center items-center bg-transparent"><p className=" w-6 h-6 border-4 border-primary border-solid border-t-transparent rounded-full animate-spin bg-transparent text-center items-center"></p></div>:"Add To Cart"
+            }  
             </button>
             <button  onClick={() => handleAddToWishlist(selectedProduct)} className="capitalize bg-gray-700 p-3 md:p-0 lg:p-  hover:bg-primary mt-6 hover:text-white rounded-full text-white w-full">
              Add to wishlist
