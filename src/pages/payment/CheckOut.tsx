@@ -1,6 +1,6 @@
 import { useLocation } from "react-router-dom";
 import { IProduct, IUser } from "../../types";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useGetUserQuery } from "../../redux/features/userManagement/userManagement";
 import { CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
@@ -16,9 +16,7 @@ const Checkout = () => {
   const { data } = useGetUserQuery({});
   const location = useLocation();
   const { selectedProducts } = location.state || { selectedProducts: [] };
-  
-  const [eachProductSubTotal, setEachProductSubTotal] = useState<number>(0);
-  const user = data?.data || ({} as IUser);
+    const user = data?.data || ({} as IUser);
   const stripe = useStripe();
   const elements = useElements();
   const [openTransitionModal,setOpenTransitionModal]=useState<boolean>(false)
@@ -32,18 +30,7 @@ const Checkout = () => {
     return acc + product.productId.price * product.userSelectedQuantity;
   }, 0);
   
-
-  // Sum total price
-  useEffect(() => {
-    if (selectedProducts && selectedProducts.length > 0) {
-      const eachProductSubtotal = selectedProducts.reduce(
-        (accumulator: number, product: { productId: IProduct }) =>
-          accumulator + (product.productId?.price || 0),
-        0
-      );
-      setEachProductSubTotal(eachProductSubtotal);
-    }
-  }, [selectedProducts]);
+  
 
   // handle the transtion id copy from the payment modal input
   const handleCopy = () => {

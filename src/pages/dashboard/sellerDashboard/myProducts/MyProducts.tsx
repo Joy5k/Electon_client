@@ -5,8 +5,11 @@ import { ImgBBResponseData, IProduct } from "../../../../types";
 import Spinner from "../../../../components/Spinner/Spinner";
 import axios from "axios";
 import { RiEmotionSadFill } from "react-icons/ri";
+import { useGetAllMyProductsQuery } from "../../../../redux/features/products/productsApi";
 
-const MyProducts = ({ products }: any) => {
+const MyProducts = () => {
+  const {data:products,isLoading}=useGetAllMyProductsQuery({})
+
   const [deleteProduct] = useDeleteProductMutation();
   const [updateProduct]=useUpdateProductMutation()
 
@@ -37,12 +40,12 @@ const MyProducts = ({ products }: any) => {
   // Pagination state
   const [currentPage, setCurrentPage] = useState(1);
   const rowsPerPage = 10;
-
+console.log(products)
 // Ensure products is an array with a fallback
 const totalPages = Math.ceil((products?.length || 0) / rowsPerPage);
 const indexOfLastRow = currentPage * rowsPerPage;
 const indexOfFirstRow = indexOfLastRow - rowsPerPage;
-const currentRows = products?.slice(indexOfFirstRow, indexOfLastRow) || [];
+const currentRows = products?.data?.slice(indexOfFirstRow, indexOfLastRow) || [];
 
     // Only update product when sellerId changes
   // Deleting product
@@ -142,14 +145,17 @@ const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaE
    }
   }
 
-
+if(isLoading){
+ return  <Spinner></Spinner>
+}
 
   return (
     <div>
       {
-        products?.length>0 ? <>
-        <div className="overflow-x-auto mr-5">
-      <table className="w-full bg-white border-collapse overflow-scroll">
+        products?.data?.length ? <>
+        <p className="text-3xl font-semibold text-gray-300 mb-4  w-fit p-4 rounded-full shadow-md  shadow-gray-800 ">Products Management</p>
+        <div className="overflow-x-auto mr-5 shadow-lg  shadow-gray-800">
+      <table className="w-full bg-white border-collapse overflow-scroll ">
         <thead>
           <tr className="border bg-gray-100">
             <th className="px-4 py-2 whitespace-nowrap">No.</th>

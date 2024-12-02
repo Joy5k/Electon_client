@@ -6,7 +6,6 @@ import { useEffect, useState } from "react";
 import PieChart from "../../dashboardComponents/charts/PieChart";
 import { useGetAllMyProductsQuery } from "../../../../redux/features/products/productsApi";
 import Spinner from "../../../../components/Spinner/Spinner";
-import MyProducts from "../myProducts/MyProducts";
 import { IProduct } from "../../../../types";
 
 
@@ -14,6 +13,8 @@ import { IProduct } from "../../../../types";
 function SellerOverview() {
   const {data:products,isLoading}=useGetAllMyProductsQuery({})
   const [chartData, setChartData] = useState<any>(null);
+
+  // set products and user data for chart
   useEffect(() => {
     if (products?.data as IProduct) {
       setChartData({
@@ -32,7 +33,9 @@ function SellerOverview() {
       });
     }
   }, [products]);
+
 return (
+
    <div>
      <div className="w-full" >
      {
@@ -41,6 +44,7 @@ return (
       {/* overview carts */}
       <h3 className="text-xl font-bold mb-5 bg-transparent">Overview</h3>
     <div className="flex flex-col md:flex-row lg:flex-row mb-5 gap-3 ">
+
       {/* products cart */}
       <div className=" bg-emerald-800 p-3 min-w-52 min-h-36 w-72 rounded-lg ">
         <div className=" flex flex-row-reverse justify-between bg-transparent ">
@@ -58,6 +62,7 @@ return (
 
         </div>
       </div>
+    
     
       {/* Total Sells products */}
       <div className=" bg-lime-800 p-3 min-w-52 min-h-36 w-72 rounded-lg ">
@@ -107,10 +112,7 @@ return (
  </div>
  </div>
      }
-     <div className="mt-10">
-       <MyProducts products={products?.data}></MyProducts>
-       
-     </div>
+   
     </div>
    </div>
   )

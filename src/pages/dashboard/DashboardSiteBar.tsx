@@ -15,7 +15,7 @@ const DashboardSiteBar: React.FC<SidebarProps> = ({ activePage, setActivePage })
   const [isOpen, setIsOpen] = useState(false);
   
   const super_adminSiteBar = ['Overview', 'Products', 'Users'];
-  const sellerSiteBar = ['Seller-overview','My-Products', 'Sells'];
+  const sellerSiteBar = ['Seller-overview','My-Products', 'Sells','Upload'];
 
     if(!authToken){
      navigate("/login") 

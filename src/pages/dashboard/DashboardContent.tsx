@@ -3,9 +3,10 @@ import Overview from './dashboardComponents/Overview';
 import ProductManagement from './dashboardComponents/ProductManagement';
 import UsersManagement from './dashboardComponents/UsersManagement';
 import MyProducts from './sellerDashboard/myProducts/MyProducts';
-import SellsProducts from './dashboardComponents/sellsProducts/SellsProducts';
 import SellerOverview from './sellerDashboard/sellerDashboardOverview/SellerOverview';
 import { verifyToken } from '../../utils/verifyToken';
+import SoldProduct from './dashboardComponents/soldProduct/SoldProduct';
+import UploadProduct from './sellerDashboard/productManagement/UploadProduct';
 
 type DashboardContentProps = {
   activePage: string;
@@ -35,8 +36,9 @@ const DashboardContent: React.FC<DashboardContentProps> = ({ activePage }) => {
       {
         decoded?.role==="seller" && <>
         {activePage === 'My-Products' && <div><MyProducts></MyProducts></div>}
-      {activePage === 'Sells' && <div className="w-full md:w-10/12 lg:w-11/12"><SellsProducts></SellsProducts></div>}
+      {activePage === 'Sells' && <div className="w-full md:w-10/12 lg:w-11/12"><SoldProduct></SoldProduct></div>}
       {activePage === 'Seller-overview' && <div><SellerOverview></SellerOverview></div>}
+      {activePage === 'Upload' && <div><UploadProduct></UploadProduct></div>}
         </>
       }
     </div>
