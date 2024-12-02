@@ -81,7 +81,7 @@ const [selectedColor, setSelectedColor] = useState<string | null>(null);
           <div key={product._id} className="bg-black border border-gray-800 p-4 rounded-md w-64 mx-auto">
             <div>
               <Link to={`/product/${product._id}`} > 
-              <img src={product.image} className="w-60 h-60 rounded-sm" alt="popular_image" />
+              <img src={product.image ? product.image : "https://cdn-icons-png.flaticon.com/512/1554/1554590.png"} className="w-60 h-60 rounded-sm" alt="popular_image" />
               </Link>
             </div>
             <div className="text-md mt-10 flex justify-between items-center mr-4">

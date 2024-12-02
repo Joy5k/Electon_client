@@ -12,18 +12,19 @@ const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
 
 
 const Checkout = () => {
-    const [stripePayment]=useCreatePaymentIntentMutation()
+  const [stripePayment]=useCreatePaymentIntentMutation()
   const { data } = useGetUserQuery({});
   const location = useLocation();
   const { selectedProducts } = location.state || { selectedProducts: [] };
-    const user = data?.data || ({} as IUser);
+  const user = data?.data || ({} as IUser);
   const stripe = useStripe();
   const elements = useElements();
+
+  const [paymentError,setPaymentError]=useState<string>("")
   const [openTransitionModal,setOpenTransitionModal]=useState<boolean>(false)
   const [paymentLoader,setPaymentLoader]=useState<boolean>(false)
   const [paymentTransitionText,setPaymentTransitionText]=useState<string>("")
   const [copyButtonText, setCopyButtonText] = useState("Copy");
-
 
 // adding all products price with user selected quantity
   const subtotal = (selectedProducts || []).reduce((acc: number, product: any) => {
@@ -154,12 +155,18 @@ const Checkout = () => {
 
         // Handle errors if the response contains 'error'
         console.error("Error in payment intent creation", response.error);
+      
       }
-    } catch (error) {
-      setPaymentLoader(false)
-
-      console.error("Error in payment process", error);
+    }catch (error: unknown) {
+      setPaymentLoader(false);
+    
+      // Assert the error type
+      const err = error as { data?: { message?: string } };
+    
+      console.error("Error in payment process", err?.data?.message);
+      setPaymentError(err?.data?.message || "An unexpected error occurred");
     }
+    
   };
   
   
@@ -230,11 +237,24 @@ const Checkout = () => {
               <p className="border mb-8 border-green-600 p-4 text-start bg-green-950">
                 Credit card
               </p>
-                <p className="mb-4 border border-green-400 p-2 ">For Testing: cartNumber: 4242 4242 4242 4242 <br />
-                MM: 04/26 <br />
-                YY: 242 <br />
-                CVC: 24242
-                </p>
+              {/* error appear or testing card credential */}
+             
+               <div className="mb-4 border border-green-400 p-2 ">
+                {
+                  paymentError ? <div>
+                  <p className="text-red-600 text-xl font-semibold text-center my-2  ">Payment Failed!</p>
+                  <p><span className="text-red-600 font-semibold">Message:</span> <span className="">{paymentError}</span></p>
+                  <p className="text-primary text-center mt-2" >Please try again later.</p>
+             </div> :
+                <p >For Testing: cartNumber: 4242 4242 4242 4242 <br />
+                     MM: 04/26 <br />
+                     YY: 242 <br />
+                     CVC: 24242
+                   </p>
+                }
+                 
+               
+               </div>
               {/* payment input field */}
               <div className=" p-4">
               {!stripe || !elements ? (
