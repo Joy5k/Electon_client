@@ -186,7 +186,7 @@ const [selectedColor, setSelectedColor] = useState<string | null>(null);
             </span>
             <div className="quantity qty-box flex items-center border border-gray-700 hover:border-gray-300 w-fit p-2 rounded-lg">
               <button
-                className={`qty-bt ${quantity === 1 ? "disabled" : ""}`}
+                className={`qty-bt  ${1>=quantity && "hidden"}`}
                 name="minus"
                 type="button"
                 onClick={decreaseQuantity}
@@ -198,15 +198,18 @@ const [selectedColor, setSelectedColor] = useState<string | null>(null);
                 type="number"
                 name="quantity"
                 min={1}
+                max={selectedProduct?.quantity}
                 step={1}
                 value={quantity}
                 readOnly
+                disabled={selectedProduct?.quantity<=quantity}
               />
               <button
-                className="qty-bt"
+                className={`qty-bt ${selectedProduct?.quantity<=quantity && "hidden"}`}
                 name="plus"
                 type="button"
                 onClick={increaseQuantity}
+                disabled={selectedProduct?.quantity<=quantity}
               >
                 +
               </button>
