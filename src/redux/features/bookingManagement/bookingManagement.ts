@@ -14,11 +14,11 @@ const bookingApi = baseApi.injectEndpoints({
     }),
  
     createBooking: builder.mutation({
-      query: (productId) => {
+      query: (productData) => {
       return  {
           url: "/booking/create-booking",
           method: "POST",
-          body:productId
+          body:productData
         }
       },invalidatesTags:["bookings"]
     }),

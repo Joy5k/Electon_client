@@ -15,7 +15,7 @@ const Booking: React.FC = () => {
   const [selectedProducts, setSelectedProducts] = useState<IProduct[]>([]); // State to track selected products
   const navigate = useNavigate();
 
-
+console.log(products)
   const handleCheckboxChange = (product: IProduct) => {
     setSelectedProducts((prevSelected) => {
       if (prevSelected.some((item) => item._id === product._id)) {

@@ -27,17 +27,29 @@ const [selectedColor, setSelectedColor] = useState<string | null>(null);
 
 
   const handleAddToWishlist = (product: IProduct) => {
-    dispatch(addToWishlist(product));
+    const bookingProduct={
+      ...product,
+      productId:product._id,
+      userSelectedQuantity:quantity
+    }
+    dispatch(addToWishlist(bookingProduct));
     setIsModalOpen(false)
     toast.success("Product added wishlist successfully")
   };
 
   const  handleAddToCart=async(product:IProduct)=>{
-    const res=await addToCart({productId:product._id}).unwrap()
+    const bookingProduct={
+      ...product,
+      productId:product._id,
+      userSelectedQuantity:quantity
+    }
+    const res=await addToCart(bookingProduct).unwrap()
     if(res.success){
         toast.success(`${product.title} is added successfully`)
+        closeModal()
     }
 }
+
   const increaseQuantity = () => {
     setQuantity(prevQuantity => prevQuantity + 1);
   };
