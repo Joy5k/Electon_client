@@ -10,22 +10,23 @@ const Wishlist = () => {
   const dispatch = useAppDispatch();
   const wishlist = useAppSelector((state: RootState) => state.wishlist.items);
   const [addToCart] = useCreateBookingMutation();
-
+console.log(wishlist)
 //   adding the product wishlist to cart
-  const handleAddToCart = async (id: string) => {
-    const product = wishlist.find((item) => item._id === id);
+  const handleAddToCart = async (payload: any) => {
+    const product = wishlist.find((item) => item._id === payload._id);
 
     if (!product) return;
 
     try {
-      const res = await addToCart({ productId: id }).unwrap();
+      const res = await addToCart({ productId: payload._id,userSelectedQuantity:payload.userSelectedQuantity }).unwrap();
       if (res.success) {
         toast.success('Product added to cart successfully');
-        dispatch(removeFromWishlist(id)); // Remove product from Redux store
+        dispatch(removeFromWishlist(payload._id)); // Remove product from Redux store
         localStorage.setItem(
           'wishlist',
-          JSON.stringify(wishlist.filter((item) => item._id !== id)) // Sync localStorage
+          JSON.stringify(wishlist.filter((item) => item._id !== payload._id)) // Sync localStorage
         );
+        navigate("/booking")
       }
     } catch (error) {
       console.error(error);
@@ -120,7 +121,7 @@ const Wishlist = () => {
                 </td>
                 <td className="py-2 px-4 border-b align-middle">
                   <button
-                    onClick={() => handleAddToCart(product._id)}
+                    onClick={() => handleAddToCart(product)}
                     className="text-emerald-500 hover:underline"
                   >
                     Add to cart

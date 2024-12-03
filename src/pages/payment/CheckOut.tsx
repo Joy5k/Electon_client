@@ -114,15 +114,14 @@ const Checkout = () => {
       const response = await stripePayment(selectedProducts).unwrap();
       // Check if the response contains 'data' or 'error'
       if ('data' in response) {
-        const paymentIntent = response.data;
+        const paymentIntent = response?.data;
 
         if (!paymentIntent || !paymentIntent.paymentIntent.client_secret) {
           console.log("Payment intent creation failed or missing client secret");
           return;
         }
-  
         // Confirm the payment with Stripe
-        const { error, paymentIntent: confirmedPaymentIntent } = await stripe.confirmCardPayment(paymentIntent.client_secret, {
+        const { error, paymentIntent: confirmedPaymentIntent } = await stripe.confirmCardPayment(paymentIntent.paymentIntent.client_secret, {
           payment_method: {
             card: card, // We can now safely use 'card' since it is guaranteed not to be null
             billing_details: {
@@ -132,7 +131,7 @@ const Checkout = () => {
             },
           },
         });
-  
+  console.log(confirmedPaymentIntent)
         // Handle any errors that occur during the confirmation process
         if (error) {
           console.log("Payment failed", error.message);
@@ -163,7 +162,7 @@ const Checkout = () => {
       // Assert the error type
       const err = error as { data?: { message?: string } };
     
-      console.error("Error in payment process", err?.data?.message);
+      console.error("Error in payment process", err);
       setPaymentError(err?.data?.message || "An unexpected error occurred");
     }
     
@@ -366,7 +365,7 @@ const Checkout = () => {
             <div>
               <p>{subtotal.toFixed(2)} $</p>
               <p>50 $</p>
-              <p className="mt-10 font-bold">{subtotal.toFixed(2) + 50}</p>
+              <p className="mt-10 font-bold">{subtotal + 50}</p>
             </div>
           </div>
         </div>

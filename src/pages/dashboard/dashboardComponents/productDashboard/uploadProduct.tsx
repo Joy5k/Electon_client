@@ -216,15 +216,19 @@ const ProductUploadForm = () => {
       </div>
 
       <div className="mb-4 w-full min-w-40">
-        <label className="block  mb-2">Description</label>
-        <textarea
-          name="description"
-          value={product.description}
-          onChange={handleInputChange}
-          className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-          required
-        ></textarea>
-      </div>
+      <label className="block mb-2">Description</label>
+      <textarea
+        name="description"
+        value={product.description}
+        maxLength={500}
+        onChange={handleInputChange}
+        className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+        required
+      ></textarea>
+      <p className="text-sm text-gray-500 mt-1">
+        {product.description.length} / 500 characters
+      </p>
+    </div>
 
     
 
