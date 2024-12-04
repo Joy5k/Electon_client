@@ -15,7 +15,6 @@ const productManagementApi = baseApi.injectEndpoints({
  
     createProduct: builder.mutation({
       query: (data) => {
-        console.log(data,"in redux")
       return  {
           url: "/product/create-product",
           method: "POST",

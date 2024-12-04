@@ -16,6 +16,7 @@ const ProductUploadForm = () => {
 
     title: "",
     description: "",
+    category:"",
     image: "",
     price: 0,
     quantity: 0,
@@ -48,7 +49,9 @@ const ProductUploadForm = () => {
     }
   }, [sellerId]); // Only update product when sellerId changes
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+  ) => {
     const { name, value } = e.target;
   
     setProduct((prev) => ({
@@ -111,7 +114,6 @@ const ProductUploadForm = () => {
     try {
       // Create product using the product state
       const res = await createProduct(product).unwrap();
-  console.log(res,'response')
       // Check if the product was created successfully
       if (res?.success) {
         // Success: Show success toast
@@ -122,6 +124,7 @@ const ProductUploadForm = () => {
           _id:"",
           title: "",
           description: "",
+          category:"",
           color: [""],
           price: 0,
           quantity: 0,
@@ -243,6 +246,25 @@ const ProductUploadForm = () => {
           className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
           required
         />
+      </div>
+      <div className="mb-4">
+        <label className="block mb-2 font-medium">Category</label>
+        <select
+          name="category"
+          value={product.category}
+          onChange={handleInputChange}
+          className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+          required
+        >
+          <option value="" disabled>
+            Select a category
+          </option>
+          <option value="pc">PC</option>
+          <option value="laptop">Laptop</option>
+          <option value="box">Box</option>
+          <option value="earphone">Earphone</option>
+          <option  selected value="others">Others</option>
+        </select>
       </div>
 
       <div className="mb-4">
