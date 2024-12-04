@@ -13,7 +13,7 @@ const ProductUploadForm = () => {
      const navigate = useNavigate();
      const [sellerId, setSellerId] = useState<string>("");
      const [product, setProduct] = useState<IProduct>({
-    _id:"",
+
     title: "",
     description: "",
     image: "",
@@ -111,7 +111,7 @@ const ProductUploadForm = () => {
     try {
       // Create product using the product state
       const res = await createProduct(product).unwrap();
-  
+  console.log(res,'response')
       // Check if the product was created successfully
       if (res?.success) {
         // Success: Show success toast

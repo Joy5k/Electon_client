@@ -8,6 +8,7 @@ function App() {
     
       <ProtectedRoute>
     <MainLayout></MainLayout>
+  
     </ProtectedRoute>
      
     </div>
