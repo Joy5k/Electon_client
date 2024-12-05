@@ -20,6 +20,7 @@ const ProductTable = ({ products }: any) => {
             _id:selectedProduct._id,
             title: selectedProduct.title || "",
             description: selectedProduct.description || "",
+            category:selectedProduct.category||"",
             image: selectedProduct.image || "",
             price: selectedProduct.price || 0,
             quantity: selectedProduct.quantity || 0,

@@ -25,6 +25,7 @@ const Checkout = () => {
   const [paymentLoader,setPaymentLoader]=useState<boolean>(false)
   const [paymentTransitionText,setPaymentTransitionText]=useState<string>("")
   const [copyButtonText, setCopyButtonText] = useState("Copy");
+  const [isCardValid, setIsCardValid] = useState(false);
 
 // adding all products price with user selected quantity
   const subtotal = (selectedProducts || []).reduce((acc: number, product: any) => {
@@ -33,6 +34,10 @@ const Checkout = () => {
   
   
 
+  const handleCardChange = (event: any) => {
+    // Update state based on whether the card is complete and valid
+    setIsCardValid(event.complete);
+  };
   // handle the transtion id copy from the payment modal input
   const handleCopy = () => {
     navigator.clipboard.writeText(paymentTransitionText).then(() => {
@@ -249,6 +254,7 @@ const Checkout = () => {
                  
                
                </div>
+               
               {/* payment input field */}
               <div className=" p-4">
               {!stripe || !elements ? (
@@ -267,6 +273,8 @@ const Checkout = () => {
         },
       },
     }}
+    onChange={handleCardChange} 
+
   />
 )}
 
@@ -274,8 +282,10 @@ const Checkout = () => {
               </div>
               <button
                 type="submit"
-                className="hover:bg-green-600 text-white p-4 rounded-md text-center font-semibold w-full my-5 bg-green-800"
-                disabled={!stripe || !elements}
+                className={`text-white p-4 rounded-md text-center font-semibold w-full my-5 ${
+                  !isCardValid ? "bg-gray-500" : "bg-green-800 hover:bg-green-600"
+                }`}
+                disabled={!stripe || !elements || !isCardValid}
               >
               {paymentLoader ? <p className="animate-pulse text-white font-semibold  bg-transparent text-lg">Loading...</p> : "Pay Now"}
               </button>

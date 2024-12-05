@@ -67,8 +67,8 @@ export interface ISubDistrict {
 }
 
 export interface userSelectedProductProperty{
-  productColor:string;
-  userSelectedQuantity:number;
+  productColor?:string;
+  userSelectedQuantity?:number;
 
 }
 export interface IProduct extends userSelectedProductProperty {
