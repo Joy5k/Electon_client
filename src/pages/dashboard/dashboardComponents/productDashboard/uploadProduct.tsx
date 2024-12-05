@@ -263,6 +263,7 @@ const ProductUploadForm = () => {
           <option value="laptop">Laptop</option>
           <option value="box">Box</option>
           <option value="earphone">Earphone</option>
+          <option value="camera">Camera</option>
           <option  selected value="others">Others</option>
         </select>
       </div>

@@ -75,22 +75,22 @@ const [selectedColor, setSelectedColor] = useState<string | null>(null);
   
   return (
     <div className="p-4">
-      <div className="flex flex-col md:flex-row justify-between items-center">
+      <div className="flex flex-col md:flex-row justify-between items-center ">
         <div>
           <h2 className="text-4xl text-primary font-bold my-10">Popular Products</h2>
         </div>
         <div>
+          <button className="text-md p-2 rounded-full border border-gray-500 hover:bg-gray-800 hover:text-primary m-3">Desktop</button>
           <button className="text-md p-2 rounded-full border border-gray-500 hover:bg-gray-800 hover:text-primary m-3">Laptops</button>
           <button className="text-md p-2 rounded-full border border-gray-500 hover:bg-gray-800 hover:text-primary m-3">Cameras</button>
-          <button className="text-md p-2 rounded-full border border-gray-500 hover:bg-gray-800 hover:text-primary m-3">Battery</button>
-          <button className="text-md p-2 rounded-full border border-gray-500 hover:bg-gray-800 hover:text-primary m-3">Mouse</button>
+          <button className="text-md p-2 rounded-full border border-gray-500 hover:bg-gray-800 hover:text-primary m-3">Others</button>
         </div>
       </div>
 {/* appearing all products according to the user condition */}
      {
-      seeMore &&  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 my-10">
+      seeMore &&  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 my-10 gap-3">
       {products.map((product) => (
-          <div key={product._id} className="bg-black border border-gray-800 p-4 rounded-md w-64 mx-auto">
+          <div key={product._id} className="bg-black border border-gray-800 p-4 rounded-md w-64 mx-auto mb-4">
             <div>
               <Link to={`/product/${product._id}`} > 
               <img src={product.image ? product.image : "https://cdn-icons-png.flaticon.com/512/1554/1554590.png"} className="w-60 h-60 rounded-sm" alt="popular_image" />
@@ -114,7 +114,7 @@ const [selectedColor, setSelectedColor] = useState<string | null>(null);
       </div>
      }
      {
-      !seeMore && <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 my-10">
+      !seeMore && <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 my-10 gap-3">
         {
           products.slice(0,8).map((product) => (
             <div key={product._id} className="bg-black border border-gray-800 p-4 rounded-md w-64 mx-auto">

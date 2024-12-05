@@ -12,6 +12,8 @@ import Dashboard from "../pages/dashboard/Dashboard";
 import ProtectedRoute from "../components/layout/ProtectedRoute";
 import Wishlist from "../pages/wishlist/Wishlist";
 import ProductDetail from "../pages/productDetails/ProductDetail";
+import Category from "../pages/category/Category";
+import ContactUs from "../pages/contactUs/ContactUs";
 
 const router = createBrowserRouter([
   {
@@ -27,8 +29,16 @@ const router = createBrowserRouter([
         element: <ProductDetail></ProductDetail>
       },
       {
+        path: "category",
+        element: <Category />
+      },
+      {
         path: "about",
         element: <About />
+      },
+      {
+        path: "contact-us",
+        element: <ContactUs />
       },
       {
         path: "booking",
