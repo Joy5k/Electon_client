@@ -2,7 +2,7 @@ import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
 import { toast } from 'sonner';
 import { useCreateBookingMutation } from '../../redux/features/bookingManagement/bookingManagement';
-import { removeFromWishlist, updateQuantity } from '../../redux/features/admin/wishlistSlice';
+import { removeAllProductsFromWishlist, removeFromWishlist, updateQuantity } from '../../redux/features/admin/wishlistSlice';
 import { useNavigate } from 'react-router-dom';
 
 const Wishlist = () => {
@@ -10,8 +10,8 @@ const Wishlist = () => {
   const dispatch = useAppDispatch();
   const wishlist = useAppSelector((state: RootState) => state.wishlist.items);
   const [addToCart] = useCreateBookingMutation();
-console.log(wishlist)
-//   adding the product wishlist to cart
+
+  //   adding the product wishlist to cart
   const handleAddToCart = async (payload: any) => {
     const product = wishlist.find((item) => item._id === payload._id);
 
@@ -59,17 +59,28 @@ console.log(wishlist)
 
   const handleClearData = () => {
     localStorage.removeItem('wishlist');
-    dispatch(removeFromWishlist("")); // Clear all wishlist items
+    dispatch(removeAllProductsFromWishlist(""));
   };
   const handleContinueShopping = () => {
     // Implement continue shopping logic here
     navigate("/")
   };
+
+  const handleRemoveItem = (id: string) => {
+    dispatch(removeFromWishlist(id)); // Dispatch the action to remove the item
+    localStorage.setItem(
+      "wishlist",
+      JSON.stringify(wishlist.filter((item) => item._id !== id)) // Update local storage
+    );
+    toast.success("Product removed from wishlist");
+  };
+  
+
   return (
-    <div className="container mx-auto p-4 my-10">
+    <div className="container mx-auto p-4 my-10 w-full">
      {
-      wishlist.length ?  <div className="flex flex-col md:flex-row lg:flex-row sm:space-x-8">
-      <div className="overflow-x-auto">
+      wishlist.length ?  <div className="flex flex-col md:flex-row lg:flex-row sm:space-x-8 w-full">
+      <div className="overflow-x-auto w-full">
         <table className="w-full bg-white border rounded-md">
           <thead>
             <tr>
@@ -106,9 +117,9 @@ console.log(wishlist)
                   <div className="flex justify-center items-center">
                     <input
                       type="number"
-                      value={product.quantity}
+                      value={product.userSelectedQuantity}
                       onChange={(e) =>
-                        handleQuantityChange(product._id, e.target.value)
+                        handleQuantityChange(product._id as string, e.target.value)
                       }
                       className="w-16 px-2 py-1 border rounded"
                     />
@@ -129,7 +140,7 @@ console.log(wishlist)
                 </td>
                 <td className="py-2 px-4 border-b align-middle">
                   <button
-                    onClick={() => handleAddToCart(product._id)}
+                    onClick={() => handleRemoveItem(product._id as string)}
                     className="text-red-600"
                   >
                     X

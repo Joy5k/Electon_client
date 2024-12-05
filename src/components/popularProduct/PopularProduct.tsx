@@ -17,9 +17,9 @@ const PopularProduct = () => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [selectedProduct, setSelectedProduct] = useState<IProduct | null>(null);
   const [quantity, setQuantity] = useState<number>(1);
-// State to track selected color
-const [selectedColor, setSelectedColor] = useState<string | null>(null);
-  // show product according to the user wise
+    // State to track selected color
+  const [selectedColor, setSelectedColor] = useState<string | null>(null);
+    // show product according to the user wise
   const [seeMore,setSeeMore]=useState<boolean>(false)
 
   const products: IProduct[] = data?.data ?? [];
@@ -30,7 +30,8 @@ const [selectedColor, setSelectedColor] = useState<string | null>(null);
     const bookingProduct={
       ...product,
       productId:product._id,
-      userSelectedQuantity:quantity
+      userSelectedQuantity:quantity,
+      productColor:selectedColor
     }
     dispatch(addToWishlist(bookingProduct));
     setIsModalOpen(false)
@@ -57,6 +58,7 @@ const [selectedColor, setSelectedColor] = useState<string | null>(null);
   const decreaseQuantity = () => {
     if (quantity > 1) {
       setQuantity(prevQuantity => prevQuantity - 1);
+      
     }
   };
   const openModal = (product: IProduct) => {
@@ -202,6 +204,7 @@ const [selectedColor, setSelectedColor] = useState<string | null>(null);
                 name="minus"
                 type="button"
                 onClick={decreaseQuantity}
+
               >
                 -
               </button>

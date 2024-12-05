@@ -13,20 +13,33 @@ const wishlistSlice = createSlice({
   name: "wishlist",
   initialState,
   reducers: {
-   addToWishlist: (state, action: PayloadAction<IProduct>) => {
-  const productExists = state.items.find((item) => item._id === action.payload._id);
-
-  if (productExists) {
-    // Safely increment the userSelectedQuantity
-    productExists.userSelectedQuantity = (productExists.userSelectedQuantity || 0) + 1;
-  } else {
-    // Add the product to the wishlist with userSelectedQuantity initialized to 1
-    state.items.push({ ...action.payload, userSelectedQuantity: 1 });
-  }
-
-  // Save updated wishlist to localStorage
-  localStorage.setItem("wishlist", JSON.stringify(state.items));
-},
+    addToWishlist: (state, action: PayloadAction<IProduct>) => {
+      // Check if the product already exists in the wishlist
+      const productIndex = state.items.findIndex(
+        (item) => item._id === action.payload._id
+      );
+    
+      if (productIndex !== -1) {
+        // Product exists; increment userSelectedQuantity
+        const existingProduct = state.items[productIndex];
+        state.items[productIndex] = {
+          ...existingProduct,
+          userSelectedQuantity:
+            (existingProduct.userSelectedQuantity || 0) + action.payload.userSelectedQuantity!,
+        };
+      } else {
+        // Add the product to the wishlist as a new entry
+        state.items.push({
+          ...action.payload,
+          userSelectedQuantity: action.payload.userSelectedQuantity, // Initialize quantity to 1
+        });
+      }
+    
+      // Save updated wishlist to localStorage
+      localStorage.setItem("wishlist", JSON.stringify(state.items));
+    },
+    
+    
 
     removeFromWishlist: (state, action: PayloadAction<string>) => {
       state.items = state.items.filter((item) => item._id !== action.payload);
@@ -48,9 +61,16 @@ const wishlistSlice = createSlice({
           }
         }
       },
-
+      removeAllProductsFromWishlist: (state, action: PayloadAction<string>) => {
+        if (action.payload === "") {
+          state.items = []; // Clear all items if the payload is empty
+        } else {
+          state.items = state.items.filter(
+            (item) => item._id !== action.payload
+          );
+        }}
   }
 });
 
-export const { addToWishlist, removeFromWishlist,updateQuantity } = wishlistSlice.actions;
+export const { addToWishlist, removeFromWishlist,updateQuantity,removeAllProductsFromWishlist } = wishlistSlice.actions;
 export default wishlistSlice.reducer;
