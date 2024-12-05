@@ -65,7 +65,13 @@ export interface ISubDistrict {
   id: string; // Adjust according to actual API response
   upazillas: string[]
 }
-export interface IProduct {
+
+export interface userSelectedProductProperty{
+  productColor:string;
+  userSelectedQuantity:number;
+
+}
+export interface IProduct extends userSelectedProductProperty {
   _id?:string;
   title: string;
   description: string;
@@ -76,9 +82,6 @@ export interface IProduct {
   color: string[];
   rating?: number;
   sellerId:string;
-  userSelectedQuantity?: number; // Optional field for user-selected quantity
-  productColor?:string
-
 }
 
 export interface IUser {

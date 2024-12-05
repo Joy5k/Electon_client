@@ -17,21 +17,17 @@ const PopularProduct = () => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [selectedProduct, setSelectedProduct] = useState<IProduct | null>(null);
   const [quantity, setQuantity] = useState<number>(1);
-    // State to track selected color
-  const [selectedColor, setSelectedColor] = useState<string | null>(null);
-    // show product according to the user wise
   const [seeMore,setSeeMore]=useState<boolean>(false)
-
   const products: IProduct[] = data?.data ?? [];
+  const [selectedColor, setSelectedColor] = useState<string>("");
 
-
-
+console.log(selectedColor)
   const handleAddToWishlist = (product: IProduct) => {
     const bookingProduct={
       ...product,
       productId:product._id,
       userSelectedQuantity:quantity,
-      productColor:selectedColor
+      productColor:selectedColor?selectedColor: products?.[0]?.color?.[0] 
     }
     dispatch(addToWishlist(bookingProduct));
     setIsModalOpen(false)

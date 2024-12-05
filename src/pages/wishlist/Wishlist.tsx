@@ -4,6 +4,7 @@ import { toast } from 'sonner';
 import { useCreateBookingMutation } from '../../redux/features/bookingManagement/bookingManagement';
 import { removeAllProductsFromWishlist, removeFromWishlist, updateQuantity } from '../../redux/features/admin/wishlistSlice';
 import { useNavigate } from 'react-router-dom';
+import { IProduct } from '../../types';
 
 const Wishlist = () => {
   const navigate=useNavigate()
@@ -74,7 +75,6 @@ const Wishlist = () => {
     );
     toast.success("Product removed from wishlist");
   };
-  
 
   return (
     <div className="container mx-auto p-4 my-10 w-full">
@@ -87,13 +87,14 @@ const Wishlist = () => {
               <th className="py-2 border-b">Product</th>
               <th className="py-2 px-4 border-b">Price</th>
               <th className="py-2 px-4 border-b">Quantity</th>
+              <th className="py-2 px-4 border-b">Color</th>
               <th className="py-2 px-4 border-b">Subtotal</th>
               <th className="py-2 px-4 border-b">Add to cart</th>
               <th className="py-2 px-4 border-b">Remove</th>
             </tr>
           </thead>
           <tbody>
-            {wishlist.map((product) => (
+            {wishlist.map((product:IProduct) => (
               <tr key={product._id}>
                 <td className="py-2 px-4 border-b w-fit">
                   <div className="flex">
@@ -127,6 +128,11 @@ const Wishlist = () => {
                 </td>
                 <td className="py-2 px-4 border-b">
                   <div className="flex justify-center items-center">
+                    <p className="w-16 px-2 py-1 border rounded">{product.productColor}</p>
+                  </div>
+                </td>
+                <td className="py-2 px-4 border-b">
+                  <div className="flex justify-center items-center">
                     ${(product.price * product.quantity).toFixed(2)}
                   </div>
                 </td>
@@ -149,7 +155,7 @@ const Wishlist = () => {
               </tr>
             ))}
           <tr>
-            <td colSpan={6} className="py-4 px-4">
+            <td colSpan={7} className="py-4 px-4">
               <div className="flex justify-between">
                 <button
                   onClick={handleContinueShopping}
