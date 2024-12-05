@@ -14,11 +14,13 @@ import Wishlist from "../pages/wishlist/Wishlist";
 import ProductDetail from "../pages/productDetails/ProductDetail";
 import Category from "../pages/category/Category";
 import ContactUs from "../pages/contactUs/ContactUs";
+import NotFound from "../pages/NotFound";
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <MainLayout />,  // Use MainLayout here
+    element: <MainLayout />,
+    errorElement:<NotFound></NotFound>,  // Use MainLayout here
     children: [
       {
         path: "/",
