@@ -21,7 +21,6 @@ const PopularProduct = () => {
   const products: IProduct[] = data?.data ?? [];
   const [selectedColor, setSelectedColor] = useState<string>("");
 
-console.log(selectedColor)
   const handleAddToWishlist = (product: IProduct) => {
     const bookingProduct={
       ...product,

@@ -15,7 +15,6 @@ const Booking: React.FC = () => {
   const [selectedProducts, setSelectedProducts] = useState<IProduct[]>([]); // State to track selected products
   const navigate = useNavigate();
 
-console.log(products)
   const handleCheckboxChange = (product: IProduct) => {
     setSelectedProducts((prevSelected) => {
       if (prevSelected.some((item) => item._id === product._id)) {
@@ -31,7 +30,6 @@ console.log(products)
       alert('Please select at least one product to proceed.');
       return;
     }
-console.log(country)
     // Proceed with the selected products (You can pass `selectedProducts` to the next route)
     navigate('/checkout', { state: { selectedProducts } });
 

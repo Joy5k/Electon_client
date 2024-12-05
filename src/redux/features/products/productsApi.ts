@@ -44,7 +44,6 @@ const productManagementApi = baseApi.injectEndpoints({
 
     updateProduct: builder.mutation({
       query: (data) => {
-        console.log(data.data,"in redux")
       return  {
           url: `/product/update-product/${data.id}`,
           method: "PUT",

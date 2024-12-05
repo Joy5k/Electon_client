@@ -58,7 +58,6 @@ const handleLogin = async (e: React.FormEvent) => {
       navigate('/'); // Redirect to default page
     }
   } catch (err: any) {
-    console.log(err?.data?.message);
     setAuthError(err?.data?.message); // Set auth error state
     toast.error(err?.data?.message || 'An error occurred', {
       id: email,

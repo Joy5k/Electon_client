@@ -40,7 +40,6 @@ const MyProducts = () => {
   // Pagination state
   const [currentPage, setCurrentPage] = useState(1);
   const rowsPerPage = 10;
-console.log(products)
 // Ensure products is an array with a fallback
 const totalPages = Math.ceil((products?.length || 0) / rowsPerPage);
 const indexOfLastRow = currentPage * rowsPerPage;
@@ -112,7 +111,6 @@ const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaE
           ...prev,
           image: uploadedImageUrl, // Update the image field in the product state
         }) as IProduct);
-        console.log(uploadedImageUrl)
       } else {
         console.error("Unexpected response format:", response.data);
       }
@@ -129,10 +127,8 @@ const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaE
       data:product,
       id:selectedProduct._id
     }
-    console.log(payload)
    try {
     const res=await updateProduct(payload).unwrap();
-    console.log(res)
     if(res.success){
       toast.success("Product update successfully")
       setIsModalOpen(false);

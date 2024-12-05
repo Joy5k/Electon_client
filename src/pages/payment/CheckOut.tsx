@@ -93,7 +93,6 @@ const Checkout = () => {
   
     // Ensure Stripe and Elements are loaded before proceeding
     if (!stripe || !elements) {
-      console.log("Stripe or Elements is not loaded");
       setPaymentLoader(false)
 
       return;
@@ -103,7 +102,6 @@ const Checkout = () => {
   
     // If no card element is found, log an error and return early
     if (!card) {
-      console.log("Card element not found");
       setPaymentLoader(false)
 
       return;
@@ -131,14 +129,12 @@ const Checkout = () => {
             },
           },
         });
-  console.log(confirmedPaymentIntent)
         // Handle any errors that occur during the confirmation process
         if (error) {
           console.log("Payment failed", error.message);
         } else {
           // You can check the confirmed paymentIntent here for success or further status
           if (confirmedPaymentIntent?.status === 'succeeded') {
-            console.log("Payment successful", confirmedPaymentIntent);
             setPaymentTransitionText(confirmedPaymentIntent.id)
             setOpenTransitionModal(true)
             setPaymentLoader(false)
@@ -146,7 +142,6 @@ const Checkout = () => {
           } else {
             setPaymentLoader(false)
 
-            console.log("Payment not confirmed, status:", confirmedPaymentIntent?.status);
           }
         }
       } else if ('error' in response) {

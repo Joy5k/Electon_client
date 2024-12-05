@@ -15,7 +15,6 @@ const paymentApi = baseApi.injectEndpoints({
  
     createPaymentIntent: builder.mutation({
       query: (data) => {
-        console.log(data)
       return  {
           url: "/payment/create-payment-intent",
           method: "POST",

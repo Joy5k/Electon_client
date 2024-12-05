@@ -20,7 +20,6 @@ const userManagementApi = baseApi.injectEndpoints({
 
     createAdmin: builder.mutation({
       query: (_id) => {
-        console.log(_id)
         if (!_id || typeof _id !== "string" || !_id.trim()) {
           throw new Error("Invalid ID provided");
         }

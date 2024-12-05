@@ -187,7 +187,6 @@ const handleUserRole=async()=>{
       handleSignOut()
     }
  } catch (error) {
-  console.log(error)
   toast.error("Something went wrong to change role")
  }
 }
