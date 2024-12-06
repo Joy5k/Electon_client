@@ -18,16 +18,28 @@ function ProductDetail() {
     const [selectedColor, setSelectedColor] = useState<string | null>(null);
 
     // Handling add to wishlist functionality
+ 
     const handleAddToWishlist = (product: IProduct) => {
-        dispatch(addToWishlist(product));
-        toast.success("Product added to wishlist successfully");
-    };
-
+        const bookingProduct={
+          ...product,
+          productId:product._id,
+          userSelectedQuantity:quantity,
+          productColor:selectedColor?selectedColor: data?.data?.color?.[0] 
+        }
+        dispatch(addToWishlist(bookingProduct));
+        toast.success("Product added wishlist successfully")
+      };
 const  handleAddToCart=async(product:IProduct)=>{
-    const res=await addToCart({productId:product._id}).unwrap()
-    if(res.success){
-        toast.success(`${product.title} is added successfully`)
-    }
+    const bookingProduct={
+        ...product,
+        productId:product._id,
+        userSelectedQuantity:quantity
+      }
+      const res=await addToCart(bookingProduct).unwrap()
+      if(res.success){
+          toast.success(`${product.title} is added successfully`)
+        
+      }
 }
 
     // Handling quantity increase and decrease

@@ -258,25 +258,25 @@ const Checkout = () => {
               {/* payment input field */}
               <div className=" p-4">
               {!stripe || !elements ? (
-  <p>Loading...</p> // Show loading text or spinner while Stripe is being initialized
-) : (
-  <CardElement
-    options={{
-      style: {
-        base: {
-          
-          color: "#ffffff",  // Change text color to white
-          fontSize: "16px",   // Optional: Adjust font size if needed
-          "::placeholder": {
-            color: "#ffffff", // Change placeholder text color to white
-          },
-        },
-      },
-    }}
-    onChange={handleCardChange} 
+                <p>Loading...</p> // Show loading text or spinner while Stripe is being initialized
+                  ) : (
+           <CardElement
+              options={{
+              style: {
+                base: {
+                  
+                  color: "#ffffff",  // Change text color to white
+                  fontSize: "16px",   // Optional: Adjust font size if needed
+                  "::placeholder": {
+                    color: "#ffffff", // Change placeholder text color to white
+                  },
+                },
+              },
+            }}
+              onChange={handleCardChange} 
 
-  />
-)}
+                 />
+              )}
 
 
               </div>
@@ -289,6 +289,8 @@ const Checkout = () => {
               >
               {paymentLoader ? <p className="animate-pulse text-white font-semibold  bg-transparent text-lg">Loading...</p> : "Pay Now"}
               </button>
+
+              
             </form>
           </div>
         </div>

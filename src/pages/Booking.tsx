@@ -126,7 +126,7 @@ const total = subtotal; // Add tax, shipping, etc. to total if needed
                  </td>
                  <td className="py-2 px-4 border-b">
    <div className="flex justify-center items-center">
-     {(product.productId?.price ?? 1) * (Number(product?.userSelectedQuantity) ?? 1)}
+     {((product.productId?.price ?? 1) * (Number(product?.userSelectedQuantity) ?? 1)).toFixed(2)}
    </div>
  </td>
  

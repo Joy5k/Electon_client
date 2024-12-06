@@ -223,13 +223,13 @@ const ProductUploadForm = () => {
       <textarea
         name="description"
         value={product.description}
-        maxLength={500}
+        maxLength={1000}
         onChange={handleInputChange}
         className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
         required
       ></textarea>
       <p className="text-sm text-gray-500 mt-1">
-        {product.description.length} / 500 characters
+        {product.description.length} / 1000 characters
       </p>
     </div>
 
