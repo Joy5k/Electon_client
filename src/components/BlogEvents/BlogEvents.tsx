@@ -21,7 +21,7 @@ const BlogEvents=()=>{
                     <p>{formattedDate}</p>
                     <p className='text-lg font-semibold mb-2 text-primary'>Which of us ever undertakes?</p>
                     <p>In life's journey, who among us truly embarks on the path to self-discovery without hesitation? </p>
-                    <p className='mt-6 text-gray-400'><span className="text-sky-800 font-semibold ">By</span> Space Tech</p>
+                    <p className='mt-6 text-gray-400'><span className="text-sky-800 font-semibold ">By</span> Mehedi Hasan</p>
                 </div>
             </div>
             {/* cart2 */}
@@ -31,7 +31,7 @@ const BlogEvents=()=>{
                     <p>{formattedDate}</p>
                     <p className='text-lg font-semibold mb-2 text-primary'>Why do we use it?</p>
                     <p>In the pursuit of comfort, some may avoid challenges or discomfort that lead to growth. </p>
-                    <p className='mt-6 text-gray-400'><span className="text-sky-800 font-semibold ">By</span> Space Tech</p>
+                    <p className='mt-6 text-gray-400'><span className="text-sky-800 font-semibold ">By</span> Mehedi Hasan</p>
                 </div>
             </div>
 
