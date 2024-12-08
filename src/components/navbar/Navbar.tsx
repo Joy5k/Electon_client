@@ -40,7 +40,6 @@ const Navbar=()=>{
     // Remove token from local storage
     localStorage.removeItem('token');
   };
-  console.log(searchTerm)
   const handleSearchQuery=(e:React.FormEvent)=>{
     e.preventDefault()
     dispatch(setSearchQuery(searchTerm))

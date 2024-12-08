@@ -23,6 +23,7 @@ const Booking: React.FC = () => {
         return [...prevSelected, product];
       }
     });
+    console.log(country)
   };
 
   const handleProceedToCheckout = () => {
