@@ -12,9 +12,10 @@ const Advertise=()=>{
       alert('Please select at least one product to proceed.');
       return;
     }
+    const selectedProducts=[product]
     // Proceed with the selected products (You can pass `selectedProducts` to the next route)
-    navigate('/checkout', { state: { product } });
-
+    navigate('/checkout', { state: { selectedProducts } });
+    console.log(selectedProducts)
   };
     return (
         <div className=' border border-black border-b-red-200 '>

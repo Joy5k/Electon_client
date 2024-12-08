@@ -29,9 +29,13 @@ const Checkout = () => {
 
 // adding all products price with user selected quantity
   const subtotal = (selectedProducts || []).reduce((acc: number, product: any) => {
-    return acc + product.productId.price * product.userSelectedQuantity;
+    if(product.productId){
+
+      return acc + product.productId.price * product.userSelectedQuantity;
+    }
+    return product.price
   }, 0);
-  
+  console.log(selectedProducts)
   
 
   const handleCardChange = (event: any) => {
@@ -339,22 +343,23 @@ const Checkout = () => {
             {selectedProducts &&
               selectedProducts?.map(
                 (
-                  prod: { userId: IUser; productId: IProduct; userSelectedQuantity: number },
+                  prod: { userId: IUser; productId: IProduct; userSelectedQuantity: number,image:string,title:string,price:number },
                   index: number
                 ) => (
                   <div key={index} className="flex md:flex-row lg:flex-row justify-start mt-6 items-center">
                     <img
-                      src={prod?.productId.image}
+                      src={prod?.productId?.image ? prod?.productId?.image : prod?.image ||""}
                       className="w-24 h-24 rounded-lg mr-1"
                       alt="product_image"
                     />
+
                     <div className="flex justify-between gap-4 md:gap-8 lg:gap-8">
                       <div>
-                        <p className="text-md font-bold">{prod?.productId.title || "Product Name"}</p>
-                        <p>Color: {prod?.productId.color || "Unknown"}</p>
+                        <p className="text-md font-bold">{prod?.productId?.title || prod?.title||"Product Name"}</p>
+                        <p>Color: {prod?.productId?.color || "Unknown"}</p>
                       </div>
                       <p>Quantity: {prod?.userSelectedQuantity || 1}</p>
-                      <p>{prod?.productId.price ? `$${prod.productId.price * prod.userSelectedQuantity}` : "Price not available"}</p>
+                      <p>{prod?.productId?.price ? `${prod?.productId?.price * prod?.userSelectedQuantity}`: prod?.price}</p>
                     </div>
                   </div>
                 )
