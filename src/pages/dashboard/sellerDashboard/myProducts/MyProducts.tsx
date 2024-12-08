@@ -1,14 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { toast } from "sonner";
-import { useDeleteProductMutation, useUpdateProductMutation } from "../../../../redux/features/admin/productManagementApi";
+import { useAllProductsQuery, useDeleteProductMutation, useUpdateProductMutation } from "../../../../redux/features/admin/productManagementApi";
 import { ImgBBResponseData, IProduct } from "../../../../types";
 import Spinner from "../../../../components/Spinner/Spinner";
 import axios from "axios";
 import { RiEmotionSadFill } from "react-icons/ri";
-import { useGetAllMyProductsQuery } from "../../../../redux/features/products/productsApi";
 
 const MyProducts = () => {
-  const {data:products,isLoading}=useGetAllMyProductsQuery({})
+  const {data:products,isLoading}=useAllProductsQuery({})
 
   const [deleteProduct] = useDeleteProductMutation();
   const [updateProduct]=useUpdateProductMutation()
@@ -23,6 +22,7 @@ const MyProducts = () => {
           setProduct({
             _id:selectedProduct._id,
             title: selectedProduct.title || "",
+            category:selectedProduct.category||"",
             description: selectedProduct.description || "",
             image: selectedProduct.image || "",
             price: selectedProduct.price || 0,

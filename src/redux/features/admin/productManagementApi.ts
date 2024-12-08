@@ -4,15 +4,23 @@ const productManagementApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
   
     allProducts: builder.query({
-      query: () =>{
+      query: (query) =>{
       return  {
-          url: "/product/get-all-products",
+          url: `/product/get-all-products/${query}`,
           method: "GET",
         }
       },providesTags:["products"],
 
     }),
- 
+    getSingleProduct: builder.query({
+      query: (id) =>{
+      return  {
+          url: `/product/single-product/${id}`,
+          method: "GET",
+        }
+      },providesTags:["products"],
+
+    }),
     createProduct: builder.mutation({
       query: (data) => {
       return  {
@@ -46,6 +54,7 @@ const productManagementApi = baseApi.injectEndpoints({
 
 export const {
   useAllProductsQuery,
+  useGetSingleProductQuery,
   useCreateProductMutation,
   useUpdateProductMutation,
   useDeleteProductMutation,

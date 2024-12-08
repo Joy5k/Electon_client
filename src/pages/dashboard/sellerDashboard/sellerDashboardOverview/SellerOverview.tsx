@@ -4,14 +4,14 @@ import { FaSackDollar } from "react-icons/fa6";
 import { MdOutlineReportProblem } from "react-icons/md";
 import { useEffect, useState } from "react";
 import PieChart from "../../dashboardComponents/charts/PieChart";
-import { useGetAllMyProductsQuery } from "../../../../redux/features/products/productsApi";
 import Spinner from "../../../../components/Spinner/Spinner";
 import { IProduct } from "../../../../types";
+import { useAllProductsQuery } from "../../../../redux/features/admin/productManagementApi";
 
 
 
 function SellerOverview() {
-  const {data:products,isLoading}=useGetAllMyProductsQuery({})
+  const {data:products,isLoading}=useAllProductsQuery({})
   const [chartData, setChartData] = useState<any>(null);
 
   // set products and user data for chart

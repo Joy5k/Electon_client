@@ -1,5 +1,4 @@
 import { useParams } from "react-router-dom";
-import { useGetSingleProductQuery } from "../../redux/features/products/productsApi";
 import { useState } from "react";
 import { AppDispatch } from "../../redux/store";
 import { useDispatch } from "react-redux";
@@ -8,6 +7,7 @@ import { addToWishlist } from "../../redux/features/admin/wishlistSlice";
 import { toast } from "sonner";
 import { useCreateBookingMutation } from "../../redux/features/bookingManagement/bookingManagement";
 import { FaRegHeart } from "react-icons/fa6";
+import { useGetSingleProductQuery } from "../../redux/features/admin/productManagementApi";
 
 function ProductDetail() {
     const [addToCart]=useCreateBookingMutation()
