@@ -8,6 +8,9 @@ import { MdOutlineFavoriteBorder } from "react-icons/md"
 import Cookies from 'js-cookie';
 import { useGetUserQuery } from "../../redux/features/userManagement/userManagement"
 import { useGetAllBookingsQuery } from "../../redux/features/bookingManagement/bookingManagement"
+import { useState } from "react"
+import { useAppDispatch } from "../../redux/hooks"
+import { setSearchQuery } from "../../redux/features/admin/wishlistSlice"
 
 const navigation = [
   { name: 'Home', href: '/', current: true },
@@ -15,17 +18,19 @@ const navigation = [
   { name: 'About', href: '/about', current: false },
   { name: 'Contact us', href: '/contact-us', current: false },
 ]
-
 function classNames(...classes:any[]) {
 
   return classes.filter(Boolean).join(' ')
 }
+
+
+
 const Navbar=()=>{
   const {data}=useGetAllBookingsQuery({})
   const {data:userData}=useGetUserQuery({})
-
+  const [searchTerm,setSearchTerm]=useState<string>("")
   const token=localStorage.getItem("token") 
-  
+  const dispatch=useAppDispatch()
 
   
   const handleSignOut = () => {
@@ -35,6 +40,12 @@ const Navbar=()=>{
     // Remove token from local storage
     localStorage.removeItem('token');
   };
+  console.log(searchTerm)
+  const handleSearchQuery=(e:React.FormEvent)=>{
+    e.preventDefault()
+    dispatch(setSearchQuery(searchTerm))
+  }
+
 
     return (
         <div>
@@ -68,13 +79,14 @@ const Navbar=()=>{
 
   {/* Visible on small screens, hidden on medium and larger screens */}
   <div className="block md:hidden lg:hidden m-4">
-    <form className="flex flex-col sm:flex-row mr-4" >
+    <form onSubmit={handleSearchQuery} className="flex flex-col sm:flex-row mr-4" >
       <input
         className="w-full p-2 md:rounded-md  outline-none border border-r-0 md:rounded-r-none"
         type="text"
         placeholder="Search Your Product"
+        onChange={(e)=>setSearchTerm(e.target.value)}
       />
-      <button className="bg-yellow-500 md:rounded-r-md px-2">Search</button>
+      <button type="submit" className="bg-yellow-500 md:rounded-r-md px-2">Search</button>
     </form>
   </div>
 </div>
@@ -118,13 +130,16 @@ const Navbar=()=>{
           </div>
 
 <div className="mr-16 hidden md:block lg:block" >
-<form className="flex flex-col sm:flex-row">
+<form onSubmit={handleSearchQuery} className="flex flex-col sm:flex-row">
             <input
+
               className="w-full p-2  rounded-md  outline-none border border-r-0 rounded-r-none"
               type="text"
               placeholder="Search Your Product"
+              onChange={(e)=>setSearchTerm(e.target.value)}
+
             />
-            <button className=" bg-yellow-500 rounded-r-md px-2 ">Search</button>
+            <button type="submit" className=" bg-yellow-500 rounded-r-md px-2 ">Search</button>
           </form>
 </div>
 

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { FaBagShopping } from "react-icons/fa6";
 import { useAllProductsQuery } from "../../redux/features/admin/productManagementApi";
@@ -20,6 +20,34 @@ const PopularProduct = () => {
   const [seeMore,setSeeMore]=useState<boolean>(false)
   const products: IProduct[] = data?.data ?? [];
   const [selectedColor, setSelectedColor] = useState<string>("");
+  const [searchTerm, setSearchTerm] = useState(''); 
+  const [debouncedValue, setDebouncedValue] = useState(''); 
+
+  
+  useEffect(() => {
+    const debounceTimer = setTimeout(() => {
+      setDebouncedValue(searchTerm); 
+    }, 500);
+
+    return () => {
+      clearTimeout(debounceTimer);
+    };
+  }, [searchTerm]); 
+
+ 
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(event.target.value);
+  };
+
+  
+  useEffect(() => {
+    if (debouncedValue) {
+      console.log('Searching for:', debouncedValue); 
+    }
+  }, [debouncedValue]);
+
+
+
 
   const handleAddToWishlist = (product: IProduct) => {
     const bookingProduct={

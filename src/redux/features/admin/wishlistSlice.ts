@@ -3,10 +3,12 @@ import { IProduct } from "../../../types";
 
 interface WishlistState {
   items: IProduct[];
+  searchTerm:string
 }
 
 const initialState: WishlistState = {
-  items: JSON.parse(localStorage.getItem("wishlist") || "[]"), // Load from localStorage initially
+  items: JSON.parse(localStorage.getItem("wishlist") || "[]"),
+  searchTerm:"" // Load from localStorage initially
 };
 
 const wishlistSlice = createSlice({
@@ -68,9 +70,15 @@ const wishlistSlice = createSlice({
           state.items = state.items.filter(
             (item) => item._id !== action.payload
           );
-        }}
+        }},
+        setSearchQuery:(state,action:PayloadAction<string>)=>{
+          state.searchTerm=action.payload
+            localStorage.setItem("searchTerm",action.payload)
+
+
+        }
   }
 });
 
-export const { addToWishlist, removeFromWishlist,updateQuantity,removeAllProductsFromWishlist } = wishlistSlice.actions;
+export const { addToWishlist, removeFromWishlist,updateQuantity,removeAllProductsFromWishlist ,setSearchQuery} = wishlistSlice.actions;
 export default wishlistSlice.reducer;

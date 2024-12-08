@@ -5,8 +5,9 @@ const productManagementApi = baseApi.injectEndpoints({
   
     allProducts: builder.query({
       query: (query) =>{
+        console.log(query)
       return  {
-          url: `/product/get-all-products/${query}`,
+          url: `/product/get-all-products?searchTerm=${query.searchTerm? query.searchTerm: ""}`,
           method: "GET",
         }
       },providesTags:["products"],
