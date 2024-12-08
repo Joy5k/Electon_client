@@ -1,51 +1,27 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { FaBagShopping } from "react-icons/fa6";
 import { useAllProductsQuery } from "../../redux/features/admin/productManagementApi";
-import { AppDispatch } from "../../redux/store";
+import { AppDispatch, RootState } from "../../redux/store";
 import { useDispatch } from "react-redux";
 import { addToWishlist } from "../../redux/features/admin/wishlistSlice";
 import { IProduct } from "../../types";
 import { toast } from "sonner";
 import { useCreateBookingMutation } from "../../redux/features/bookingManagement/bookingManagement";
+import { useAppSelector } from "../../redux/hooks";
 
 
 const PopularProduct = () => {
   const [addToCart,{isLoading:bookingLoader}]=useCreateBookingMutation()
   const dispatch = useDispatch<AppDispatch>();
-  const{data}=useAllProductsQuery({})
+  const searchTerm = useAppSelector((state: RootState) => state.wishlist.searchTerm);
+  const{data}=useAllProductsQuery({searchTerm})
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [selectedProduct, setSelectedProduct] = useState<IProduct | null>(null);
   const [quantity, setQuantity] = useState<number>(1);
   const [seeMore,setSeeMore]=useState<boolean>(false)
   const products: IProduct[] = data?.data ?? [];
   const [selectedColor, setSelectedColor] = useState<string>("");
-  const [searchTerm, setSearchTerm] = useState(''); 
-  const [debouncedValue, setDebouncedValue] = useState(''); 
-
-  
-  useEffect(() => {
-    const debounceTimer = setTimeout(() => {
-      setDebouncedValue(searchTerm); 
-    }, 500);
-
-    return () => {
-      clearTimeout(debounceTimer);
-    };
-  }, [searchTerm]); 
-
- 
-  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchTerm(event.target.value);
-  };
-
-  
-  useEffect(() => {
-    if (debouncedValue) {
-      console.log('Searching for:', debouncedValue); 
-    }
-  }, [debouncedValue]);
-
 
 
 
