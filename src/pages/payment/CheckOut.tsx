@@ -359,7 +359,7 @@ const Checkout = () => {
                         <p>Color: {prod?.productId?.color || "Unknown"}</p>
                       </div>
                       <p>Quantity: {prod?.userSelectedQuantity || 1}</p>
-                      <p>{prod?.productId?.price ? `${prod?.productId?.price * prod?.userSelectedQuantity}`: prod?.price}</p>
+                      <p>{prod?.productId?.price ? `${(prod?.productId?.price * prod?.userSelectedQuantity).toFixed(2)}`: (Number(prod?.price)).toFixed(2)}</p>
                     </div>
                   </div>
                 )

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { FaBagShopping } from "react-icons/fa6";
 import { useAllProductsQuery } from "../../redux/features/admin/productManagementApi";
@@ -15,7 +15,8 @@ const PopularProduct = () => {
   const [addToCart,{isLoading:bookingLoader}]=useCreateBookingMutation()
   const dispatch = useDispatch<AppDispatch>();
   const searchTerm = useAppSelector((state: RootState) => state.wishlist.searchTerm);
-  const{data}=useAllProductsQuery({searchTerm})
+  const [queryText,seQueryText]=useState<string>("")
+  const{data}=useAllProductsQuery({searchTerm:queryText})
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [selectedProduct, setSelectedProduct] = useState<IProduct | null>(null);
   const [quantity, setQuantity] = useState<number>(1);
@@ -23,7 +24,10 @@ const PopularProduct = () => {
   const products: IProduct[] = data?.data ?? [];
   const [selectedColor, setSelectedColor] = useState<string>("");
 
-
+useEffect(()=>{
+  seQueryText(searchTerm)
+  
+},[searchTerm])
 
   const handleAddToWishlist = (product: IProduct) => {
     const bookingProduct={
@@ -74,22 +78,29 @@ const PopularProduct = () => {
     return <p>Loading products...</p>;
   }
   
+const handleProductQueryButton=(query:string)=>{
+  seQueryText(query)
+  console.log(query,"The query text")
+}
+
+
   return (
-    <div className="p-4">
+    <div className="p-4  border-b-2 border-dashed border-gray-800">
       <div className="flex flex-col md:flex-row justify-between items-center ">
         <div>
           <h2 className="text-4xl text-primary font-bold my-10">Popular Products</h2>
         </div>
         <div>
-          <button className="text-md p-2 rounded-full border border-gray-500 hover:bg-gray-800 hover:text-primary m-3">Desktop</button>
-          <button className="text-md p-2 rounded-full border border-gray-500 hover:bg-gray-800 hover:text-primary m-3">Laptops</button>
-          <button className="text-md p-2 rounded-full border border-gray-500 hover:bg-gray-800 hover:text-primary m-3">Cameras</button>
-          <button className="text-md p-2 rounded-full border border-gray-500 hover:bg-gray-800 hover:text-primary m-3">Others</button>
+          <button onClick={()=>handleProductQueryButton("desktop")} className="text-md p-2 rounded-full border border-gray-500 hover:bg-gray-800 hover:text-primary m-3">Desktop</button>
+          <button onClick={()=>handleProductQueryButton("laptop")} className="text-md p-2 rounded-full border border-gray-500 hover:bg-gray-800 hover:text-primary m-3">Laptops</button>
+          <button onClick={()=>handleProductQueryButton("camera")} className="text-md p-2 rounded-full border border-gray-500 hover:bg-gray-800 hover:text-primary m-3">Cameras</button>
+          <button onClick={()=>handleProductQueryButton("")} className="text-md p-2 rounded-full border border-gray-500 hover:bg-gray-800 hover:text-primary m-3">All Items</button>
         </div>
       </div>
 {/* appearing all products according to the user condition */}
      {
-      seeMore &&  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 my-10 gap-3">
+    seeMore && 
+       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 my-10  gap-y-3">
       {products.map((product) => (
           <div key={product._id} className="bg-black border border-gray-800 p-4 rounded-md w-64 mx-auto mb-4">
             <div>
@@ -115,35 +126,42 @@ const PopularProduct = () => {
       </div>
      }
      {
-      !seeMore && <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 my-10 gap-3">
+     !seeMore && 
+     <div>
         {
-          products.slice(0,8).map((product) => (
-            <div key={product._id} className="bg-black border border-gray-800 p-4 rounded-md w-64 mx-auto">
-              <div>
-                <Link to={`/product/${product._id}`} > 
-                <img src={product.image} className="w-60 h-60 rounded-sm" alt="popular_image" />
-                </Link>
-              </div>
-              <div className="text-md mt-10 flex justify-between items-center mr-4">
+          products.length >0 ?  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 my-10 gap-y-3">
+          {
+            products.slice(0,8).map((product) => (
+              <div key={product._id} className="bg-black border border-gray-800 p-4 rounded-md w-64 mx-auto">
                 <div>
-                  <Link to={`/product/${product._id}`} className="text-gray-300 text-xl font-semibold hover:text-primary mb-4 hover:underline">{product.title}</Link>
-                  <p className="mt-2 text-primary font-semibold">Price: ${product.price}</p>
+                  <Link to={`/product/${product._id}`} > 
+                  <img src={product.image} className="w-60 h-60 rounded-sm" alt="popular_image" />
+                  </Link>
                 </div>
-                <button
-                  className="hover:border hover:rounded-full hover:p-2 p-2 hover:border-primary"
-                  onClick={() => openModal(product)}
-                >
-                  <FaBagShopping className="text-3xl text-primary hover:text-white bg-transparent" />
-                </button>
+                <div className="text-md mt-10 flex justify-between items-center mr-4">
+                  <div>
+                    <Link to={`/product/${product._id}`} className="text-gray-300 text-xl font-semibold hover:text-primary mb-4 hover:underline">{product.title}</Link>
+                    <p className="mt-2 text-primary font-semibold">Price: ${product.price}</p>
+                  </div>
+                  <button
+                    className="hover:border hover:rounded-full hover:p-2 p-2 hover:border-primary"
+                    onClick={() => openModal(product)}
+                  >
+                    <FaBagShopping className="text-3xl text-primary hover:text-white bg-transparent" />
+                  </button>
+                </div>
               </div>
-            </div>
-          ))
+            ))
+          }
+        </div> :<h2 className="text-3xl text-primary font-semibold text-center my-10">No Product Found</h2>
         }
-      </div>
+     </div>
      }
-      <div className="mx-auto flex justify-center md:justify-start md:ml-6 ">
-          <button onClick={()=>setSeeMore(!seeMore)} className="underline text-blue-400 hover:text-primary">{seeMore===true ?"See less":"See more"}</button>
-        </div>
+     {
+      products.length>0  && <div className="mx-auto flex justify-center md:justify-start md:ml-6 ">
+      <button onClick={()=>setSeeMore(!seeMore)} className="underline text-blue-400 hover:text-primary">{seeMore===true ?"See less":"See more"}</button>
+    </div>
+     }
       {/* Modal */}
       {isModalOpen && selectedProduct && (
   <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 overflow-y-auto">
