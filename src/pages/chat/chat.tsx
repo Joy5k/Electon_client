@@ -91,14 +91,14 @@ const Chat = () => {
     <div className="flex h-screen">
       {/* Sidebar */}
       {role === 'super_admin' && (
-        <div className="w-1/4 bg-gray-100 border-r border-gray-300 p-4 overflow-y-auto">
+        <div className="w-1/4 bg-transparent border-r border-gray-300 p-4 overflow-y-auto">
           <h3 className="text-lg font-bold mb-4">Active Users</h3>
           {activeUsers.map((user) => (
             <div
               key={user.email}
               onClick={() => handleUserSelection(user.email)}
               className={`p-2 mb-2 cursor-pointer rounded ${
-                selectedUser === user.email ? 'bg-blue-500 text-white' : 'bg-gray-200'
+                selectedUser === user.email ? 'bg-blue-500 text-white' : 'bg-gray-800'
               }`}
             >
               {user.email}
@@ -108,7 +108,7 @@ const Chat = () => {
       )}
 
       {/* Main Chat Area */}
-      <div className="flex-grow flex flex-col bg-white p-4 relative">
+      <div className="flex-grow flex flex-col bg-transparent p-4 relative  border-dashed ">
         {/* Chat Header */}
         <div className="bg-primary text-white p-4 rounded-t-lg">
           <h2 className="text-3xl bg-transparent">
@@ -117,9 +117,9 @@ const Chat = () => {
         </div>
 
         {/* Chat Messages */}
-        <div className="flex-grow bg-transparent">
+        <div className="flex-grow bg-gray-800">
           <div
-            className="flex-grow bg-white overflow-y-auto p-4 rounded-b-lg right-0"
+            className="flex-grow bg-transparent overflow-y-auto p-4 rounded-b-lg right-0"
             style={{ maxHeight: '350px' }}
           >
             {messages.map((msg) => (
