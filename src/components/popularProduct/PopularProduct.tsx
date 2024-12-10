@@ -80,7 +80,6 @@ useEffect(()=>{
   
 const handleProductQueryButton=(query:string)=>{
   seQueryText(query)
-  console.log(query,"The query text")
 }
 
 

@@ -93,3 +93,11 @@ export interface IUser {
   status:string;
   role:string
 }
+// Make 'id' optional to accommodate incoming messages that already have an 'id'
+export interface IMessage {
+  id?: string;
+  text: string;
+  user: string;
+  role:string
+ 
+}
