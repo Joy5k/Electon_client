@@ -12,17 +12,19 @@ import { useAppSelector } from "../../redux/hooks";
 
 
 const PopularProduct = () => {
-  const [addToCart,{isLoading:bookingLoader}]=useCreateBookingMutation()
   const dispatch = useDispatch<AppDispatch>();
   const searchTerm = useAppSelector((state: RootState) => state.wishlist.searchTerm);
+  
   const [queryText,seQueryText]=useState<string>("")
-  const{data}=useAllProductsQuery({searchTerm:queryText})
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [selectedProduct, setSelectedProduct] = useState<IProduct | null>(null);
   const [quantity, setQuantity] = useState<number>(1);
   const [seeMore,setSeeMore]=useState<boolean>(false)
-  const products: IProduct[] = data?.data ?? [];
   const [selectedColor, setSelectedColor] = useState<string>("");
+  
+  const [addToCart,{isLoading:bookingLoader}]=useCreateBookingMutation()
+  const{data}=useAllProductsQuery({searchTerm:queryText})
+  const products: IProduct[] = data?.data ?? [];
 
 useEffect(()=>{
   seQueryText(searchTerm)
@@ -98,7 +100,9 @@ const handleProductQueryButton=(query:string)=>{
       </div>
 {/* appearing all products according to the user condition */}
      {
-    seeMore && 
+   products.length >=0 ? 
+   <div>
+      seeMore && 
        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 my-10  gap-y-3">
       {products.map((product) => (
           <div key={product._id} className="bg-black border border-gray-800 p-4 rounded-md w-64 mx-auto mb-4">
@@ -122,13 +126,14 @@ const handleProductQueryButton=(query:string)=>{
           </div>
         ))}
        
-      </div>
+      </div> 
+   </div>:<h2 className="text-3xl text-primary font-semibold text-center my-10">No Product Found</h2>
      }
      {
      !seeMore && 
      <div>
         {
-          products.length >0 ?  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 my-10 gap-y-3">
+          products.length >=0 ?  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 my-10 gap-y-3">
           {
             products.slice(0,8).map((product) => (
               <div key={product._id} className="bg-black border border-gray-800 p-4 rounded-md w-64 mx-auto">
