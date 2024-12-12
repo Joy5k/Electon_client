@@ -100,9 +100,8 @@ const handleProductQueryButton=(query:string)=>{
       </div>
 {/* appearing all products according to the user condition */}
      {
-   products.length >=0 ? 
+   products.length >0 ? 
    <div>
-      seeMore && 
        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 my-10  gap-y-3">
       {products.map((product) => (
           <div key={product._id} className="bg-black border border-gray-800 p-4 rounded-md w-64 mx-auto mb-4">
@@ -129,6 +128,8 @@ const handleProductQueryButton=(query:string)=>{
       </div> 
    </div>:<h2 className="text-3xl text-primary font-semibold text-center my-10">No Product Found</h2>
      }
+
+
      {
      !seeMore && 
      <div>
