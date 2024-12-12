@@ -2,7 +2,7 @@
 
 This document serves as the README file for the frontend part of the Electrical Product Website. This project aims to create an interactive platform for browsing and purchasing electrical products like PCs, laptops, cameras, and accessories. It provides a modern and user-friendly interface, ensuring a smooth shopping experience for users.
 
-## Live Link
+# Live Link
 
 The live version of the project can be accessed here: [Electrical Product Website](https://electon-one.vercel.app/)
 
@@ -150,7 +150,4 @@ Contributions are welcome! If you’d like to contribute to this project:
    ```
 4. Create a Pull Request.
 
-## License
-
-This project is licensed under the [MIT License](LICENSE).
 
