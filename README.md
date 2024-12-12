@@ -1,10 +1,10 @@
-# Election Project Frontend
+# Electrical Product Website Frontend
 
-This document serves as the README file for the frontend part of the Election Project. This project aims to create an interactive platform for managing and participating in elections. It provides a modern and user-friendly interface, ensuring smooth interaction for users.
+This document serves as the README file for the frontend part of the Electrical Product Website. This project aims to create an interactive platform for browsing and purchasing electrical products like PCs, laptops, cameras, and accessories. It provides a modern and user-friendly interface, ensuring a smooth shopping experience for users.
 
 ## Live Link
 
-The live version of the project can be accessed here: [Election Project](https://electon-one.vercel.app/)
+The live version of the project can be accessed here: [Electrical Product Website](https://electon-one.vercel.app/)
 
 ---
 
@@ -23,12 +23,11 @@ The live version of the project can be accessed here: [Election Project](https:/
 
 ## Introduction
 
-The **Election Project Frontend** is built to provide:
+The **Electrical Product Website Frontend** is built to provide:
 
-- Voter registration and login features.
-- A platform to view and cast votes.
-- Real-time updates and interactive user experience.
-- Administrative tools for managing elections.
+- A comprehensive platform to browse and purchase electrical products.
+- A seamless user experience with advanced search and filtering options.
+- Admin tools for managing products and user interactions.
 
 This README focuses solely on the frontend implementation.
 
@@ -37,15 +36,15 @@ This README focuses solely on the frontend implementation.
 ### User Features
 
 - **Login & Registration**: Users can securely sign up or log in to their accounts.
-- **View Elections**: Users can view the list of ongoing and upcoming elections.
-- **Cast Votes**: Authenticated users can cast their votes in active elections.
-- **Profile Management**: Users can manage their profiles, view their voting history, and update their details.
+- **Browse Products**: Users can view and search through a variety of electrical products.
+- **Add to Cart**: Users can add products to their cart and proceed to checkout.
+- **Profile Management**: Users can manage their profiles, view their purchase history, and update their details.
 
 ### Admin Features
 
-- **Manage Elections**: Admins can create, edit, and manage election campaigns.
-- **User Management**: Admins have access to manage users, including adding or removing users.
-- **Real-Time Results**: Admins can view live updates on election results.
+- **Manage Products**: Admins can add, edit, or remove products.
+- **Order Management**: Admins can view and manage customer orders.
+- **Analytics Dashboard**: Admins can view insights and sales data in real-time.
 
 ## Tech Stack
 
@@ -71,13 +70,13 @@ Before running this project, ensure you have:
 1. Clone the repository:
 
    ```bash
-   git clone https://github.com/your-username/election-frontend.git
+   git clone https://github.com/your-username/electrical-product-frontend.git
    ```
 
 2. Navigate to the project directory:
 
    ```bash
-   cd election-frontend
+   cd electrical-product-frontend
    ```
 
 3. Install the dependencies:
@@ -108,13 +107,13 @@ Before running this project, ensure you have:
 src/
 |-- assets/             # Images and static assets
 |-- components/         # Reusable UI components
-|-- config/             # For manage all configuration
-|-- constant/           # Manage all constants
-|-- hooks/              # All hooks create and management folder
+|-- config/             # Manage all configurations
+|-- constants/          # Manage all constants
+|-- hooks/              # Custom hooks
 |-- pages/              # Page-level components
 |-- redux/              # Redux store and slices
 |-- routes/             # Handle React Routing
-|-- types/              # Manage the all typescript types
+|-- types/              # Manage all TypeScript types
 |-- utils/              # Utility functions and helpers
 |-- App.tsx             # Main app component
 |-- index.tsx           # Entry point of the application
