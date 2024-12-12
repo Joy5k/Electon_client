@@ -108,8 +108,13 @@ Before running this project, ensure you have:
 src/
 |-- assets/             # Images and static assets
 |-- components/         # Reusable UI components
+|-- config/             # For manage all configuration
+|-- constant/           # Manage all constants
+|-- hooks/              # All hooks create and management folder
 |-- pages/              # Page-level components
 |-- redux/              # Redux store and slices
+|-- routes/             # Handle React Routing
+|-- types/              # Manage the all typescript types
 |-- utils/              # Utility functions and helpers
 |-- App.tsx             # Main app component
 |-- index.tsx           # Entry point of the application
