@@ -98,6 +98,8 @@ export interface IMessage {
   id?: string;
   text: string;
   user: string;
-  role:string
+  role:string;
+  sender:string
+  room:string
  
 }

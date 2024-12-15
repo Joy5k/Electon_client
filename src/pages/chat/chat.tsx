@@ -20,7 +20,7 @@ const Chat = () => {
   const [activeUsers, setActiveUsers] = useState<IUser[]>([]); // Super admin active users
   const [currentRoom, setCurrentRoom] = useState<string>(''); // Super admin selected room
   const [selectedUser, setSelectedUser] = useState<string>(''); // Super admin selected user for chat
-
+  // Handle user authentication and join room
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (!token) {
@@ -29,42 +29,56 @@ const Chat = () => {
     }
 
     const user = verifyToken(token) as { email: string; role: 'user' | 'super_admin' };
-    setUserEmail(user.email);
+    setUserEmail(user?.email);
     setRole(user.role);
 
     if (!socket) return;
 
     // Join user's room
-    socket.emit('join', { email: user.email, role: user.role });
+    const userRoom = role === 'user' ? user.email : currentRoom;
+    socket.emit('joinRoom', { email: user.email, room: userRoom,sender:user.email });
+
+    // Fetch chat history for the room
+    socket.emit('fetchHistory', { room: userRoom });
 
     // Listen for incoming messages
     socket.on('message', (msg: IMessage) => {
       setMessages((prev) => [...prev, msg]);
     });
 
+    // Listen for chat history
+    socket.on('chatHistory', (history: IMessage[]) => {
+      setMessages(history);
+    });
+
     return () => {
       socket.off('message');
+      socket.off('chatHistory');
     };
-  }, [navigate, socket]);
+  }, [navigate, socket, role, currentRoom]);
 
+  // Handle sending messages
   const sendMessage = () => {
     if (message.trim()) {
       const newMessage: IMessage = {
         id: Date.now().toString(),
         text: message,
-        user: userEmail,
+        sender: userEmail,
+        room: role === 'user' ? userEmail : currentRoom,
+        user: '',
         role: ''
       };
 
+      // Optimistically update the UI
       setMessages((prev) => [...prev, newMessage]);
 
-      // Emit to the server
+      // Emit the message to the server
       socket?.emit('message', {
         room: role === 'user' ? userEmail : currentRoom,
         text: message,
-        sender: userEmail,
+        sender: userEmail ,
       });
-
+      
       setMessage('');
     }
   };
@@ -80,11 +94,15 @@ const Chat = () => {
     }
   }, [role]);
 
+  // Handle switching between users (for super admin)
   const handleUserSelection = (userEmail: string) => {
     setSelectedUser(userEmail);
     setCurrentRoom(userEmail);
-    socket!.emit('joinRoom', userEmail); // Join the selected user's room
-    setMessages([]); // Clear the messages when switching users (optional, adjust based on backend persistence)
+    socket!.emit('joinRoom', { email: userEmail, room: userEmail ,sender:userEmail}); // Join the selected user's room
+
+    // Fetch chat history for the new room
+    socket!.emit('fetchHistory', { room: userEmail });
+    setMessages([]); // Clear messages temporarily (optional)
   };
 
   return (
