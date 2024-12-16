@@ -47,10 +47,7 @@ const Chat = () => {
         setMessages(history); // Set fetched messages to the state
     });
 
-    // Listen for incoming messages
-    socket.on('message', (msg: IMessage) => {
-        setMessages((prev) => [...prev, msg]);
-    });
+  
 
     return () => {
         socket.off('message');
