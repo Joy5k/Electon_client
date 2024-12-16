@@ -24,8 +24,8 @@ const Chat = () => {
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (!token) {
-      navigate('/login');
-      return;
+        navigate('/login');
+        return;
     }
 
     const user = verifyToken(token) as { email: string; role: 'user' | 'super_admin' };
@@ -34,28 +34,30 @@ const Chat = () => {
 
     if (!socket) return;
 
-    // Join user's room
     const userRoom = role === 'user' ? user.email : currentRoom;
-    socket.emit('joinRoom', { email: user.email, room: userRoom,sender:user.email });
+
+    // Join the room
+    socket.emit('joinRoom', { email: user.email, room: userRoom });
 
     // Fetch chat history for the room
     socket.emit('fetchHistory', { room: userRoom });
 
-    // Listen for incoming messages
-    socket.on('message', (msg: IMessage) => {
-      setMessages((prev) => [...prev, msg]);
-    });
-
     // Listen for chat history
     socket.on('chatHistory', (history: IMessage[]) => {
-      setMessages(history);
+        setMessages(history); // Set fetched messages to the state
+    });
+
+    // Listen for incoming messages
+    socket.on('message', (msg: IMessage) => {
+        setMessages((prev) => [...prev, msg]);
     });
 
     return () => {
-      socket.off('message');
-      socket.off('chatHistory');
+        socket.off('message');
+        socket.off('chatHistory');
     };
-  }, [navigate, socket, role, currentRoom]);
+}, [navigate, socket, role, currentRoom]);
+
 
   // Handle sending messages
   const sendMessage = () => {
