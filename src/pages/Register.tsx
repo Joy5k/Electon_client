@@ -67,7 +67,7 @@ const Register = () => {
     
     return (
         <div>
-        <div className="bg-gray-800  rounded-md p-10 w-full md:w-[530px] mx-auto h-fit m-10">
+        <div className="bg-slate-900  rounded-md p-10 w-full md:w-[530px] mx-auto h-fit m-10">
           <h5 className="text-3xl font-bold text-center font-mono my-5 bg-transparent">Register</h5>
           <form  className="flex flex-col bg-transparent">
             <div className="flex flex-col md:flex-row lg:flex-row justify-center bg-transparent my-4">

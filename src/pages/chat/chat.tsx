@@ -65,7 +65,7 @@ const Chat = () => {
         sender: userEmail,
         room: role === 'user' ? userEmail : currentRoom,
         user: '',
-        role: ''
+        role
       };
 
       // Optimistically update the UI
@@ -146,7 +146,7 @@ const Chat = () => {
                   msg.user === userEmail ? 'bg-blue-500 self-end' : 'bg-primary'
                 }`}
               >
-                <strong className="text-white mr-1 bg-transparent">{msg.user}</strong>:{' '}
+                <strong className="text-white mr-1 bg-transparent">{'you'}</strong>:{' '}
                 <span className="bg-transparent">{msg.text}</span>
               </div>
             ))}

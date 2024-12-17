@@ -69,7 +69,7 @@ const handleLogin = async (e: React.FormEvent) => {
 
   return (
     <div>
-      <div className="bg-gray-800  rounded-md p-10 w-full md:w-[400px] mx-auto h-[500px] m-10">
+      <div className="bg-gray-900  rounded-md p-10 w-full md:w-[400px] mx-auto h-[500px] m-10">
         <h5 className="text-3xl font-bold text-center font-mono my-5 bg-transparent">Login</h5>
         <form onSubmit={handleLogin} className="flex flex-col bg-transparent">
           <label htmlFor="" className="bg-transparent">Email</label>
