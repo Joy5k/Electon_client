@@ -16,7 +16,7 @@ const Chat = () => {
   const [messages, setMessages] = useState<IMessage[]>([]);
   const [message, setMessage] = useState<string>('');
   const [userEmail, setUserEmail] = useState<string>('');
-  const [role, setRole] = useState<'user' | 'super_admin'>('user');
+  const [role, setRole] = useState<'user' | 'super_admin'|'seller'>('user');
   const [activeUsers, setActiveUsers] = useState<IUser[]>([]); // Super admin active users
   const [currentRoom, setCurrentRoom] = useState<string>(''); // Super admin selected room
   const [selectedUser, setSelectedUser] = useState<string>(''); // Super admin selected user for chat
@@ -28,7 +28,7 @@ const Chat = () => {
         return;
     }
 
-    const user = verifyToken(token) as { email: string; role: 'user' | 'super_admin' };
+    const user = verifyToken(token) as { email: string; role: 'user' | 'super_admin'|'seller' };
     setUserEmail(user?.email);
     setRole(user.role);
 
@@ -37,7 +37,7 @@ const Chat = () => {
     const userRoom = role === 'user' ? user.email : currentRoom;
 
     // Join the room
-    socket.emit('joinRoom', { email: user.email, room: userRoom });
+    socket.emit('joinRoom', { email: user.email, room: userRoom ,role});
 
     // Fetch chat history for the room
     socket.emit('fetchHistory', { room: userRoom });
@@ -47,7 +47,10 @@ const Chat = () => {
         setMessages(history); // Set fetched messages to the state
     });
 
-  
+    // **NEW: Listen for incoming messages**
+    socket.on('message', (newMessage: IMessage) => {
+      setMessages((prev) => [...prev, newMessage]);
+  });
 
     return () => {
         socket.off('message');
@@ -86,7 +89,7 @@ const Chat = () => {
   useEffect(() => {
     if (role === 'super_admin') {
       // Mock active users for demonstration
-      const users = [{ email: 'user1@example.com' }, { email: 'user2@example.com' }];
+      const users = [{ email: 'user@gmail.com' }, { email: 'user2@example.com' }];
       setActiveUsers(users);
       setSelectedUser(users[0]?.email || ''); // Set the first user as selected by default
       setCurrentRoom(users[0]?.email || ''); // Set the first user's room by default
@@ -135,22 +138,28 @@ const Chat = () => {
 
         {/* Chat Messages */}
         <div className="flex-grow bg-gray-800">
-          <div
-            className="flex-grow bg-transparent overflow-y-auto p-4 rounded-b-lg right-0"
-            style={{ maxHeight: '350px' }}
-          >
-            {messages.map((msg) => (
-              <div
-                key={msg.id}
-                className={`mb-2 w-fit p-2 rounded-full ${
-                  msg.user === userEmail ? 'bg-blue-500 self-end' : 'bg-primary'
-                }`}
-              >
-                <strong className="text-white mr-1 bg-transparent">{'you'}</strong>:{' '}
-                <span className="bg-transparent">{msg.text}</span>
-              </div>
-            ))}
-          </div>
+        <div className="flex-grow bg-gray-800 p-4 overflow-y-auto" style={{ maxHeight: '350px' }}>
+  {messages.map((msg) => (
+    <div
+      key={msg.id}
+      className={`flex mb-2 bg-transparent ${
+        msg.sender === userEmail ? 'justify-end' : 'justify-start'
+      }`}
+    >
+      <div
+        className={`px-2 max-w-xs break-words rounded-lg ${
+          msg.sender === userEmail ? 'bg-blue-500 text-white' : 'bg-primary text-black'
+        }`}
+      >
+        <p className="font-semibold mb-1 bg-transparent">
+          {msg.sender === userEmail ? '' : msg.sender}
+        </p>
+        <p className='bg-transparent'>{msg.text}</p>
+      </div>
+    </div>
+  ))}
+</div>
+
         </div>
 
         {/* Input Field */}
