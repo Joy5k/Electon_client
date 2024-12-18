@@ -16,6 +16,7 @@ const Chat = () => {
   const [messages, setMessages] = useState<IMessage[]>([]);
   const [message, setMessage] = useState<string>('');
   const [userEmail, setUserEmail] = useState<string>('');
+  const [userId,setUserId]=useState<string>("")
   const [role, setRole] = useState<'user' | 'super_admin'|'seller'>('user');
   const [activeUsers, setActiveUsers] = useState<IUser[]>([]); // Super admin active users
   const [currentRoom, setCurrentRoom] = useState<string>(''); // Super admin selected room
@@ -28,9 +29,10 @@ const Chat = () => {
         return;
     }
 
-    const user = verifyToken(token) as { email: string; role: 'user' | 'super_admin'|'seller' };
+    const user = verifyToken(token) as { email: string;userId:string; role: 'user' | 'super_admin'|'seller' };
     setUserEmail(user?.email);
     setRole(user.role);
+    setUserId(user.userId)
 
     if (!socket) return;
 
@@ -63,12 +65,12 @@ const Chat = () => {
   const sendMessage = () => {
     if (message.trim()) {
       const newMessage: IMessage = {
-        id: Date.now().toString(),
+        id: userId,
         text: message,
         sender: userEmail,
         room: role === 'user' ? userEmail : currentRoom,
         user: '',
-        role
+        role,
       };
 
       // Optimistically update the UI
