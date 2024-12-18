@@ -74,7 +74,13 @@ const Chat = () => {
       };
 
       // Optimistically update the UI
-      setMessages((prev) => [...prev, newMessage]);
+      setMessages((prev) => {
+        const isDuplicate = prev.some((msg) => msg.id === newMessage.id);
+        if (isDuplicate) {
+          return prev; // Return the existing state if duplicate
+        }
+        return [...prev, newMessage]; // Add the new message if it's not a duplicate
+      });
 
       // Emit the message to the server
       socket?.emit('message', {
@@ -108,7 +114,6 @@ const Chat = () => {
     socket!.emit('fetchHistory', { room: userEmail });
     setMessages([]); // Clear messages temporarily (optional)
   };
-
   return (
     <div className="flex h-screen">
       {/* Sidebar */}
@@ -149,7 +154,7 @@ const Chat = () => {
       }`}
     >
       <div
-        className={`px-2 max-w-xs break-words rounded-lg ${
+        className={`p-2 max-w-xs break-words rounded-lg ${
           msg.sender === userEmail ? 'bg-blue-500 text-white' : 'bg-primary text-black'
         }`}
       >

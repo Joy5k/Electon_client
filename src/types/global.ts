@@ -95,6 +95,7 @@ export interface IUser {
 }
 // Make 'id' optional to accommodate incoming messages that already have an 'id'
 export interface IMessage {
+  [x: string]: any;
   id?: string;
   text: string;
   user: string;
