@@ -100,11 +100,8 @@ const Chat = () => {
     console.log(data?.data,"chatting array")
     if (role === 'super_admin') {
       // Mock active users for demonstration
-      const users = data?.data.map((user: any) => ({ email: user.room })) || [];
-      console.log(users[0]?.email);
-      
-      // const users = [{ email: 'user@gmail.com' }, { email: 'user2@example.com' }];
-      setActiveUsers(users);
+      const users = data?.data.map((user: IMessage) => ({ email: user.room })) || [];
+            setActiveUsers(users);
       setSelectedUser(users[0]?.email || ''); // Set the first user as selected by default
       setCurrentRoom(users[0]?.email || ''); // Set the first user's room by default
     }
