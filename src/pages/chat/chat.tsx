@@ -5,12 +5,14 @@ import useSocket from './useSocket';
 import { verifyToken } from '../../utils/verifyToken';
 import { useNavigate } from 'react-router-dom';
 import { IMessage } from '../../types';
+import { useGetAllChattingRoomQuery } from '../../redux/features/chat/chattingManagement';
 
 interface IUser {
   email: string;
 }
 
 const Chat = () => {
+  const {data}=useGetAllChattingRoomQuery({})
   const navigate = useNavigate();
   const socket = useSocket();
   const [messages, setMessages] = useState<IMessage[]>([]);
@@ -21,6 +23,7 @@ const Chat = () => {
   const [activeUsers, setActiveUsers] = useState<IUser[]>([]); // Super admin active users
   const [currentRoom, setCurrentRoom] = useState<string>(''); // Super admin selected room
   const [selectedUser, setSelectedUser] = useState<string>(''); // Super admin selected user for chat
+
   // Handle user authentication and join room
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -28,7 +31,6 @@ const Chat = () => {
         navigate('/login');
         return;
     }
-
     const user = verifyToken(token) as { email: string;userId:string; role: 'user' | 'super_admin'|'seller' };
     setUserEmail(user?.email);
     setRole(user.role);
@@ -95,14 +97,18 @@ const Chat = () => {
 
   // Super admin: Mock active users list
   useEffect(() => {
+    console.log(data?.data,"chatting array")
     if (role === 'super_admin') {
       // Mock active users for demonstration
-      const users = [{ email: 'user@gmail.com' }, { email: 'user2@example.com' }];
+      const users = data?.data.map((user: any) => ({ email: user.room })) || [];
+      console.log(users[0]?.email);
+      
+      // const users = [{ email: 'user@gmail.com' }, { email: 'user2@example.com' }];
       setActiveUsers(users);
       setSelectedUser(users[0]?.email || ''); // Set the first user as selected by default
       setCurrentRoom(users[0]?.email || ''); // Set the first user's room by default
     }
-  }, [role]);
+  }, [data?.data, role]);
 
   // Handle switching between users (for super admin)
   const handleUserSelection = (userEmail: string) => {
@@ -120,9 +126,9 @@ const Chat = () => {
       {role === 'super_admin' && (
         <div className="w-1/4 bg-transparent border-r border-gray-300 p-4 overflow-y-auto">
           <h3 className="text-lg font-bold mb-4">Active Users</h3>
-          {activeUsers.map((user) => (
+          {activeUsers.map((user, index) => (
             <div
-              key={user.email}
+              key={index}
               onClick={() => handleUserSelection(user.email)}
               className={`p-2 mb-2 cursor-pointer rounded ${
                 selectedUser === user.email ? 'bg-blue-500 text-white' : 'bg-gray-800'
