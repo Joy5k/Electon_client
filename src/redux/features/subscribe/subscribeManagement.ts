@@ -15,10 +15,22 @@ const subscribeApi = baseApi.injectEndpoints({
 
     }),
  
+    subscribeStatus: builder.mutation({
+      query: () =>{
+      return  {
+          url: "/subscription/unsubscribe",
+          method: "PUT",
+
+        }
+      },invalidatesTags:["subscribe"],
+
+    }),
+ 
 
   }),
 });
 
 export const {
 useCreateSubscriberMutation,
+useSubscribeStatusMutation
 } = subscribeApi;

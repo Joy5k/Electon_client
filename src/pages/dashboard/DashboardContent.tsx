@@ -7,6 +7,7 @@ import SellerOverview from './sellerDashboard/sellerDashboardOverview/SellerOver
 import { verifyToken } from '../../utils/verifyToken';
 import SoldProduct from './dashboardComponents/soldProduct/SoldProduct';
 import UploadProduct from './sellerDashboard/productManagement/UploadProduct';
+import OfferManagement from './dashboardComponents/allOffers/OfferManagement';
 
 type DashboardContentProps = {
   activePage: string;
@@ -27,6 +28,7 @@ const DashboardContent: React.FC<DashboardContentProps> = ({ activePage }) => {
    
       {activePage === 'Products' && <div className="w-full md:w-10/12 lg:w-11/12"><ProductManagement></ProductManagement></div>}
       {activePage === 'Users' && <div><UsersManagement></UsersManagement></div>}
+      {activePage === 'Discounts' && <div><OfferManagement></OfferManagement></div>}
     
       {
       decoded?.role==="seller" && <>

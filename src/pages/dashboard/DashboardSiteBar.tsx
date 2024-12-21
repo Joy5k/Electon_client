@@ -14,7 +14,7 @@ const DashboardSiteBar: React.FC<SidebarProps> = ({ activePage, setActivePage })
   const [siteBarItems,setSiteBarItems]=useState<string[]>([])
   const [isOpen, setIsOpen] = useState(false);
   
-  const super_adminSiteBar = ['Overview', 'Products', 'Users'];
+  const super_adminSiteBar = ['Overview', 'Products','Discounts', 'Users'];
   const sellerSiteBar = ['Seller-overview','My-Products', 'Sells','Upload'];
 
     if(!authToken){
@@ -27,7 +27,7 @@ const DashboardSiteBar: React.FC<SidebarProps> = ({ activePage, setActivePage })
 // setting sitebar item name
 useEffect(()=>{
 
-  if(role==="super_admin"){
+  if(role==="super_admin"||role==="admin"){
     setSiteBarItems(super_adminSiteBar)
   } else if(role==="seller"){
     setSiteBarItems(sellerSiteBar)
