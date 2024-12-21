@@ -8,7 +8,7 @@ function OfferManagement() {
 
     const [isDiscountModalOpen, setDiscountModalOpen] = useState(false);
     const [isUpdateModalOpen, setUpdateModalOpen] = useState(false);
-    const [selectedProduct, setSelectedProduct] = useState<IProduct | null>(null);
+    const [selectedProduct, setSelectedProduct] = useState<IProduct >({} as IProduct);
     const [discountPercentage,setDiscountPercentage]=useState<number>(0);
     const handleOpenDiscountModal = (product:IProduct) => {
         setSelectedProduct(product);
@@ -23,7 +23,7 @@ function OfferManagement() {
     const handleCloseModal = () => {
         setDiscountModalOpen(false);
         setUpdateModalOpen(false);
-        setSelectedProduct(null);
+        setSelectedProduct({} as IProduct);
     };
 
     return (
