@@ -104,3 +104,8 @@ export interface IMessage {
   room:string
  
 }
+
+export interface IUserSubscription {
+  email: string;
+  isActive?: boolean;
+}

@@ -5,6 +5,9 @@ import {
   FaLinkedin,
 } from "react-icons/fa";
 import { TfiHeadphoneAlt } from "react-icons/tfi";
+import { FormEvent } from "react";
+import { useCreateSubscriberMutation } from "../../redux/features/subscribe/subscribeManagement";
+import { toast } from "sonner";
 
 const sections = [
   
@@ -30,15 +33,48 @@ const items = [
 ];
 
 const Footer = () => {
+const [userSubscribe]=useCreateSubscriberMutation()
+const handleUserSubscribe = async (
+  event: FormEvent<HTMLFormElement>
+): Promise<void> => {
+  event.preventDefault();
+
+  const form = event.currentTarget;
+  const emailInput = form.querySelector<HTMLInputElement>('input[type="text"]');
+  const email = emailInput?.value;
+
+  if (!email) {
+    toast.error("Please enter a valid email");
+    return;
+  }
+
+  const data = {
+    email,
+    isActive: true,
+  };
+
+  try {
+    const res = await userSubscribe(data).unwrap();
+    if (res.success) {
+      toast.success("Subscribed Successfully");
+      form.reset(); // Reset form after success
+    }
+  } catch (error) {
+    console.error(error);
+    toast.error("Subscription failed. Please try again.");
+  }
+};
+
+
   return (
     <div className="w-full mt-24 bg-black text-gray-300 ">
       <div className="flex flex-col items-center md:flex-row lg:flex-row justify-evenly bg-slate-500 p-12 rounded-xl w-fit gap-9 mx-auto">
         <p className="text-4xl text-primary font-bold bg-transparent">Subscribe newsletter
         </p>
-        <div className="bg-transparent">
+        <form onSubmit={handleUserSubscribe} className="bg-transparent">
         <input type="text" className=" p-[12px] rounded-l-lg border border-dashed text-white bg-transparent" placeholder="Enter Your Email"/>
-<button className="bg-primary text-white p-[13px] rounded-r-xl">Subscribe</button>
-        </div>
+<button type="submit" className="bg-primary text-white p-[13px] rounded-r-xl">Subscribe</button>
+        </form>
      <div className="flex justify-center gap-3 bg-transparent">
      <TfiHeadphoneAlt className="text-6xl bg-transparent" />
 

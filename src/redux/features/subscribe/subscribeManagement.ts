@@ -8,7 +8,7 @@ const subscribeApi = baseApi.injectEndpoints({
       return  {
           url: "/subscription/subscribe",
           method: "POST",
-          body:data.data
+          body:data
 
         }
       },invalidatesTags:["subscribe"],
