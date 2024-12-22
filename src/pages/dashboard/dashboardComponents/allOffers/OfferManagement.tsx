@@ -10,6 +10,9 @@ function OfferManagement() {
     const [isUpdateModalOpen, setUpdateModalOpen] = useState(false);
     const [selectedProduct, setSelectedProduct] = useState<IProduct >({} as IProduct);
     const [discountPercentage,setDiscountPercentage]=useState<number>(0);
+
+
+
     const handleOpenDiscountModal = (product:IProduct) => {
         setSelectedProduct(product);
         setDiscountModalOpen(true);
@@ -26,6 +29,12 @@ function OfferManagement() {
         setSelectedProduct({} as IProduct);
     };
 
+    // set the discount on server
+    const handleDiscount=async():Promise<void>=>{
+        const discount=selectedProduct.price * discountPercentage / 100;
+        console.log(discount)
+        console.log(discountPercentage)
+    }
     return (
         <div>
             <div>
@@ -104,7 +113,7 @@ function OfferManagement() {
                         <div className="flex justify-between">
                           
                         <button onClick={handleCloseModal} className="mt-4 px-2  bg-red-500 hover:bg-red-600 text-white rounded">Close</button>
-                        <button onClick={handleCloseModal} className="mt-4 px-2 hover:bg-emerald-700  bg-emerald-600 text-white rounded">Save</button>
+                        <button onClick={handleDiscount} className="mt-4 px-2 hover:bg-emerald-700  bg-emerald-600 text-white rounded">Save</button>
                         </div>
                     </div>
                 </div>
