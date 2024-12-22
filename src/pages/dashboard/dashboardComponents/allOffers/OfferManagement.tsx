@@ -1,15 +1,18 @@
-import React, { useState } from "react";
+import  { useState } from "react";
 import { useAllProductsQuery } from "../../../../redux/features/admin/productManagementApi";
-import { IProduct } from "../../../../types";
+import { IOfferProduct, IProduct } from "../../../../types";
+import DiscountModal from "../discountModal/DiscountModal";
+import { useCreateDiscountMutation } from "../../../../redux/features/offers/offerManagement";
+import { toast } from "sonner";
 
 function OfferManagement() {
     const { data } = useAllProductsQuery({});
     const products = data?.data;
-
+    const [submitProductDiscount]=useCreateDiscountMutation()
     const [isDiscountModalOpen, setDiscountModalOpen] = useState(false);
     const [isUpdateModalOpen, setUpdateModalOpen] = useState(false);
-    const [selectedProduct, setSelectedProduct] = useState<IProduct >({} as IProduct);
-    const [discountPercentage,setDiscountPercentage]=useState<number>(0);
+    const [selectedProduct, setSelectedProduct] = useState<IProduct >({}as IProduct);
+   
 
 
 
@@ -30,11 +33,25 @@ function OfferManagement() {
     };
 
     // set the discount on server
-    const handleDiscount=async():Promise<void>=>{
-        const discount=selectedProduct.price * discountPercentage / 100;
-        console.log(discount)
-        console.log(discountPercentage)
+    const handleDiscount=async(offerData: { offerPercentage: number; offerStartDate: string; offerEndDate: string; offerType: "general" | "dealOfTheDay" | "other"; }):Promise<void>=>{
+        const offerProduct: IOfferProduct = {
+            productId: selectedProduct._id,
+            offerPrice: selectedProduct.price * (1 - offerData.offerPercentage / 100),
+            offerStatus:true,
+            ...offerData
+        };
+        try {
+         const res= await submitProductDiscount(offerProduct).unwrap()
+            if(res.success){
+                toast.success("Discount set successfully")
+                handleCloseModal()
+            }
+        } catch (error) {
+            console.log(error)
+        }
     }
+
+
     return (
         <div>
             <div>
@@ -88,41 +105,14 @@ function OfferManagement() {
 
             {/* Discount Modal */}
             {isDiscountModalOpen && (
-                <div className="fixed inset-0 bg-gray-800 bg-opacity-75 flex items-center justify-center ">
-                    <div className=" p-4 rounded shadow-md w-96">
-                        <h2 className="text-lg font-semibold ">Set Discount for {selectedProduct?.title}</h2>
-                        {/* Add form or content here for discount */}
-                       <p>Regular Price: {selectedProduct?.price}</p>
-    <input 
-      onChange={(e) => setDiscountPercentage(Math.max(0, Math.min(100, Number(e.target.value))))} 
-      max={100} 
-      min={1} 
-      className="border border-gray-700 mt-2  px-2" 
-      type="number" 
-      name="discountPercentage" 
-      
-      value={discountPercentage}
-      onInput={(e) => {
-        const value = Number(e.currentTarget.value);
-        if (value > 100) {
-          e.currentTarget.value = "100";
-        }
-      }}
-    />
-                    <p className="text-gray-700">Possible Price:{selectedProduct.price - (selectedProduct.price * discountPercentage / 100)}</p>
-                        <div className="flex justify-between">
-                          
-                        <button onClick={handleCloseModal} className="mt-4 px-2  bg-red-500 hover:bg-red-600 text-white rounded">Close</button>
-                        <button onClick={handleDiscount} className="mt-4 px-2 hover:bg-emerald-700  bg-emerald-600 text-white rounded">Save</button>
-                        </div>
-                    </div>
-                </div>
+           
+            <DiscountModal selectedProduct={selectedProduct} handleCloseModal={handleCloseModal} handleDiscount={handleDiscount} />
             )}
 
             {/* Update Modal */}
             {isUpdateModalOpen && (
                 <div className="fixed inset-0 bg-gray-800 bg-opacity-75 flex items-center justify-center">
-                    <div className="bg-white p-4 rounded shadow-md w-96">
+                    <div className=" p-4 rounded shadow-md w-96">
                         <h2 className="text-lg font-semibold mb-4">Update Product: {selectedProduct?.title}</h2>
                         {/* Add form or content here for updating */}
                         <button onClick={handleCloseModal} className="mt-4 px-4 py-2 bg-red-500 text-white rounded">Close</button>

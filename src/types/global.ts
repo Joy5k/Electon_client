@@ -72,7 +72,7 @@ export interface userSelectedProductProperty{
 
 }
 export interface IProduct extends userSelectedProductProperty {
-  _id?:string;
+  _id:string;
   title: string;
   description: string;
   category:string;
@@ -108,4 +108,14 @@ export interface IMessage {
 export interface IUserSubscription {
   email: string;
   isActive?: boolean;
+}
+
+export interface IOfferProduct {
+  productId: string; // Reference to the product
+  offerPercentage: number; // Discount percentage
+  offerPrice: number; // Calculated price after discount
+  offerStartDate: string; // ISO string for date and time
+  offerEndDate: string; // ISO string for date and time
+  offerType: "general" | "dealOfTheDay" | "other"; // Type of offer
+  offerStatus: boolean; // Whether the offer is active
 }
