@@ -3,6 +3,19 @@ import { baseApi } from "../../api/baseApi";
 const offerApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
   
+    getAllOfferedProducts: builder.query({
+      query: () => {
+        return {
+          url: "/offerProduct/allOffers",
+          method: "GET",
+        };
+      },
+      providesTags: ["offers"],
+    }),
+
+
+
+
     createDiscount: builder.mutation({
       query: (data) =>{
       return  {
@@ -34,7 +47,6 @@ deleteOfferedProduct: builder.mutation({
 
         }
       },invalidatesTags:["offers"],
-
     
 })
 
