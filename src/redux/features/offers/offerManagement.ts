@@ -26,11 +26,29 @@ const offerApi = baseApi.injectEndpoints({
 
     }),
  
+deleteOfferedProduct: builder.mutation({
+      query: (id) =>{
+      return  {
+          url: `/offerProduct/delete/${id}`,
+          method: "DELETE",
+
+        }
+      },invalidatesTags:["offers"],
+
+    
+})
+
+
+
+
+
+
 
   }),
 });
 
 export const {
 useCreateDealOfTheDayMutation,
-useCreateDiscountMutation
+useCreateDiscountMutation,
+useDeleteOfferedProductMutation
 } = offerApi;

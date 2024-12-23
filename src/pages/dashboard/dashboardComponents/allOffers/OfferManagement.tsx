@@ -4,6 +4,7 @@ import { IOfferProduct, IProduct } from "../../../../types";
 import DiscountModal from "../discountModal/DiscountModal";
 import { useCreateDiscountMutation } from "../../../../redux/features/offers/offerManagement";
 import { toast } from "sonner";
+import AllOfferedProducts from "./AllOfferedProducts";
 
 function OfferManagement() {
     const { data } = useAllProductsQuery({});
@@ -119,7 +120,12 @@ function OfferManagement() {
                     </div>
                 </div>
             )}
-        </div>
+            {/* the all offer component */}
+            <hr className="text-red-300 border" />
+                <div className="mt-4">
+                    <AllOfferedProducts />
+                </div>
+            </div>
     );
 }
 
