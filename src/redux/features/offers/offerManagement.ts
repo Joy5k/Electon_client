@@ -6,20 +6,16 @@ const offerApi = baseApi.injectEndpoints({
     getAllOfferedProducts: builder.query({
       query: () => {
         return {
-          url: "/offerProduct/allOffers",
+          url: "offerProduct/allOffers",
           method: "GET",
         };
       },
       providesTags: ["offers"],
     }),
-
-
-
-
     createDiscount: builder.mutation({
       query: (data) =>{
       return  {
-          url: "/offerProduct/create",
+          url: "offerProduct/create",
           method: "POST",
           body:data
 
@@ -42,9 +38,8 @@ const offerApi = baseApi.injectEndpoints({
 deleteOfferedProduct: builder.mutation({
       query: (id) =>{
       return  {
-          url: `/offerProduct/delete/${id}`,
+          url: `offerProduct/delete/${id}`,
           method: "DELETE",
-
         }
       },invalidatesTags:["offers"],
     
@@ -60,6 +55,7 @@ deleteOfferedProduct: builder.mutation({
 });
 
 export const {
+useGetAllOfferedProductsQuery,
 useCreateDealOfTheDayMutation,
 useCreateDiscountMutation,
 useDeleteOfferedProductMutation
