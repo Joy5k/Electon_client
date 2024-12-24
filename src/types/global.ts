@@ -111,6 +111,7 @@ export interface IUserSubscription {
 }
 
 export interface IOfferProduct {
+  _id?:string
   productId: string; // Reference to the product
   offerPercentage: number; // Discount percentage
   offerPrice: number; // Calculated price after discount
