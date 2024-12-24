@@ -3,6 +3,7 @@ import { toast } from "sonner";
 import {
   useDeleteOfferedProductMutation,
   useGetAllOfferedProductsQuery,
+  useUpdateAllDiscountMutation,
 } from "../../../../redux/features/offers/offerManagement";
 import { IOfferProduct } from "../../../../types";
 
@@ -140,12 +141,14 @@ function AllOfferedProducts() {
 
 
 function UpdateModal({ product, onClose }: UpdateModalProps) {
-  const [updateDealOfTheDay] = useUpdateDealOfTheDayMutation();
+  const [updateDealOfTheDay] = useUpdateAllDiscountMutation();
   const [offerPrice, setOfferPrice] = useState<number>(product?.offerPrice || 0);
   const [offerPercentage, setOfferPercentage] = useState<number>(
     product?.offerPercentage || 0
   );
   const [selectedValue, setSelectedValue] = useState<string>('');
+  const [offerStartDate, setOfferStartDate] = useState(product?.offerStartDate);
+  const [offerEndDate, setOfferEndDate] = useState(product?.offerEndDate);
 
   // Handle offer percentage change and update offer price
   const handlePercentageChange = (value: number) => {
@@ -163,26 +166,39 @@ function UpdateModal({ product, onClose }: UpdateModalProps) {
   };
 
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    console.log("Form Data:",{offerPercentage,offerPrice,selectedValue});
-    // Update the form or send the data to the backend
-    onClose()
+  const handleSubmit =async (e: React.FormEvent) => {
+  
+    e.preventDefault(); 
+     const updatedData = {
+      id: product._id,
+      data: {
+        offerPrice,
+        offerPercentage,
+        offerType: selectedValue,
+      },
+    }
+    
+    const response=await updateDealOfTheDay(updatedData).unwrap();
+    if(response.success){
+      toast.success(` ${product.productId?.title}  updated successfully`);
+      onClose();
+    }
+
   };
 
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-      <div className=" p-6 rounded shadow-md w-96">
+    <div className="fixed inset-0 flex items-center justify-center bg-black  bg-opacity-80 ">
+      <div className=" p-6 rounded shadow-2xl w-96 border border-primary  shadow-primary">
         <h3 className="text-xl font-bold mb-4">Update Product</h3>
         <p className="mb-4">Title: {product?.productId?.title}</p>
-        <p className="mb-4">Price: {product?.productId?.price}</p>
-
+        <p className="">Price: {product?.productId?.price}</p>
+<hr className=" bg-primary p-[1px] animate-pulse" />
         <form onSubmit={handleSubmit}>
-        <div className="mb-4 mt-1">
+        <div className="mb-4 mt-1 ">
         <label htmlFor="offerPercentage">Offer %:</label>
         <input
-          className="border w-24 px-2 ml-1 border-gray-800"
+          className="border w-24 px-2 ml-[26px] border-gray-800"
           type="number"
           name="offerPercentage"
           id="offerPercentage"
@@ -191,7 +207,7 @@ function UpdateModal({ product, onClose }: UpdateModalProps) {
           placeholder="Offer Percentage"
         />
       </div>
-      <div>
+      <div className="">
         <label htmlFor="offerPrice">Offer-Price:</label>
         <input
           className="border w-24 px-2 ml-1 border-gray-800"
@@ -204,10 +220,10 @@ function UpdateModal({ product, onClose }: UpdateModalProps) {
         />
       </div>
 
-      <div className="h-full">
+      <div className="h-full mt-3">
         <label htmlFor="offerType">Offer-Type:</label>
         <select
-          className="border mt-1 border-gray-800"
+          className="border mt-1 ml-1 border-gray-800  "
           name="offerType"
           id="offerType"
           value={"offerType"}
@@ -220,16 +236,43 @@ function UpdateModal({ product, onClose }: UpdateModalProps) {
       </div>
 
      
-    
+      <label className="block mt-4">
+  <span className="text-sm font-medium">Offer Start Date & Time</span>
+  <input
+    type="datetime-local"
+    className="border border-gray-700 mt-2 px-2 w-full"
+    value={
+      offerStartDate
+        ? new Date(offerStartDate).toISOString().slice(0, 16) // Convert to 'YYYY-MM-DDTHH:mm'
+        : ''
+    }
+    onChange={(e) => setOfferStartDate(e.target.value)}
+  />
+</label>
 
-        <div className="flex justify-end">
+<label className="block mt-4">
+  <span className="text-sm font-medium">Offer End Date & Time</span>
+  <input
+    type="datetime-local"
+    className="border border-gray-700 mt-2 px-2 w-full"
+    value={
+      offerEndDate
+        ? new Date(offerEndDate).toISOString().slice(0, 16) // Convert to 'YYYY-MM-DDTHH:mm'
+        : ''
+    }
+    onChange={(e) => setOfferEndDate(e.target.value)}
+  />
+</label>
+
+
+        <div className="flex justify-end mt-5">
           <button
             onClick={onClose}
             className="border hover:bg-slate-700 px-4 py-2 rounded mr-2"
           >
             Cancel
           </button>
-          <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded">
+          <button type="submit" className="bg-primary text-white px-4 py-2 rounded">
             Submit
       </button>
         </div>
