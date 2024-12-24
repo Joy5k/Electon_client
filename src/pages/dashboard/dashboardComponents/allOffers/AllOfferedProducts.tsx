@@ -4,6 +4,7 @@ import {
   useDeleteOfferedProductMutation,
   useGetAllOfferedProductsQuery,
   useUpdateAllDiscountMutation,
+  useUpdateProductStatusMutation,
 } from "../../../../redux/features/offers/offerManagement";
 import { IOfferProduct } from "../../../../types";
 
@@ -18,7 +19,7 @@ function AllOfferedProducts() {
   const { data } = useGetAllOfferedProductsQuery({});
   const products = data?.data;
   const [deleteOfferedProduct] = useDeleteOfferedProductMutation();
-
+  const [updateProductStatus] = useUpdateProductStatusMutation();
   // Modal state
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState<IOfferProduct | null>(
@@ -31,7 +32,24 @@ function AllOfferedProducts() {
       toast.success("Offered product deleted successfully");
     }
   };
-
+  const handleUpdateProductStatus = async (_id: string) => {
+    console.log("_id received in handleUpdateProductStatus:", _id); // Debug log
+    if (!_id) {
+      toast.error("Failed to update status: Invalid product ID");
+      return;
+    }
+    try {
+      const res = await updateProductStatus(_id).unwrap();
+      console.log(res,"the response")
+      if (res.success) {
+        toast.success("Offered product status updated successfully");
+      }
+    } catch (error) {
+      console.error("Error updating product status:", error);
+      toast.error("Failed to update product status");
+    }
+  };
+  
   const handleOfferedProductUpdate = (product: IOfferProduct) => {
     setSelectedProduct(product);
     setIsModalOpen(true);
@@ -41,7 +59,7 @@ function AllOfferedProducts() {
     setIsModalOpen(false);
     setSelectedProduct(null);
   };
-
+console.log(products)
   return (
     <div>
       <div className="my-10">
@@ -89,13 +107,13 @@ function AllOfferedProducts() {
                       </td>
                       <td className="border px-4 text-center">
                         {product?.offerStatus ? (
-                          <p className="text-emerald-600 font-semibold">
+                          <button onClick={()=>handleUpdateProductStatus(product._id!)} className="text-emerald-600 font-semibold">
                             Active
-                          </p>
+                          </button>
                         ) : (
-                          <p className="text-primary font-sans font-bold">
+                          <button onClick={()=>{handleUpdateProductStatus(product._id!)}} className="text-primary font-sans font-bold">
                             Off
-                          </p>
+                          </button>
                         )}
                       </td>
                       <td className="border px-4 text-center">
@@ -146,7 +164,7 @@ function UpdateModal({ product, onClose }: UpdateModalProps) {
   const [offerPercentage, setOfferPercentage] = useState<number>(
     product?.offerPercentage || 0
   );
-  const [selectedValue, setSelectedValue] = useState<string>('');
+  const [selectedValue, setSelectedValue] = useState<string>('general');
   const [offerStartDate, setOfferStartDate] = useState(product?.offerStartDate);
   const [offerEndDate, setOfferEndDate] = useState(product?.offerEndDate);
 
@@ -175,6 +193,8 @@ function UpdateModal({ product, onClose }: UpdateModalProps) {
         offerPrice,
         offerPercentage,
         offerType: selectedValue,
+        offerStartDate,
+        offerEndDate
       },
     }
     
@@ -243,7 +263,7 @@ function UpdateModal({ product, onClose }: UpdateModalProps) {
     className="border border-gray-700 mt-2 px-2 w-full"
     value={
       offerStartDate
-        ? new Date(offerStartDate).toISOString().slice(0, 16) // Convert to 'YYYY-MM-DDTHH:mm'
+        ? new Date(offerStartDate).toISOString().slice(0, 16) 
         : ''
     }
     onChange={(e) => setOfferStartDate(e.target.value)}

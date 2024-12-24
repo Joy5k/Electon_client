@@ -37,7 +37,7 @@ const offerApi = baseApi.injectEndpoints({
  updateAllDiscount: builder.mutation({
       query: (data) =>{
       return  {
-          url: `offerProduct/update/${data.id}`,
+          url: `/offerProduct/update/${data.id}`,
           method: "PUT",
           body:data.data
 
@@ -45,6 +45,18 @@ const offerApi = baseApi.injectEndpoints({
       },invalidatesTags:["offers"],
 
  }),
+ updateProductStatus: builder.mutation({
+  query: (_id) => {
+    console.log("Received _id in mutation:", _id); // Debugging log
+    // return {
+    //   url: `/offerProduct/updateStatus/${_id}`,
+    //   method: "PUT",
+    // };
+  },
+  invalidatesTags: ["offers"],
+}),
+
+
 deleteOfferedProduct: builder.mutation({
       query: (id) =>{
       return  {
@@ -69,5 +81,6 @@ useGetAllOfferedProductsQuery,
 useCreateDealOfTheDayMutation,
 useCreateDiscountMutation,
 useUpdateAllDiscountMutation,
+useUpdateProductStatusMutation,
 useDeleteOfferedProductMutation
 } = offerApi;
