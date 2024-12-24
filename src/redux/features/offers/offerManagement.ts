@@ -34,7 +34,17 @@ const offerApi = baseApi.injectEndpoints({
       },invalidatesTags:["offers"],
 
     }),
- 
+ updateAllDiscount: builder.mutation({
+      query: (data) =>{
+      return  {
+          url: `offerProduct/update/${data.id}`,
+          method: "PUT",
+          body:data.data
+
+        }
+      },invalidatesTags:["offers"],
+
+ }),
 deleteOfferedProduct: builder.mutation({
       query: (id) =>{
       return  {
@@ -58,5 +68,6 @@ export const {
 useGetAllOfferedProductsQuery,
 useCreateDealOfTheDayMutation,
 useCreateDiscountMutation,
+useUpdateAllDiscountMutation,
 useDeleteOfferedProductMutation
 } = offerApi;

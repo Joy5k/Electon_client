@@ -140,10 +140,12 @@ function AllOfferedProducts() {
 
 
 function UpdateModal({ product, onClose }: UpdateModalProps) {
+  const [updateDealOfTheDay] = useUpdateDealOfTheDayMutation();
   const [offerPrice, setOfferPrice] = useState<number>(product?.offerPrice || 0);
   const [offerPercentage, setOfferPercentage] = useState<number>(
     product?.offerPercentage || 0
   );
+  const [selectedValue, setSelectedValue] = useState<string>('');
 
   // Handle offer percentage change and update offer price
   const handlePercentageChange = (value: number) => {
@@ -163,7 +165,7 @@ function UpdateModal({ product, onClose }: UpdateModalProps) {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Form Data:");
+    console.log("Form Data:",{offerPercentage,offerPrice,selectedValue});
     // Update the form or send the data to the backend
     onClose()
   };
@@ -209,7 +211,7 @@ function UpdateModal({ product, onClose }: UpdateModalProps) {
           name="offerType"
           id="offerType"
           value={"offerType"}
-          // onChange={handleChange}
+          onChange={  (event)=> setSelectedValue(event.target.value)}
         >
           <option value="general">General</option>
           <option value="dealOfTheDay">Deal Of The Day</option>
