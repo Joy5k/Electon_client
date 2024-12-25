@@ -12,6 +12,15 @@ const offerApi = baseApi.injectEndpoints({
       },
       providesTags: ["offers"],
     }),
+    getDealOfTheDay: builder.query({
+      query: () => {
+        return {
+          url: "/offerProduct/dealOfTheDayOffer",
+          method: "GET",
+        };
+      },
+      providesTags: ["offers"],
+    }),
     getAllOfferedProducts: builder.query({
       query: () => {
         return {
@@ -87,6 +96,7 @@ deleteOfferedProduct: builder.mutation({
 export const {
 useGetAllOfferedProductsQuery,
 useGetDiscountQuery,
+useGetDealOfTheDayQuery,
 useCreateDealOfTheDayMutation,
 useCreateDiscountMutation,
 useUpdateAllDiscountMutation,

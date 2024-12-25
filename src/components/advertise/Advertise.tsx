@@ -1,6 +1,5 @@
 
 import { useNavigate } from 'react-router-dom'
-import tv from '../../assets/images/tv.png'
 import { useGetDiscountQuery } from '../../redux/features/offers/offerManagement'
 const Advertise=()=>{
     const navigate=useNavigate()
