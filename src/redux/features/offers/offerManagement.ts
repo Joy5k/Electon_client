@@ -47,11 +47,10 @@ const offerApi = baseApi.injectEndpoints({
  }),
  updateProductStatus: builder.mutation({
   query: (_id) => {
-    console.log("Received _id in mutation:", _id); // Debugging log
-    // return {
-    //   url: `/offerProduct/updateStatus/${_id}`,
-    //   method: "PUT",
-    // };
+    return {
+      url: `/offerProduct/updateStatus/${_id}`,
+      method: "PUT",
+    };
   },
   invalidatesTags: ["offers"],
 }),

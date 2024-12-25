@@ -40,10 +40,11 @@ function AllOfferedProducts() {
     }
     try {
       const res = await updateProductStatus(_id).unwrap();
-      console.log(res,"the response")
       if (res.success) {
-        toast.success("Offered product status updated successfully");
-      }
+        toast.success("Offered product status updated successfully", {
+          duration: 1000
+
+        });      }
     } catch (error) {
       console.error("Error updating product status:", error);
       toast.error("Failed to update product status");
@@ -59,7 +60,6 @@ function AllOfferedProducts() {
     setIsModalOpen(false);
     setSelectedProduct(null);
   };
-console.log(products)
   return (
     <div>
       <div className="my-10">
@@ -160,9 +160,9 @@ console.log(products)
 
 function UpdateModal({ product, onClose }: UpdateModalProps) {
   const [updateDealOfTheDay] = useUpdateAllDiscountMutation();
-  const [offerPrice, setOfferPrice] = useState<number>(product?.offerPrice || 0);
+  const [offerPrice, setOfferPrice] = useState<number>(Number(product?.offerPrice) || 0);
   const [offerPercentage, setOfferPercentage] = useState<number>(
-    product?.offerPercentage || 0
+   Number( product?.offerPercentage) || 0
   );
   const [selectedValue, setSelectedValue] = useState<string>('general');
   const [offerStartDate, setOfferStartDate] = useState(product?.offerStartDate);
