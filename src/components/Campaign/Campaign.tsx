@@ -3,42 +3,48 @@ import  { useState, useEffect } from 'react';
 import { FaShoppingBag } from 'react-icons/fa'
 import { FaHeart } from 'react-icons/fa6'
 import { useGetDealOfTheDayQuery } from '../../redux/features/offers/offerManagement';
-import { toast } from 'sonner';
 
 const Campaign=()=>{
     const {data}=useGetDealOfTheDayQuery({})
     const products=data?.data;
     const singleProduct=data?.data[0].productId;
+    const offerDate=data?.data[0]?.offerEndDate;
+   
+console.log(offerDate)
 
-    // const initialTime = Math.floor(
-    //     (new Date(products[0].offerStartDate).getTime() - Date.now()) / 1000
-    //   );
+    const targetDate = offerDate ? new Date(offerDate).getTime() : Date.now(); // Target date in milliseconds
+  console.log(targetDate)
+    const [timeLeft, setTimeLeft] = useState(targetDate - Date.now());
+console.log(timeLeft)
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setTimeLeft((prevTime) => {
+        const newTime = prevTime - 1000; // Decrease by 1 second (1000 ms)
+        if (newTime <= 0) {
+          clearInterval(interval); // Stop timer at 0
+          return 0;
+        }
+        return newTime;
+      });
+    }, 1000);
 
-    //   const [time, setTime] = useState(initialTime > 0 ? initialTime : 0);
-      const [time, setTime] = useState( 10)
+    return () => clearInterval(interval); // Cleanup on component unmount
+  }, []);
+
+      const formatTime = (milliseconds:number) => {
+        const totalSeconds = Math.floor(milliseconds / 1000);
+        const days = Math.floor(totalSeconds / (24 * 3600));
+        const hours = Math.floor((totalSeconds % (24 * 3600)) / 3600);
+        const minutes = Math.floor((totalSeconds % 3600) / 60);
+        const seconds = totalSeconds % 60;
     
-      useEffect(() => {
-        const interval = setInterval(() => {
-          setTime((prevTime) => {
-            if (prevTime <= 0) {
-              clearInterval(interval);
-              return 0; // Ensure the counter stops at 0
-            }
-            return prevTime - 1;
-          });
-        }, 1000);
-    
-        return () => clearInterval(interval); // Cleanup on component unmount
-      }, []);
+        return `${days}d ${hours}h ${minutes}m ${seconds}s`;
+      };
 return (
     <div>
         <div className='flex flex-col md:flex-row  justify-between items-center'>
             <p className='text-4xl text-white font-semibold ml-10 my-10'>Deal of The Day</p>
-            {/* <div className='flex justify-between gap-4 mr-1 md:mr-10 '>
-                <button className='text-white border border-primary border-dashed rounded-full p-2 hover:bg-gray-900'>20% off</button>
-                <button className='text-white border border-primary border-dashed rounded-full p-2 hover:bg-gray-900'>23% off</button>
-                <button className='text-white border border-primary border-dashed rounded-full p-2 hover:bg-gray-900'>27% off</button>
-            </div> */}
+          
         </div>
         <div className='flex flex-col md:flex-row justify-evenly px-4'>
            {
@@ -50,12 +56,14 @@ return (
                <div>
                <div className="flex justify-start items-center mt-10 ml-6">
                  <div >
-                   {
+                   {/* {
                     time ?   <p className="text-gray-600 text-5xl font-bold ">
                     End:{Math.floor(time / 60).toString().padStart(2, '0')}:
                     {(time % 60).toString().padStart(2, '0')}
                     </p> : <p onClick={()=>toast.warning("wait for next round")}  className='text-red-600  font-semibold underline cursor-pointer '>Offer has been closed</p>
-                   }
+                   } */}
+                         <p>Time Remaining: {timeLeft > 0 ? formatTime(timeLeft) : "Time's up!"}</p>
+
                     </div>
                     </div>
                </div>
