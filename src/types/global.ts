@@ -120,3 +120,9 @@ export interface IOfferProduct {
   offerType: "general" | "dealOfTheDay" | "other"; // Type of offer
   offerStatus: boolean; // Whether the offer is active
 }
+
+
+
+ export interface IProductId {
+  productId: IProduct;
+}

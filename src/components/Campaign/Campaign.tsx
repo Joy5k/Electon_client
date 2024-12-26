@@ -3,33 +3,35 @@ import  { useState, useEffect } from 'react';
 import { FaShoppingBag } from 'react-icons/fa'
 import { FaHeart } from 'react-icons/fa6'
 import { useGetDealOfTheDayQuery } from '../../redux/features/offers/offerManagement';
+import { IProductId } from '../../types';
 
 const Campaign=()=>{
     const {data}=useGetDealOfTheDayQuery({})
     const products=data?.data;
     const singleProduct=data?.data[0].productId;
-    const offerDate=data?.data[0]?.offerEndDate;
-   
-console.log(offerDate)
+    const offerDate = data?.data?.[0]?.offerEndDate;
 
-    const targetDate = offerDate ? new Date(offerDate).getTime() : Date.now(); // Target date in milliseconds
-  console.log(targetDate)
-    const [timeLeft, setTimeLeft] = useState(targetDate - Date.now());
-console.log(timeLeft)
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setTimeLeft((prevTime) => {
-        const newTime = prevTime - 1000; // Decrease by 1 second (1000 ms)
-        if (newTime <= 0) {
-          clearInterval(interval); // Stop timer at 0
-          return 0;
-        }
-        return newTime;
-      });
-    }, 1000);
-
-    return () => clearInterval(interval); // Cleanup on component unmount
-  }, []);
+    const [timeLeft, setTimeLeft] = useState<number>(0);
+  
+    useEffect(() => {
+      if (!offerDate) return;
+  
+      const targetDate = new Date(offerDate).getTime(); // Convert offerDate to milliseconds
+      const updateTimer = () => {
+        const now = Date.now();
+        const remainingTime = targetDate - now;
+        setTimeLeft(remainingTime > 0 ? remainingTime : 0); // Avoid negative values
+      };
+  
+      // Initialize the timer
+      updateTimer();
+  
+      // Start the interval
+      const interval = setInterval(updateTimer, 1000);
+  
+      return () => clearInterval(interval); // Cleanup interval on component unmount
+    }, [offerDate]); // Rerun when offerDate changes
+  
 
       const formatTime = (milliseconds:number) => {
         const totalSeconds = Math.floor(milliseconds / 1000);
@@ -81,7 +83,7 @@ return (
            }
             <div className=' border-gray-800 flex  flex-col  justify-center'>
             {
-  products?.slice(1,3).map((product, i: number) => {
+  products?.slice(1,3).map((product:IProductId, i: number) => {
     return (
       <div
         key={i}
