@@ -13,7 +13,7 @@ const ProductUploadForm = () => {
      const navigate = useNavigate();
      const [sellerId, setSellerId] = useState<string>("");
      const [product, setProduct] = useState<IProduct>({
-
+      
     title: "",
     description: "",
     category:"",

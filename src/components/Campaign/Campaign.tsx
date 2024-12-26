@@ -5,15 +5,26 @@ import { FaHeart } from 'react-icons/fa6'
 import { useGetDealOfTheDayQuery, useResetOfferProductDateAndStatusMutation } from '../../redux/features/offers/offerManagement';
 import { IProductId } from '../../types';
 import { toast } from 'sonner';
+import { useDispatch } from 'react-redux';
+import { AppDispatch } from '../../redux/store';
+import { addToWishlist } from '../../redux/features/admin/wishlistSlice';
 
 const Campaign=()=>{
     const {data}=useGetDealOfTheDayQuery({})
     const [resetOffer]=useResetOfferProductDateAndStatusMutation()
+    const dispatch = useDispatch<AppDispatch>();
+
+
+
+
     const products=data?.data;
     const singleProduct=data?.data[0].productId;
     const offerDate = data?.data?.[0]?.offerEndDate;
+   const [timeLeft, setTimeLeft] = useState<number>(0);
 
-    const [timeLeft, setTimeLeft] = useState<number>(0);
+
+
+// handle the offer product data and status progress
 
 const resetOfferProductDateAndStatus=async()=>{
   const result=await resetOffer({}).unwrap()
@@ -22,7 +33,7 @@ const resetOfferProductDateAndStatus=async()=>{
   }
 }
 
-
+// handle the product counter
 useEffect(() => {
   if (!offerDate) return;
   const targetDate = new Date(offerDate).getTime(); // Convert offerDate to milliseconds
@@ -44,8 +55,7 @@ useEffect(() => {
   return () => clearInterval(interval); 
 }, [offerDate]); 
 
-
-
+  // handle time calculation
       const formatTime = (milliseconds:number) => {
         const totalSeconds = Math.floor(milliseconds / 1000);
         const days = Math.floor(totalSeconds / (24 * 3600));
@@ -55,6 +65,22 @@ useEffect(() => {
     
         return `${days}d ${hours}h ${minutes}m ${seconds}s`;
       };
+
+ const handleAddToWishlist = (product: any) => {
+    const bookingProduct={
+      ...product,
+      productId:product._id,
+      userSelectedQuantity:1,
+      productColor:product.color[0] 
+    }
+    dispatch(addToWishlist(bookingProduct));
+    toast.success("Product added wishlist successfully")
+  };
+
+const handleProductBooking=()=>{
+
+}
+
 
 
 return (
@@ -80,10 +106,10 @@ return (
                     </div>
                </div>
                 <div className=' flex justify-evenly  text-xl mt-12 -ml-5 bg-transparent'>
-                   <button className='p-4 rounded-full border hover:bg-primary'>
+                   <button onClick={()=>handleProductBooking()} className='p-4 rounded-full border hover:bg-primary'>
                      <FaShoppingBag className='bg-transparent'></FaShoppingBag>
                     </button>
-                    <button className='p-4 rounded-full border hover:bg-primary'>
+                    <button onClick={() => handleAddToWishlist(singleProduct)} className='p-4 rounded-full border hover:bg-primary'>
                         <FaHeart className='bg-transparent'></FaHeart>
                     </button>
                 </div>
@@ -112,10 +138,10 @@ return (
             Price: {product?.productId?.price}$
           </p>
           <div className="flex justify-evenly text-xl mt-6 -ml-7 bg-transparent">
-            <button className="p-3 rounded-full border hover:bg-primary">
+            <button onClick={()=>handleProductBooking()} className="p-3 rounded-full border hover:bg-primary">
               <FaShoppingBag className="bg-transparent"></FaShoppingBag>
             </button>
-            <button className="p-3 rounded-full border hover:bg-primary">
+            <button onClick={() => handleAddToWishlist(product.productId)} className="p-3 rounded-full border hover:bg-primary">
               <FaHeart className="bg-transparent"></FaHeart>
             </button>
           </div>

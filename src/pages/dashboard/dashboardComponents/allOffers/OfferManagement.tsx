@@ -12,17 +12,17 @@ function OfferManagement() {
     const [submitProductDiscount]=useCreateDiscountMutation()
     const [isDiscountModalOpen, setDiscountModalOpen] = useState(false);
     const [isUpdateModalOpen, setUpdateModalOpen] = useState(false);
-    const [selectedProduct, setSelectedProduct] = useState<IProduct >({}as IProduct);
+    const [selectedProduct, setSelectedProduct] = useState<IProduct & { _id: string }>({ _id: "", title: "", price: 0 } as IProduct & { _id: string });
    
 
 
 
-    const handleOpenDiscountModal = (product:IProduct) => {
+    const handleOpenDiscountModal = (product: IProduct & { _id: string }) => {
         setSelectedProduct(product);
         setDiscountModalOpen(true);
     };
 
-    const handleOpenUpdateModal = (product:IProduct) => {
+    const handleOpenUpdateModal = (product: IProduct & { _id: string }) => {
         setSelectedProduct(product);
         setUpdateModalOpen(true);
     };
@@ -30,13 +30,13 @@ function OfferManagement() {
     const handleCloseModal = () => {
         setDiscountModalOpen(false);
         setUpdateModalOpen(false);
-        setSelectedProduct({} as IProduct);
+        setSelectedProduct({ _id: "", title: "", price: 0 } as IProduct & { _id: string });
     };
 
     // set the discount on server
     const handleDiscount=async(offerData: { offerPercentage: number; offerStartDate: string; offerEndDate: string; offerType: "general" | "dealOfTheDay" | "other"; }):Promise<void>=>{
         const offerProduct: IOfferProduct = {
-            productId: selectedProduct._id,
+            productId: selectedProduct._id!,
             offerPrice: selectedProduct.price * (1 - offerData.offerPercentage / 100),
             offerStatus:true,
             ...offerData
@@ -69,7 +69,7 @@ function OfferManagement() {
                         </tr>
                     </thead>
                     <tbody>
-                        {products?.map((product:IProduct, i:number) => (
+                        {products?.map((product: IProduct & { _id: string }, i: number) => (
                             <tr key={product?._id} className="border-b">
                                 <td className="border px-4">{i + 1}</td>
                                 <td className="border px-4 py-2">

@@ -6,10 +6,10 @@ import {
   useUpdateAllDiscountMutation,
   useUpdateProductStatusMutation,
 } from "../../../../redux/features/offers/offerManagement";
-import { IOfferProduct } from "../../../../types";
+import {  IProductId } from "../../../../types";
 
 interface UpdateModalProps {
-  product: IOfferProduct;
+  product: IProductId;
   onClose: () => void;
 }
 
@@ -22,7 +22,7 @@ function AllOfferedProducts() {
   const [updateProductStatus] = useUpdateProductStatusMutation();
   // Modal state
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedProduct, setSelectedProduct] = useState<IOfferProduct | null>(
+  const [selectedProduct, setSelectedProduct] = useState<IProductId | null>(
     null
   );
 
@@ -51,7 +51,7 @@ function AllOfferedProducts() {
     }
   };
   
-  const handleOfferedProductUpdate = (product: IOfferProduct) => {
+  const handleOfferedProductUpdate = (product: any) => {
     setSelectedProduct(product);
     setIsModalOpen(true);
   };
@@ -86,7 +86,7 @@ function AllOfferedProducts() {
                   </tr>
                 </thead>
                 <tbody>
-                  {products.map((product: IOfferProduct, i: number) => (
+                  {products.map((product: IProductId, i: number) => (
                     <tr key={i} className="border-b">
                       <td className="border px-4">{i + 1}</td>
                       <td className="border px-4 py-2">

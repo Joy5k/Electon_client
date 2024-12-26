@@ -111,7 +111,7 @@ const Wishlist = () => {
                 </td>
                 <td className="py-2 border-b">
                   <div className="flex justify-center items-center">
-                    ${product.price.toFixed(2)}
+                    ${product?.price?.toFixed(2)}
                   </div>
                 </td>
                 <td className="py-2 px-4 border-b">
