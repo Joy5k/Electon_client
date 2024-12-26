@@ -72,6 +72,15 @@ const offerApi = baseApi.injectEndpoints({
   },
   invalidatesTags: ["offers"],
 }),
+ resetOfferProductDateAndStatus: builder.mutation({
+  query: () => {
+    return {
+      url: `/offerProduct/resetOffer`,
+      method: "PUT",
+    };
+  },
+  invalidatesTags: ["offers"],
+}),
 
 
 deleteOfferedProduct: builder.mutation({
@@ -101,5 +110,6 @@ useCreateDealOfTheDayMutation,
 useCreateDiscountMutation,
 useUpdateAllDiscountMutation,
 useUpdateProductStatusMutation,
+useResetOfferProductDateAndStatusMutation,
 useDeleteOfferedProductMutation
 } = offerApi;

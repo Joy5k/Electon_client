@@ -2,36 +2,49 @@ import  { useState, useEffect } from 'react';
 
 import { FaShoppingBag } from 'react-icons/fa'
 import { FaHeart } from 'react-icons/fa6'
-import { useGetDealOfTheDayQuery } from '../../redux/features/offers/offerManagement';
+import { useGetDealOfTheDayQuery, useResetOfferProductDateAndStatusMutation } from '../../redux/features/offers/offerManagement';
 import { IProductId } from '../../types';
+import { toast } from 'sonner';
 
 const Campaign=()=>{
     const {data}=useGetDealOfTheDayQuery({})
+    const [resetOffer]=useResetOfferProductDateAndStatusMutation()
     const products=data?.data;
     const singleProduct=data?.data[0].productId;
     const offerDate = data?.data?.[0]?.offerEndDate;
 
     const [timeLeft, setTimeLeft] = useState<number>(0);
-  
-    useEffect(() => {
-      if (!offerDate) return;
-  
-      const targetDate = new Date(offerDate).getTime(); // Convert offerDate to milliseconds
-      const updateTimer = () => {
-        const now = Date.now();
-        const remainingTime = targetDate - now;
-        setTimeLeft(remainingTime > 0 ? remainingTime : 0); // Avoid negative values
-      };
-  
-      // Initialize the timer
-      updateTimer();
-  
-      // Start the interval
-      const interval = setInterval(updateTimer, 1000);
-  
-      return () => clearInterval(interval); // Cleanup interval on component unmount
-    }, [offerDate]); // Rerun when offerDate changes
-  
+
+const resetOfferProductDateAndStatus=async()=>{
+  const result=await resetOffer({}).unwrap()
+  if(result.success){
+    toast.success(" Officially product offered has been off ")
+  }
+}
+
+
+useEffect(() => {
+  if (!offerDate) return;
+  const targetDate = new Date(offerDate).getTime(); // Convert offerDate to milliseconds
+  const updateTimer = () => {
+    const now = Date.now();
+    const remainingTime = targetDate - now;
+    if(remainingTime > 0 ){
+      setTimeLeft(remainingTime); 
+
+    }
+    else{
+      resetOfferProductDateAndStatus()
+    }
+  };
+    updateTimer();
+
+  // Start the interval
+  const interval = setInterval(updateTimer, 1000);
+  return () => clearInterval(interval); 
+}, [offerDate]); 
+
+
 
       const formatTime = (milliseconds:number) => {
         const totalSeconds = Math.floor(milliseconds / 1000);
@@ -42,6 +55,8 @@ const Campaign=()=>{
     
         return `${days}d ${hours}h ${minutes}m ${seconds}s`;
       };
+
+
 return (
     <div>
         <div className='flex flex-col md:flex-row  justify-between items-center'>
@@ -58,13 +73,8 @@ return (
                <div>
                <div className="flex justify-start items-center mt-10 ml-6">
                  <div >
-                   {/* {
-                    time ?   <p className="text-gray-600 text-5xl font-bold ">
-                    End:{Math.floor(time / 60).toString().padStart(2, '0')}:
-                    {(time % 60).toString().padStart(2, '0')}
-                    </p> : <p onClick={()=>toast.warning("wait for next round")}  className='text-red-600  font-semibold underline cursor-pointer '>Offer has been closed</p>
-                   } */}
-                         <p>Time Remaining: {timeLeft > 0 ? formatTime(timeLeft) : "Time's up!"}</p>
+                
+                         <p>Offer Remaining: <span className='text-primary  block'>{timeLeft > 0 ? formatTime(timeLeft) : "Time's up!"}</span></p>
 
                     </div>
                     </div>
