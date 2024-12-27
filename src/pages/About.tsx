@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 
 const About = () => {
   return (
@@ -20,7 +21,7 @@ const About = () => {
         <div className=" shadow-md rounded-lg p-8">
           <h1 className="text-3xl font-bold  mb-4">About The Developer</h1>
           <p className="text-gray-400 leading-relaxed mb-4">
-            Hello! I’m <span className="text-primary font-semibold">Mehedi Hasan Joy</span>, a passionate Full Stack Web Developer. 
+            Hello! I’m <Link to="https://developer-mehedi.vercel.app" target="_blank" className="hover:underline text-primary font-semibold">Mehedi Hasan Joy</Link>, a passionate Full Stack Web Developer. 
             I specialize in building dynamic, responsive, and user-friendly web applications. 
           </p>
           <p className="text-gray-400 leading-relaxed mb-4">

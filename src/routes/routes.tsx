@@ -13,8 +13,8 @@ import ProtectedRoute from "../components/layout/ProtectedRoute";
 import Wishlist from "../pages/wishlist/Wishlist";
 import ProductDetail from "../pages/productDetails/ProductDetail";
 import Category from "../pages/category/Category";
-import ContactUs from "../pages/contactUs/ContactUs";
 import NotFound from "../pages/NotFound";
+import Contact from "../pages/Contact";
 
 const router = createBrowserRouter([
   {
@@ -40,7 +40,7 @@ const router = createBrowserRouter([
       },
       {
         path: "contact-us",
-        element: <ContactUs />
+        element: <Contact />
       },
       {
         path: "booking",
