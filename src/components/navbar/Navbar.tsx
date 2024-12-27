@@ -60,7 +60,7 @@ const Navbar=()=>{
 
       <div className="flex justify-between gap-6">
         <div>
-          <Link to="/" className="flex items-center">
+          <Link to="https://www.google.com/maps/place/Patuakhali/@22.3590336,90.3360658,389m/data=!3m1!1e3!4m6!3m5!1s0x30aab9406abb81a1:0xe1e479ed6811c97d!8m2!3d22.3589237!4d90.3280132!16s%2Fg%2F122zd966?entry=ttu&g_ep=EgoyMDI0MTIxMS4wIKXMDSoJLDEwMjExMjMzSAFQAw%3D%3D" target="_blank" className="flex items-center">
             <FaLocationDot />
             <p className="hover:text-primary">Our Store</p>
           </Link>
