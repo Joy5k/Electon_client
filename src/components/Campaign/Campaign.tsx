@@ -21,6 +21,7 @@ const Campaign=()=>{
     const singleProduct=data?.data[0].productId;
     const offerDate = data?.data?.[0]?.offerEndDate;
    const [timeLeft, setTimeLeft] = useState<number>(0);
+   const [hasReset, setHasReset] = useState(false); // Track if reset has been called
 
 
 
@@ -29,31 +30,35 @@ const Campaign=()=>{
 const resetOfferProductDateAndStatus=async()=>{
   const result=await resetOffer({}).unwrap()
   if(result.success){
-    toast.success(" Officially product offered has been off ")
+    
+    // toast.success(" Officially product offered has been off ")
   }
 }
 
 // handle the product counter
 useEffect(() => {
   if (!offerDate) return;
+
   const targetDate = new Date(offerDate).getTime(); // Convert offerDate to milliseconds
+
   const updateTimer = () => {
     const now = Date.now();
     const remainingTime = targetDate - now;
-    if(remainingTime > 0 ){
-      setTimeLeft(remainingTime); 
 
-    }
-    else{
-      resetOfferProductDateAndStatus()
+    if (remainingTime > 0) {
+      setTimeLeft(remainingTime); // Update the remaining time
+    } else if (!hasReset) {
+      setHasReset(true); // Set the flag to true to prevent multiple calls
+      resetOfferProductDateAndStatus();
     }
   };
-    updateTimer();
 
-  // Start the interval
+  // Start the timer and immediately invoke it
   const interval = setInterval(updateTimer, 1000);
-  return () => clearInterval(interval); 
-}, [offerDate]); 
+  updateTimer();
+
+  return () => clearInterval(interval); // Clean up the interval on component unmount
+}, [offerDate, hasReset]); // Depend on offerDate and hasReset
 
   // handle time calculation
       const formatTime = (milliseconds:number) => {
