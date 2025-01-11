@@ -91,7 +91,7 @@ function AllOfferedProducts() {
                       <td className="border px-4">{i + 1}</td>
                       <td className="border px-4 py-2">
                         <img
-                          src="https://cdn-icons-png.flaticon.com/512/1554/1554590.png"
+                          src={product.productId?.image as string||"https://cdn-icons-png.flaticon.com/512/1554/1554590.png"}
                           alt="product title"
                           className="w-16 h-16 object-cover rounded"
                         />

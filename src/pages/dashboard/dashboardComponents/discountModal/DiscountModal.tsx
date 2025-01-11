@@ -1,81 +1,69 @@
 import { useState } from "react";
 import { IOfferProduct } from "../../../../types";
 
-
 interface DiscountModalProps {
+  selectedProduct: { _id: string; title: string; price: number };
+  handleCloseModal: () => void;
+  handleDiscount: (offerData: {
+    productId: string;
+    offerPercentage: number;
+    offerPrice: number;
+    offerStartDate: string;
+    offerEndDate: string;
+    offerType: "general" | "dealOfTheDay" | "other";
+    offerStatus: boolean;
+  }) => void;
+}
 
-    selectedProduct: { _id:string,title: string; price: number };
-  
-    handleCloseModal: () => void;
-  
-    handleDiscount: (offerData: {
-  
-      productId: string;
-  
-      offerPercentage: number;
-  
-      offerPrice: number;
-  
-      offerStartDate: string;
-  
-      offerEndDate: string;
-  
-      offerType: "general" | "dealOfTheDay" | "other";
-  
-      offerStatus: boolean;
-  
-    }) => void;
-  
-  }
-  
-
-function DiscountModal({ selectedProduct, handleCloseModal, handleDiscount }: DiscountModalProps) {
+function DiscountModal({
+  selectedProduct,
+  handleCloseModal,
+  handleDiscount,
+}: DiscountModalProps) {
   const [discountPercentage, setDiscountPercentage] = useState(0);
   const [offerStartDate, setOfferStartDate] = useState("");
   const [offerEndDate, setOfferEndDate] = useState("");
-  const [offerType, setOfferType] = useState<"general" | "dealOfTheDay" | "other">("general"); // Default value
+  const [offerType, setOfferType] = useState<"general" | "dealOfTheDay" | "other">("general");
 
   const handleSave = () => {
-    const offerData:IOfferProduct = {
-     productId: selectedProduct?._id,
-      offerPercentage:discountPercentage,
-      offerPrice:parseFloat((selectedProduct.price - (selectedProduct.price * discountPercentage) / 100).toFixed(2)),
+    const offerPrice = parseFloat(
+      (selectedProduct.price - (selectedProduct.price * discountPercentage) / 100).toFixed(2)
+    );
+    const offerData: IOfferProduct = {
+      productId: selectedProduct._id,
+      offerPercentage: discountPercentage,
+      offerPrice,
       offerStartDate,
       offerEndDate,
       offerType,
-      offerStatus:true
+      offerStatus: true,
     };
     handleDiscount(offerData);
   };
 
   return (
     <div className="fixed inset-0 bg-gray-800 bg-opacity-75 flex items-center justify-center">
-      <div className="p-4 rounded shadow-md w-96 ">
-        <h2 className="text-lg font-semibold">
+      <div className="p-4 bg-white rounded shadow-md w-96">
+        <h2 className="text-lg font-semibold mb-4">
           Set Discount for {selectedProduct?.title}
         </h2>
-        <p>Regular Price: {selectedProduct?.price}</p>
-        <input
-          onChange={(e) =>
-            setDiscountPercentage(Math.max(0, Math.min(100, Number(e.target.value))))
-          }
-          max={100}
-          min={1}
-          className="border border-gray-700 mt-2 px-2 w-full"
-          type="number"
-          name="discountPercentage"
-          value={discountPercentage}
-          onInput={(e) => {
-            const value = Number(e.currentTarget.value);
-            if (value > 100) {
-              e.currentTarget.value = "100";
+        <p className="mb-4">Regular Price: ${selectedProduct?.price}</p>
+        <label className="block">
+          <span className="text-sm font-medium">Discount Percentage</span>
+          <input
+            type="number"
+            className="border border-gray-700 mt-2 px-2 w-full"
+            value={discountPercentage}
+            min={0}
+            max={100}
+            onChange={(e) =>
+              setDiscountPercentage(Math.max(0, Math.min(100, Number(e.target.value))))
             }
-          }}
-        />
-        <p className="text-gray-700">
-          Possible Price:{" "}
-          {selectedProduct?.price -
-            (selectedProduct?.price * discountPercentage) / 100}
+          />
+        </label>
+        <p className="text-gray-700 mt-2">
+          Possible Price: $
+          {(selectedProduct.price - (selectedProduct.price * discountPercentage) / 100).toFixed(2)}
         </p>
 
         <label className="block mt-4">
@@ -103,7 +91,9 @@ function DiscountModal({ selectedProduct, handleCloseModal, handleDiscount }: Di
           <select
             className="border border-gray-700 mt-2 px-2 w-full"
             value={offerType}
-            onChange={(e) => setOfferType(e.target.value as "general" | "dealOfTheDay" | "other")}
+            onChange={(e) =>
+              setOfferType(e.target.value as "general" | "dealOfTheDay" | "other")
+            }
           >
             <option value="general">General</option>
             <option value="dealOfTheDay">Deal of The Day</option>
@@ -111,16 +101,16 @@ function DiscountModal({ selectedProduct, handleCloseModal, handleDiscount }: Di
           </select>
         </label>
 
-        <div className="flex  flex-col md:flex-row lg:flex-row justify-between mt-6">
+        <div className="flex justify-between mt-6">
           <button
             onClick={handleCloseModal}
-            className="px-2 bg-red-500 hover:bg-red-600 text-white rounded w-full md:w-20 lg:w-28 "
+            className="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded"
           >
             Close
           </button>
           <button
             onClick={handleSave}
-            className="px-2 hover:bg-emerald-700 bg-emerald-600 text-white rounded w-full md:w-20 lg:w-28 "
+            className="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded"
           >
             Save
           </button>
