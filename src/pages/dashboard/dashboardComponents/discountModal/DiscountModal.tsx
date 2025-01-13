@@ -26,18 +26,35 @@ function DiscountModal({
   const [offerType, setOfferType] = useState<"general" | "dealOfTheDay" | "other">("general");
 
   const handleSave = () => {
+    if (!offerStartDate || !offerEndDate) {
+      alert("Please provide both start and end dates.");
+      return;
+    }
+
+    // Convert start and end dates to ISO strings for consistency
+    const parsedStartDate = new Date(offerStartDate).toISOString();
+    const parsedEndDate = new Date(offerEndDate).toISOString();
+
+    if (new Date(parsedStartDate) >= new Date(parsedEndDate)) {
+      alert("The end date must be after the start date.");
+      return;
+    }
+
     const offerPrice = parseFloat(
       (selectedProduct.price - (selectedProduct.price * discountPercentage) / 100).toFixed(2)
     );
+
     const offerData: IOfferProduct = {
       productId: selectedProduct._id,
       offerPercentage: discountPercentage,
       offerPrice,
-      offerStartDate,
-      offerEndDate,
+      offerStartDate: parsedStartDate,
+      offerEndDate: parsedEndDate,
       offerType,
       offerStatus: true,
     };
+
+    console.log("Offer Data:", offerData); // Debugging
     handleDiscount(offerData);
   };
 
