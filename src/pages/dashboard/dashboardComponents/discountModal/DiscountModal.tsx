@@ -21,42 +21,40 @@ function DiscountModal({
   handleDiscount,
 }: DiscountModalProps) {
   const [discountPercentage, setDiscountPercentage] = useState(0);
-  const [offerStartDate, setOfferStartDate] = useState("");
-  const [offerEndDate, setOfferEndDate] = useState("");
+  const [offerStartDate, setOfferStartDate] = useState<string>("");
+  const [offerEndDate, setOfferEndDate] = useState<string>("");
   const [offerType, setOfferType] = useState<"general" | "dealOfTheDay" | "other">("general");
 
   const handleSave = () => {
-    if (!offerStartDate || !offerEndDate) {
-      alert("Please provide both start and end dates.");
-      return;
-    }
-
-    // Convert start and end dates to ISO strings for consistency
-    const parsedStartDate = new Date(offerStartDate).toISOString();
-    const parsedEndDate = new Date(offerEndDate).toISOString();
-
-    if (new Date(parsedStartDate) >= new Date(parsedEndDate)) {
-      alert("The end date must be after the start date.");
-      return;
-    }
-
     const offerPrice = parseFloat(
       (selectedProduct.price - (selectedProduct.price * discountPercentage) / 100).toFixed(2)
     );
+
+    // Ensure proper formatting of date-time
+    const startDate = new Date(offerStartDate).toISOString();
+    const endDate = new Date(offerEndDate).toISOString();
 
     const offerData: IOfferProduct = {
       productId: selectedProduct._id,
       offerPercentage: discountPercentage,
       offerPrice,
-      offerStartDate: parsedStartDate,
-      offerEndDate: parsedEndDate,
+      offerStartDate: startDate,
+      offerEndDate: endDate,
       offerType,
       offerStatus: true,
     };
 
-    console.log("Offer Data:", offerData); // Debugging
     handleDiscount(offerData);
   };
+
+  const handleDateChange = (setter: React.Dispatch<React.SetStateAction<string>>) => 
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const value = e.target.value;
+      // Validate and set the date-time value
+      if (value) {
+        setter(value);
+      }
+    };
 
   return (
     <div className="fixed inset-0 bg-gray-800 bg-opacity-75 flex items-center justify-center">
@@ -89,7 +87,7 @@ function DiscountModal({
             type="datetime-local"
             className="border border-gray-700 mt-2 px-2 w-full"
             value={offerStartDate}
-            onChange={(e) => setOfferStartDate(e.target.value)}
+            onChange={handleDateChange(setOfferStartDate)}
           />
         </label>
 
@@ -99,7 +97,7 @@ function DiscountModal({
             type="datetime-local"
             className="border border-gray-700 mt-2 px-2 w-full"
             value={offerEndDate}
-            onChange={(e) => setOfferEndDate(e.target.value)}
+            onChange={handleDateChange(setOfferEndDate)}
           />
         </label>
 
