@@ -26,21 +26,20 @@ function DiscountModal({
   const [offerType, setOfferType] = useState<"general" | "dealOfTheDay" | "other">("general");
 
   const handleSave = () => {
-    if (!offerStartDate || !offerEndDate) {
-      alert("Please select valid start and end dates.");
-      return;
-    }
-
     const offerPrice = parseFloat(
       (selectedProduct.price - (selectedProduct.price * discountPercentage) / 100).toFixed(2)
     );
+
+    // Ensure proper formatting of date-time
+    const startDate = new Date(offerStartDate).toISOString();
+    const endDate = new Date(offerEndDate).toISOString();
 
     const offerData: IOfferProduct = {
       productId: selectedProduct._id,
       offerPercentage: discountPercentage,
       offerPrice,
-      offerStartDate: new Date(offerStartDate).toISOString(),
-      offerEndDate: new Date(offerEndDate).toISOString(),
+      offerStartDate: startDate,
+      offerEndDate: endDate,
       offerType,
       offerStatus: true,
     };
@@ -50,7 +49,11 @@ function DiscountModal({
 
   const handleDateChange = (setter: React.Dispatch<React.SetStateAction<string>>) => 
     (e: React.ChangeEvent<HTMLInputElement>) => {
-      setter(e.target.value);
+      const value = e.target.value;
+      // Validate and set the date-time value
+      if (value) {
+        setter(value);
+      }
     };
 
   return (
@@ -74,7 +77,7 @@ function DiscountModal({
           />
         </label>
         <p className="text-gray-700 mt-2">
-          Possible Price: $ 
+          Possible Price: $
           {(selectedProduct.price - (selectedProduct.price * discountPercentage) / 100).toFixed(2)}
         </p>
 
