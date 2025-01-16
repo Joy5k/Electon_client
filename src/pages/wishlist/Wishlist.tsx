@@ -133,7 +133,7 @@ const Wishlist = () => {
                 </td>
                 <td className="py-2 px-4 border-b">
                   <div className="flex justify-center items-center">
-                    ${(product.price * product.quantity).toFixed(2)}
+                    ${(product.price * (product.userSelectedQuantity ? product.userSelectedQuantity : 1)).toFixed(2)}
                   </div>
                 </td>
                 <td className="py-2 px-4 border-b align-middle">
