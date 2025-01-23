@@ -97,7 +97,6 @@ const Chat = () => {
 
   // Super admin: Mock active users list
   useEffect(() => {
-    console.log(data?.data,"chatting array")
     if (role === 'super_admin') {
       // Mock active users for demonstration
       const users = data?.data.map((user: IMessage) => ({ email: user.room })) || [];
