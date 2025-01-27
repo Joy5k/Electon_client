@@ -1,24 +1,26 @@
-// src/hooks/useSocket.ts
-import { useEffect, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import { io, Socket } from 'socket.io-client';
 
-const SOCKET_URL = 'https://electon-server-three.vercel.app'; // Replace with your server URL
-// const SOCKET_URL = 'http://localhost:5000'; // Replace with your server URL
+const SOCKET_URL = "https://electon-server-three.vercel.app" 
+
 
 const useSocket = () => {
-  const [socket, setSocket] = useState<Socket | null>(null);
+    const socketRef = useRef<Socket | null>(null);
 
-  useEffect(() => {
-    const socketIo = io(SOCKET_URL);
+    useEffect(() => {
+        const socketIo = io(SOCKET_URL, {
+            transports: ['websocket', 'polling'],
+            withCredentials: true,
+        });
 
-    setSocket(socketIo);
+        socketRef.current = socketIo;
 
-    return () => {
-      socketIo.disconnect();
-    };
-  }, []);
+        return () => {
+            socketIo.disconnect();
+        };
+    }, []);
 
-  return socket;
+    return socketRef.current;
 };
 
 export default useSocket;

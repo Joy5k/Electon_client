@@ -1,4 +1,5 @@
 
+import { Image } from 'antd';
 import banner from '../assets/banner4.png'
 import Advertise from '../components/advertise/Advertise';
 import BlogEvents from '../components/BlogEvents/BlogEvents';
@@ -22,7 +23,7 @@ const HomePage=()=>{
           </div>
           {/* banner image */}
           <div className='flex-1 py-12'>
-            <img className='bg-transparent w-full h-fit' src={banner} alt="Banner Image" />
+            <Image className='bg-transparent w-full h-fit' src={banner} alt="Banner Image" />
           </div>
         </div>
          <CategorySlider></CategorySlider>
