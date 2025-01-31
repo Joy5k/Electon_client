@@ -9,7 +9,10 @@ import CategorySlider from '../components/catergorySlider/categorySlider';
 import CustomerReview from '../components/customerReview/CustomerReview';
 import Features from '../components/features/Features';
 import PopularProduct from '../components/popularProduct/PopularProduct';
+import { useGetSingleProductQuery } from '../redux/features/admin/productManagementApi';
 const HomePage=()=>{
+  const {data}=useGetSingleProductQuery("679e3fe387e4bf1f5ea8392e")
+  console.log(data)
 
     return(
      <div>
