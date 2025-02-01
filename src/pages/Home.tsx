@@ -10,7 +10,7 @@ import CustomerReview from '../components/customerReview/CustomerReview';
 import Features from '../components/features/Features';
 import PopularProduct from '../components/popularProduct/PopularProduct';
 import { useGetSingleProductQuery } from '../redux/features/admin/productManagementApi';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 const HomePage=()=>{
       const navigate=useNavigate()
   const {data}=useGetSingleProductQuery("679e3fe387e4bf1f5ea8392e")
@@ -38,7 +38,7 @@ const HomePage=()=>{
             <h3 className="text-7xl text-white font-bold flex flex-col gap-3 text-center md:text-start"><span>Portable</span><span >Speaker</span></h3>
             <div className="flex gap-3 mt-20 items-center justify-center md:justify-start">
             <button onClick={()=>handleProceedToCheckout()} className="capitalize text-white bg-primary hover:bg-gray-800 hover:text-primary p-4 rounded-full text-xl font-bold ">Shop Now</button>
-            <button className="capitalize text-white hover:bg-gray-800 hover:text-white p-4 rounded-full text-xl font-bold border">View more</button>
+            <Link to="/category"><button className="capitalize text-white hover:bg-gray-800 hover:text-white p-4 rounded-full text-xl font-bold border">View more</button></Link>
             </div>
           </div>
           {/* banner image */}
