@@ -15,8 +15,13 @@ const HomePage=()=>{
       const navigate=useNavigate()
   const {data}=useGetSingleProductQuery("679e3fe387e4bf1f5ea8392e")
   const product=data?.data;
-  
+  const token=localStorage.getItem('token');
+
   const handleProceedToCheckout = () => {
+    if(!token){
+      navigate('/login');
+
+    }
     if (product.length === 0) {
       alert('Please select at least one product to proceed.');
       return;

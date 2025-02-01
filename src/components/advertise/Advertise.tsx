@@ -5,8 +5,13 @@ const Advertise=()=>{
     const navigate=useNavigate()
     const {data}=useGetDiscountQuery({})
    const product=data?.data?.productId
-   
+   const token=localStorage.getItem('token');
+
    const handleProceedToCheckout = () => {
+    if(!token){
+      navigate('/login');
+
+    }
     if (product.length === 0) {
       alert('Please select at least one product to proceed.');
       return;
