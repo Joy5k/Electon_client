@@ -134,3 +134,9 @@ export interface IOfferProduct {
   offerStatus: boolean; 
 
 }
+export interface ICategory {
+  _id: string;
+  category: string;
+  totalProducts: number;
+  products: IProduct[];
+}

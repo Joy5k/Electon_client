@@ -9,6 +9,7 @@ import { IProduct } from "../../types";
 import { toast } from "sonner";
 import { useCreateBookingMutation } from "../../redux/features/bookingManagement/bookingManagement";
 import { useAppSelector } from "../../redux/hooks";
+import Spinner from "../Spinner/Spinner";
 
 
 const PopularProduct = () => {
@@ -23,7 +24,7 @@ const PopularProduct = () => {
   const [selectedColor, setSelectedColor] = useState<string>("");
   
   const [addToCart,{isLoading:bookingLoader}]=useCreateBookingMutation()
-  const{data}=useAllProductsQuery({searchTerm:queryText})
+  const{data,isLoading}=useAllProductsQuery({searchTerm:queryText})
   const products: IProduct[] = data?.data ?? [];
 
 useEffect(()=>{
@@ -84,6 +85,9 @@ const handleProductQueryButton=(query:string)=>{
   seQueryText(query)
 }
 
+if(isLoading){
+  return <Spinner></Spinner>
+}
 
   return (
     <div className="p-4  border-b-2 border-dashed border-gray-800">

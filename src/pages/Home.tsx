@@ -1,6 +1,5 @@
 
 import { Image } from 'antd';
-import banner from '../assets/banner4.png'
 import Advertise from '../components/advertise/Advertise';
 import BlogEvents from '../components/BlogEvents/BlogEvents';
 import Brand from '../components/brand/Brand';
@@ -12,10 +11,14 @@ import PopularProduct from '../components/popularProduct/PopularProduct';
 import { useGetSingleProductQuery } from '../redux/features/admin/productManagementApi';
 import { Link, useNavigate } from 'react-router-dom';
 const HomePage=()=>{
-      const navigate=useNavigate()
+  const navigate=useNavigate()
+
   const {data}=useGetSingleProductQuery("679e3fe387e4bf1f5ea8392e")
+
+
   const product=data?.data;
   const token=localStorage.getItem('token');
+
 
   const handleProceedToCheckout = () => {
     if(!token){
@@ -43,7 +46,7 @@ const HomePage=()=>{
           </div>
           {/* banner image */}
           <div className='flex-1 py-12'>
-            <Image className='bg-transparent w-full h-fit' src={banner} alt="Banner Image" />
+            <Image className='bg-transparent w-full h-fit' src={"https://i.ibb.co.com/5hDf7dP0/banner.png"} alt="Banner Image" />
           </div>
         </div>
          <CategorySlider></CategorySlider>

@@ -3,6 +3,15 @@ import { baseApi } from "../../api/baseApi";
 const productManagementApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
   
+    getAllCategories: builder.query({
+      query: () =>{
+      return  {
+          url: `/product/category`,
+          method: "GET",
+        }
+      },providesTags:["products"],
+
+    }),
     allProducts: builder.query({
       query: (query) =>{
       return  {
@@ -53,6 +62,7 @@ const productManagementApi = baseApi.injectEndpoints({
 });
 
 export const {
+  useGetAllCategoriesQuery,
   useAllProductsQuery,
   useGetSingleProductQuery,
   useCreateProductMutation,
