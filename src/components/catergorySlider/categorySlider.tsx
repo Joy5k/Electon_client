@@ -2,15 +2,12 @@
 import { Link } from 'react-router-dom'
 import { useGetAllCategoriesQuery } from '../../redux/features/admin/productManagementApi';
 import { ICategory } from '../../types';
-import Spinner from '../Spinner/Spinner';
 const CategorySlider = () => {
-  const {data:categories,isLoading}=useGetAllCategoriesQuery({})
+  const {data:categories}=useGetAllCategoriesQuery({})
   const slicedCategories=categories?.data.slice(0,5)
 
 
-if(isLoading){
-  return <Spinner></Spinner>
-}
+
   return (
    <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 mx-auto border-t border-dashed my-16'>
   
