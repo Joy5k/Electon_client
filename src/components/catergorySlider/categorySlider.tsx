@@ -21,7 +21,7 @@ const CategorySlider = () => {
 {(category?.category === "pc" ? "PC & Laptop" : category?.category ?? "").toUpperCase()}
 </Link>
 
-        <Link to="/">
+        <Link to="/category">
       <button className="relative bg-black text-white  text-lg py-2 px-4 rounded overflow-hidden group">
         <span className="block text-sm bg-primary px-2 rounded-sm ">10+ items</span>
         <span className="absolute w-full underline inset-0 flex items-center justify-center bg-black text-primary  rounded transform scale-0 group-hover:scale-100 transition-transform duration-300">
