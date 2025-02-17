@@ -19,7 +19,10 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: '14'
+          node-version: '20'
+
+      - name: Clean npm cache
+        run: npm cache clean --force
 
       - name: Install dependencies (Frontend)
         run: npm install
@@ -28,14 +31,14 @@ jobs:
         run: npm run build
 
       - name: Deploy to Vercel
-        uses: amondnet/vercel-action@v20
+        uses: amondnet/vercel-action@v21
         with:
           vercel-token: ${{ secrets.VERCEL_TOKEN }}
           vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
           vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
           vercel-args: '--prod'
 
-  # Electon build
+  # Electron build
   electon-build:
     runs-on: ubuntu-latest
     steps:
@@ -45,16 +48,16 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: '14'
+          node-version: '20'
 
-      - name: Install dependencies (Electon)
+      - name: Install dependencies (Electron)
         run: npm install
 
-      - name: Build Electon app
-        run: npm run build  # Assuming 'npm run build' builds both the web and the Electon app
+      - name: Build Electron app
+        run: npm run build
 
-      - name: Upload Electon build artifact
+      - name: Upload Electron build artifact
         uses: actions/upload-artifact@v2
         with:
           name: electon-app
-          path: ./dist/*  # Ensure this points to your Electon app build output (e.g., 'dist' folder)
+          path: ./dist/*
