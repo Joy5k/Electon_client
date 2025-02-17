@@ -47,14 +47,14 @@ jobs:
         with:
           node-version: '14'
 
-      - name: Install dependencies (Electron)
+      - name: Install dependencies (Electon)
         run: npm install
 
-      - name: Build Electron app
-        run: npm run build  # Assuming 'npm run build' builds both the web and the Electron app
+      - name: Build Electon app
+        run: npm run build  # Assuming 'npm run build' builds both the web and the Electon app
 
-      - name: Upload Electron build artifact
+      - name: Upload Electon build artifact
         uses: actions/upload-artifact@v2
         with:
-          name: electron-app
-          path: ./dist/*  # Ensure this points to your Electron app build output (e.g., 'dist' folder)
+          name: electon-app
+          path: ./dist/*  # Ensure this points to your Electon app build output (e.g., 'dist' folder)
