@@ -9,7 +9,7 @@ import { MdEdit } from "react-icons/md";
 import Spinner from "../../components/Spinner/Spinner";
 import { FiAlertTriangle } from "react-icons/fi";
 import Cookies from 'js-cookie';
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Profile = () => {
    // redux queries and mutations
@@ -166,7 +166,7 @@ useEffect(() => {
 const createAuth2Secret=async():Promise<void>=>{
   const res:IAuthResponse=await qrCodeData({}).unwrap()
   setQrCodeSecrete(res.data)
-
+console.log(res.data)
 }
 
 // verify qr authentication code
@@ -378,7 +378,7 @@ return (
         <div className="flex justify-center flex-col items-center align-middle ">
           <img src={qrCodeSecret?.qrCode} className="w-fit" alt="qr code" />
           <p className="mt-5 font-sans font-bold">Note: <span className="text-primary animate-pulse">{qrCodeSecret?.message}</span></p>
-      
+       <button>Visit: <Link className="text-blue-500 underline cursor-pointer p-1" to={`otpauth://totp/MyApp?secret=${qrCodeSecret?.secret}&issuer=MyApp`}>Alternative authentication link</Link></button>
         </div>
         <div className="mt-6">
         <label htmlFor="verifyCode" className="font-bold text-start w-full">Enter 6 Digit Code</label> <br />
