@@ -31,14 +31,14 @@ jobs:
         run: npm run build
 
       - name: Deploy to Vercel
-        uses: amondnet/vercel-action@v21
+        uses: amondnet/vercel-action@v20
         with:
           vercel-token: ${{ secrets.VERCEL_TOKEN }}
           vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
           vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
           vercel-args: '--prod'
 
-  # Electron build
+  # Electon build
   electon-build:
     runs-on: ubuntu-latest
     steps:
@@ -50,13 +50,13 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Install dependencies (Electron)
+      - name: Install dependencies (Electon)
         run: npm install
 
-      - name: Build Electron app
+      - name: Build Electon app
         run: npm run build
 
-      - name: Upload Electron build artifact
+      - name: Upload Electon build artifact
         uses: actions/upload-artifact@v2
         with:
           name: electon-app
