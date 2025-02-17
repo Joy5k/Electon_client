@@ -1,0 +1,60 @@
+name: Electon_Client CI/CD
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  # Frontend build and deploy to Vercel (React + Vite)
+  frontend:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+
+      - name: Install dependencies (Frontend)
+        run: npm install
+
+      - name: Build the React app with Vite
+        run: npm run build
+
+      - name: Deploy to Vercel
+        uses: amondnet/vercel-action@v20
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
+          vercel-args: '--prod'
+
+  # Electon build
+  electon-build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+
+      - name: Install dependencies (Electron)
+        run: npm install
+
+      - name: Build Electron app
+        run: npm run build  # Assuming 'npm run build' builds both the web and the Electron app
+
+      - name: Upload Electron build artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: electron-app
+          path: ./dist/*  # Ensure this points to your Electron app build output (e.g., 'dist' folder)
