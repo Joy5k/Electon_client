@@ -57,7 +57,7 @@ jobs:
         run: npm run build
 
       - name: Upload Electon build artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v2
         with:
           name: electon-app
           path: ./dist/*
