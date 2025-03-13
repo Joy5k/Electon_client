@@ -11,9 +11,14 @@ const Wishlist = () => {
   const dispatch = useAppDispatch();
   const wishlist = useAppSelector((state: RootState) => state.wishlist.items);
   const [addToCart] = useCreateBookingMutation();
-
+  const authToken=localStorage.getItem('token')
   //   adding the product wishlist to cart
   const handleAddToCart = async (payload: any) => {
+    if (!authToken) {
+      navigate('/login');
+      return;
+    }
+
     const product = wishlist.find((item) => item._id === payload._id);
 
     if (!product) return;
