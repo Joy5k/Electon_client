@@ -46,111 +46,131 @@ function Overview() {
   const decoded=verifyToken(token) as {role:string}
  
 return (
-    <div className="w-full" >
-     {
-      isLoading ||userLoading ? <div className="flex justify-center items-center align-middle mx-auto w-11/12"><Spinner></Spinner></div> :
-      <div className="">
-      {/* overview carts */}
-      <h3 className="text-xl font-bold mb-5 bg-transparent">Overview</h3>
-    <div className="flex flex-col md:flex-row lg:flex-row mb-5 gap-3">
-      {/* products cart */}
-      <div className=" bg-emerald-800 p-3 w-52 h-36 rounded-lg ">
-        <div className=" flex flex-row-reverse justify-between bg-transparent ">
-        <CiBoxes className="bg-transparent text-7xl mt-5 " />
-
-        <div className="bg-transparent">
-        <p className="text-white  bg-transparent"> Products</p>
-        <p className="text-white text-4xl py-5 bg-transparent">{products?.data.length}</p>
+    <div className="w-full min-h-screen bg-black text-gray-100 p-6">
+      {isLoading || userLoading ? (
+        <div className="flex justify-center items-center h-screen">
+          <Spinner />
         </div>
+      ) : (
+        <div className="space-y-8">
+          {/* Header */}
+          <div className="pb-4 border-b border-gray-800">
+            <h3 className="text-3xl font-bold text-emerald-400">Dashboard Overview</h3>
+          </div>
+
+          {/* Stats Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
+            {/* Products Card */}
+            <div className="bg-gray-950 border border-gray-900 p-5 rounded-xl hover:transform hover:scale-105 transition-all duration-300 shadow-lg">
+              <div className="flex justify-between items-center">
+                <div>
+                  <p className="text-gray-400 text-sm mb-2">Total Products</p>
+                  <p className="text-3xl font-bold text-emerald-400">{products?.data.length}</p>
+                </div>
+                <div className="p-3 bg-emerald-900/20 rounded-full">
+                  <CiBoxes className="text-4xl text-emerald-400" />
+                </div>
+              </div>
+              <div className="mt-4 flex items-center justify-between text-sm">
+                <span className="text-emerald-400 flex items-center">
+                  <BsGraphUpArrow className="mr-2" />
+                  {(Number(products?.data?.length) * 3.67).toFixed(2)}%
+                </span>
+                <span className="text-gray-400">Last 30 days</span>
+              </div>
+            </div>
+
+            {/* Users Card - Conditional */}
+            {decoded.role !== "seller" && (
+              <div className="bg-gray-950 border border-gray-900 p-5 rounded-xl hover:transform hover:scale-105 transition-all duration-300 shadow-lg">
+                <div className="flex justify-between items-center">
+                  <div>
+                    <p className="text-gray-400 text-sm mb-2">Total Users</p>
+                    <p className="text-3xl font-bold text-purple-400">{users?.data?.length}</p>
+                  </div>
+                  <div className="p-3 bg-purple-900/20 rounded-full">
+                    <TiGroup className="text-4xl text-purple-400" />
+                  </div>
+                </div>
+                <div className="mt-4 flex items-center justify-between text-sm">
+                  <span className="text-purple-400 flex items-center">
+                    <BsGraphUpArrow className="mr-2" />
+                    {(users?.data?.length * 3.67).toFixed(2)}%
+                  </span>
+                  <span className="text-gray-400">Last 30 days</span>
+                </div>
+              </div>
+            )}
+
+            {/* Sales Card */}
+            <div className="bg-gray-950 border border-gray-900 p-5 rounded-xl hover:transform hover:scale-105 transition-all duration-300 shadow-lg">
+              <div className="flex justify-between items-center">
+                <div>
+                  <p className="text-gray-400 text-sm mb-2">Total Sales</p>
+                  <p className="text-3xl font-bold text-blue-400">{products?.data?.length}</p>
+                </div>
+                <div className="p-3 bg-blue-900/20 rounded-full">
+                  <FaSackDollar className="text-4xl text-blue-400" />
+                </div>
+              </div>
+              <div className="mt-4 flex items-center justify-between text-sm">
+                <span className="text-blue-400 flex items-center">
+                  <BsGraphUpArrow className="mr-2" />
+                  {(products?.data?.length * 3.67).toFixed(2)}%
+                </span>
+                <span className="text-gray-400">Last 30 days</span>
+              </div>
+            </div>
+
+            {/* Reported Items Card */}
+            <div className="bg-gray-950 border border-gray-900 p-5 rounded-xl hover:transform hover:scale-105 transition-all duration-300 shadow-lg">
+              <div className="flex justify-between items-center">
+                <div>
+                  <p className="text-gray-400 text-sm mb-2">Reported Items</p>
+                  <p className="text-3xl font-bold text-yellow-400">{products?.data?.length}</p>
+                </div>
+                <div className="p-3 bg-yellow-900/20 rounded-full">
+                  <MdOutlineReportProblem className="text-4xl text-yellow-400" />
+                </div>
+              </div>
+              <div className="mt-4 flex items-center justify-between text-sm">
+                <span className="text-yellow-400 flex items-center">
+                  <BsGraphUpArrow className="mr-2" />
+                  {(products?.data?.length * 3.67).toFixed(2)}%
+                </span>
+                <span className="text-gray-400">Last 30 days</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Charts Section */}
+          <div className="space-y-6">
+            <div className="flex items-center justify-center space-x-4">
+              <div className="flex-1 border-t border-gray-800"></div>
+              <h3 className="text-xl font-semibold text-emerald-400 px-4">
+                Analytics Overview
+              </h3>
+              <div className="flex-1 border-t border-gray-800"></div>
+            </div>
+
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              <div className="bg-gray-950 border border-gray-900 p-6 rounded-xl shadow-lg">
+                <h4 className="text-lg font-semibold mb-4 text-emerald-400">Distribution Overview</h4>
+                {chartData && <PieChart chartData={chartData} />}
+              </div>
+
+              <div className="bg-gray-950 border border-gray-900 p-6 rounded-xl shadow-lg">
+                <h4 className="text-lg font-semibold mb-4 text-emerald-400">Progress Trends</h4>
+                {chartData ? (
+                  <StackedLineChart data={chartData} />
+                ) : (
+                  <p className="text-center text-gray-400">Loading Chart Data...</p>
+                )}
+              </div>
+            </div>
+          </div>
         </div>
-        <hr />
-        <p className="font-mono text-white bg-transparent relative">{(Number(products?.data?.length) * 3.67).toFixed(2)}% Increase <BsGraphUpArrow className="bg-transparent absolute right-4 top-[6px] font-bold bold" />
-        </p>
-        <div>
-
-        </div>
-      </div>
-      {/* users cart */}
-    {  
-           decoded.role!=="seller" &&
-<div className=" bg-purple-900 p-3 w-52 h-36 rounded-lg ">
-        <div className=" flex flex-row-reverse justify-between bg-transparent ">
-       
-        <TiGroup className="bg-transparent text-7xl mt-5 "  />
-
-        <div className="bg-transparent">
-        <p className="text-white  bg-transparent"> Users</p>
-        <p className="text-white text-4xl py-5 bg-transparent">{users?.data?.length}</p>
-        </div>
-        </div>
-        <hr />
-        <p className="font-mono text-white bg-transparent relative">{(users?.data?.length * 3.67).toFixed(2)}% Increase <BsGraphUpArrow className="bg-transparent absolute right-4 top-[6px] font-bold bold" />
-        </p>
-        <div>
-
-        </div>
-      </div>}
-      {/* Total Sells products */}
-      <div className=" bg-lime-800 p-3 w-52 h-36 rounded-lg ">
-        <div className=" flex flex-row-reverse justify-between bg-transparent ">
-        <FaSackDollar className="bg-transparent text-7xl mt-5 " />
-      
-
-        <div className="bg-transparent">
-        <p className="text-white  bg-transparent"> Sells</p>
-        <p className="text-white text-4xl py-5 bg-transparent">{products?.data?.length}</p>
-        </div>
-        </div>
-        <hr />
-        <p className="font-mono text-white bg-transparent relative">{(products?.data?.length * 3.67).toFixed(2)}% Increase <BsGraphUpArrow className="bg-transparent absolute right-4 top-[6px] font-bold bold" />
-        </p>
-        <div>
-
-        </div>
-      </div>
-      <div className=" bg-yellow-600 p-3 w-52 h-36 rounded-lg bg-transparent">
-        <div className=" flex flex-row-reverse justify-between bg-transparent ">
-       
-        < MdOutlineReportProblem  className="bg-transparent text-7xl mt-5 " />
-
-        <div className="bg-transparent">
-        <p className="text-white  bg-transparent"> Reported items</p>
-        <p className="text-white text-4xl py-5 bg-transparent">{products?.data?.length}</p>
-        </div>
-        </div>
-        <hr />
-        <p className="font-mono text-white bg-transparent relative">{(products?.data?.length * 3.67).toFixed(2)}% Increase <BsGraphUpArrow className="bg-transparent absolute right-4 top-[6px] font-bold bold" />
-        </p>
-        <div>
-
-        </div>
-      </div>
-      </div>
-
-    {/* chart section start here */}
-    <h3 className="my-6 text-xl text-green-100 border border-b-8 px-2">Product and User Progress with Pie chart</h3>
- {/* Charts section started here */}
- <div className="flex flex-col md:flex-row lg:flex-row justify-center align-middle items-center gap-3">
- <div className="w-full md:w-1/2 lg:w-1/2">
-      {chartData && <PieChart chartData={chartData} />}
-    </div>
-
-    <div className="w-full md:w-1/2 lg:w-1/2">
-
-
-  {chartData ? (
-    <StackedLineChart data={chartData} />
-  ) : (
-    <p className="text-center text-white">Loading Chart Data...</p>
-  )}
-</div>
- </div>
-
-
-
-
-    </div>
-     }
+      )}
     </div>
   )
 }

@@ -140,3 +140,17 @@ export interface ICategory {
   totalProducts: number;
   products: IProduct[];
 }
+
+export interface IDiscountModalProps {
+  selectedProduct: { _id: string; title: string; price: number };
+  handleCloseModal: () => void;
+  handleDiscount: (offerData: {
+    productId: string;
+    offerPercentage: number;
+    offerPrice: number;
+    offerStartDate: string;
+    offerEndDate: string;
+    offerType: "general" | "dealOfTheDay" | "other";
+    offerStatus: boolean;
+  }) => void;
+}

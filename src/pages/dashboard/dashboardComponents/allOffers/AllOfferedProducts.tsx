@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import {
   useDeleteOfferedProductMutation,
@@ -7,6 +7,8 @@ import {
   useUpdateProductStatusMutation,
 } from "../../../../redux/features/offers/offerManagement";
 import {  IProductId } from "../../../../types";
+import { useNavigate } from "react-router-dom";
+import { jwtDecode } from "jwt-decode";
 
 interface UpdateModalProps {
   product: IProductId;
@@ -159,6 +161,7 @@ function AllOfferedProducts() {
 
 
 function UpdateModal({ product, onClose }: UpdateModalProps) {
+
   const [updateDealOfTheDay] = useUpdateAllDiscountMutation();
   const [offerPrice, setOfferPrice] = useState<number>(Number(product?.offerPrice) || 0);
   const [offerPercentage, setOfferPercentage] = useState<number>(
@@ -168,6 +171,19 @@ function UpdateModal({ product, onClose }: UpdateModalProps) {
   const [offerStartDate, setOfferStartDate] = useState(product?.offerStartDate);
   const [offerEndDate, setOfferEndDate] = useState(product?.offerEndDate);
 
+  const navigate=useNavigate()
+  const token=localStorage.getItem("token")
+  useEffect(() => {
+    // Decode the JWT token to get user information
+    const decode = jwtDecode(token as string) as {role: string};
+    // Check if the token is present in local storage
+    if(!token||decode.role !== "super_admin"){
+      toast.error("You are not authorized to access this page", {
+        duration: 1000,
+      });
+      navigate("/login")
+    }
+  },[token,navigate])
   // Handle offer percentage change and update offer price
   const handlePercentageChange = (value: number) => {
     setOfferPercentage(value);
@@ -197,11 +213,21 @@ function UpdateModal({ product, onClose }: UpdateModalProps) {
         offerEndDate
       },
     }
-    
-    const response=await updateDealOfTheDay(updatedData).unwrap();
-    if(response.success){
-      toast.success(` ${product.productId?.title}  updated successfully`);
-      onClose();
+   
+    try {
+      const res = await updateDealOfTheDay(updatedData).unwrap();
+      if (res.success) {
+        toast.success(` ${product.productId?.title}  updated successfully`, {
+          duration: 1000,
+        });
+        onClose(); 
+      } else {
+        toast.error("Failed to update product");
+      }
+    }
+    catch (error) {
+      console.error("Error updating product:", error);
+      toast.error("Failed to update product");
     }
 
   };

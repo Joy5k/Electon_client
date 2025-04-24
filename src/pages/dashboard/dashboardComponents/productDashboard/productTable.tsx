@@ -13,7 +13,7 @@ const ProductTable = ({ products }: any) => {
      const [imagePreview,setImagePreview]=useState<string>()
      const [selectedProduct, setSelectedProduct] = useState<any>(null);
     const [product,setProduct]=useState<IProduct>()
-
+console.log(products,"products")
       useEffect(() => {
         if (selectedProduct) {
           setProduct({
@@ -46,7 +46,6 @@ const ProductTable = ({ products }: any) => {
   const currentRows = products.slice(indexOfFirstRow, indexOfLastRow);
 
   
-    // Only update product when sellerId changes
   // Deleting product
 
   const handleDeleteProduct = async (id: string) => {
