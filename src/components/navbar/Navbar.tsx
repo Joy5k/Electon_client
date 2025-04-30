@@ -3,7 +3,7 @@ import "./Navbar.css"
 
 import { Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
 import { Bars3Icon, XMarkIcon,ShoppingCartIcon } from '@heroicons/react/24/outline'
-import { FaLocationDot, FaTruck } from "react-icons/fa6"
+import { FaLocationDot } from "react-icons/fa6"
 import { MdOutlineFavoriteBorder } from "react-icons/md"
 import Cookies from 'js-cookie';
 import { useGetUserQuery } from "../../redux/features/userManagement/userManagement"
@@ -11,6 +11,7 @@ import { useGetAllBookingsQuery } from "../../redux/features/bookingManagement/b
 import { useState } from "react"
 import { useAppDispatch } from "../../redux/hooks"
 import { setSearchQuery } from "../../redux/features/admin/wishlistSlice"
+import { TrackOrderModal } from "../TrackProductModal/TrackProductModal"
 
 const navigation = [
   { name: 'Home', href: '/', current: true },
@@ -67,10 +68,11 @@ const Navbar=()=>{
         </div>
 
         <div>
-          <Link to="/" className="flex items-center">
-            <FaTruck />
-            <p className="ml-1 hover:text-primary">Track your order</p>
-          </Link>
+         
+       
+
+            <TrackOrderModal></TrackOrderModal>
+                   
         </div>
       </div>
     </div>
