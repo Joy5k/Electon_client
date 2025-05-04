@@ -39,10 +39,10 @@ const sections = [
 
 
 const items = [
-  { name: "Facebook", icon: FaFacebook, link: "https://web.facebook.com/profile.php?id=100050264947375" },
-  { name: "Linkedin", icon: FaLinkedin, link: "https://www.linkedin.com/in/eng-mehedi-hasan-joy/" },
-  { name: "Twitter", icon: FaTwitter, link: "https://twitter.com/" },
-  { name: "Github", icon: FaGithub, link: "https://github.com/Joy5k" },
+  { name: "Facebook", icon: FaFacebook, link: "https://web.facebook.com/profile.php?id=100050264947375",color:"#1877F2" },
+  { name: "Linkedin", icon: FaLinkedin, link: "https://www.linkedin.com/in/eng-mehedi-hasan-joy/" ,color:"#0077B5"},
+  { name: "Twitter", icon: FaTwitter, link: "https://twitter.com/",color:"#1DA1F2" },
+  { name: "Github", icon: FaGithub, link: "https://github.com/Joy5k",color:"#181717" },
 ];
 
 const Footer = () => {
@@ -129,12 +129,16 @@ const handleUserSubscribe = async (
       target="_blank"
       rel="noopener noreferrer"
       key={index}
-      className="hover:text-white"
+      className="p-2 rounded-full transition duration-300 hover:scale-125"
     >
-      <x.icon />
+      <x.icon 
+        style={{ color: x.color }}  // Direct color assignment to icon
+        className="text-3xl"        // Add size class if needed
+      />
     </a>
   ))}
 </div>
+
 
       </div>
     </div>
