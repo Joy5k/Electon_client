@@ -11,7 +11,7 @@ Welcome to **Electon** – your one-stop destination for cutting-edge electrical
 ## 🌟 Live Demo
 
 Experience the spark! Visit the live site here:  
-**[Electon Live Preview](https://electon-one.vercel.app/)**  
+**[Electon Live Preview]([https://electon-one.vercel.app/](https://i.ibb.co.com/twYdh03Z/electon-client.png))**  
 *(Best viewed on desktop with Chrome/Firefox)*
 
 ---
