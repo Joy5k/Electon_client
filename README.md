@@ -11,26 +11,14 @@ Welcome to **Electon** – your one-stop destination for cutting-edge electrical
 ## 🌟 Live Demo
 
 Experience the spark! Visit the live site here:  
-<img src="https://i.ibb.co/twYdh03Z/electon-client.png" alt="Electon Live Preview" style="width: 800px; height: auto; border: 1px solid #ddd; border-radius: 8px;" />  
-*(Best viewed on desktop with Chrome/Firefox)*
+<img src="https://i.ibb.co.com/twYdh03Z/electon-client.png" alt="electon-client" border="0">
 
 ---
 
 ## 🎥 Project Showcase
 
 <table>
-  <tr>
-    <td align="center" width="50%">
-      <img src="https://i.ibb.co/twYdh03Z/electon-client.png" alt="Homepage Preview" style="width: 100%; max-width: 600px; height: auto; border-radius: 8px;" />
-      <br>
-      <strong>Homepage Hero</strong>
-    </td>
-    <td align="center" width="50%">
-      <img src="https://i.ibb.co/WvkqCXg4/screencapture-electon-one-vercel-app-category-2025-05-06-12-21-41.png" alt="Products Preview" style="width: 100%; max-width: 600px; height: auto; border-radius: 8px;" />
-      <br>
-      <strong>Product Gallery</strong>
-    </td>
-  </tr>
+
   <tr>
     <td align="center" width="50%">
       <img src="https://i.ibb.co/HLCQjTvT/Screenshot-2025-05-06-122113.png" alt="Cart Demo" style="width: 100%; max-width: 600px; height: auto; border-radius: 8px;" />
