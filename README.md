@@ -11,34 +11,57 @@ Welcome to **Electon** – your one-stop destination for cutting-edge electrical
 ## 🌟 Live Demo
 
 Experience the spark! Visit the live site here:  
-**[Electon Live Preview]([https://electon-one.vercel.app/](https://i.ibb.co.com/twYdh03Z/electon-client.png))**  
+<img src="https://i.ibb.co/twYdh03Z/electon-client.png" alt="Electon Live Preview" style="width: 800px; height: auto; border: 1px solid #ddd; border-radius: 8px;" />  
 *(Best viewed on desktop with Chrome/Firefox)*
 
 ---
 
 ## 🎥 Project Showcase
 
-| **Homepage Hero** | **Product Gallery** |
-|-------------------|---------------------|
-| ![Homepage Preview](https://via.placeholder.com/600x300.png?text=Hero+Animation+Preview) | ![Products Preview](https://via.placeholder.com/600x300.png?text=Product+Grid+with+Hover+Effects) |
-
-| **Interactive Cart** | **Admin Dashboard** |
-|----------------------|---------------------|
-| ![Cart Demo](https://via.placeholder.com/600x300.png?text=Cart+Slide-In+Animation) | ![Dashboard Preview](https://via.placeholder.com/600x300.png?text=Admin+Analytics+Charts) |
-
-*Replace placeholder URLs with your actual image links hosted on CDN/GitHub*
+<table>
+  <tr>
+    <td align="center" width="50%">
+      <img src="https://i.ibb.co/twYdh03Z/electon-client.png" alt="Homepage Preview" style="width: 100%; max-width: 600px; height: auto; border-radius: 8px;" />
+      <br>
+      <strong>Homepage Hero</strong>
+    </td>
+    <td align="center" width="50%">
+      <img src="https://i.ibb.co/WvkqCXg4/screencapture-electon-one-vercel-app-category-2025-05-06-12-21-41.png" alt="Products Preview" style="width: 100%; max-width: 600px; height: auto; border-radius: 8px;" />
+      <br>
+      <strong>Product Gallery</strong>
+    </td>
+  </tr>
+  <tr>
+    <td align="center" width="50%">
+      <img src="https://i.ibb.co/HLCQjTvT/Screenshot-2025-05-06-122113.png" alt="Cart Demo" style="width: 100%; max-width: 600px; height: auto; border-radius: 8px;" />
+      <br>
+      <strong>Interactive Cart</strong>
+    </td>
+    <td align="center" width="50%">
+      <img src="https://i.ibb.co/zH82QTZy/screencapture-electon-one-vercel-app-dashboard-2025-05-06-12-22-32.png" alt="Dashboard Preview" style="width: 100%; max-width: 600px; height: auto; border-radius: 8px;" />
+      <br>
+      <strong>Admin Dashboard</strong>
+    </td>
+  </tr>
+</table>
 
 ---
 
 ## ✨ Featured Animations
 
-- **Micro-Interactions**: Button hover effects & loading spinners  
-  ![Hover Effect](https://via.placeholder.com/400x200.png?text=Button+Hover+Demo)
-- **Page Transitions**: Smooth route animations using Framer Motion  
-  ![Route Transition](https://via.placeholder.com/400x200.png?text=Page+Transition+GIF)
-- **3D Product Previews**: Orbit controls for featured items *(Coming Soon!)*
+<div style="display: flex; gap: 20px; flex-wrap: wrap; justify-content: center;">
+  <div style="flex: 1; min-width: 300px;">
+    <h4>Micro-Interactions</h4>
+    <img src="https://via.placeholder.com/600x300.png?text=Button+Hover+Demo" style="width: 100%; height: auto; border-radius: 8px;" />
+  </div>
+  <div style="flex: 1; min-width: 300px;">
+    <h4>Page Transitions</h4>
+    <img src="https://via.placeholder.com/600x300.png?text=Page+Transition+GIF" style="width: 100%; height: auto; border-radius: 8px;" />
+  </div>
+</div>
 
 ---
+
 
 ## 🛠 Tech Stack
 
@@ -146,6 +169,6 @@ Distributed under the MIT License. See `LICENSE` for more information.
 
 ---
 
-**Made with ❤️ and ⚡ by [Your Name]**  
-[![GitHub](https://img.shields.io/badge/-GitHub-181717?logo=github)](https://github.com/your-username)
-[![LinkedIn](https://img.shields.io/badge/-LinkedIn-0A66C2?logo=linkedin)](https://linkedin.com/in/your-profile)
+**Made with ❤️ and ⚡ by Mehedi Hasan Joy**  
+[![GitHub](https://img.shields.io/badge/-GitHub-181717?logo=github)](https://github.com/Joy5k)
+[![LinkedIn](https://img.shields.io/badge/-LinkedIn-0A66C2?logo=linkedin)](https://www.linkedin.com/in/eng-mehedi-hasan-joy)
