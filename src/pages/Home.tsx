@@ -1,5 +1,3 @@
-import { Suspense, lazy } from 'react';
-import { Image } from 'antd';
 import Advertise from '../components/advertise/Advertise';
 import Campaign from '../components/Campaign/Campaign';
 import Features from '../components/features/Features';
@@ -8,10 +6,10 @@ import { useGetSingleProductQuery } from '../redux/features/admin/productManagem
 import { Link, useNavigate } from 'react-router-dom';
 import LazyLoad from "react-lazyload";
 import CategorySlider from '../components/catergorySlider/categorySlider';
+import BlogEvents from '../components/BlogEvents/BlogEvents';
+import Brand from '../components/brand/Brand';
+import CustomerReview from '../components/customerReview/CustomerReview';
 
-const CustomerReview = lazy(() => import("../components/brand/Brand"));
-const Brand = lazy(() => import("../components/catergorySlider/categorySlider"));
-const BlogEvents = lazy(() => import("../components/BlogEvents/BlogEvents"));
 
 const HomePage = () => {
   const navigate = useNavigate();
@@ -51,7 +49,7 @@ const HomePage = () => {
         </div>
         <div className='flex-1 py-12'>
           <LazyLoad>
-            <Image className='bg-transparent w-full h-fit' src="https://i.ibb.co.com/5hDf7dP0/banner.png" alt="Banner Image" />
+            <img className='bg-transparent w-full h-fit' src="https://i.ibb.co.com/5hDf7dP0/banner.png" alt="Banner Image" />
           </LazyLoad>
         </div>
       </div>
@@ -62,12 +60,11 @@ const HomePage = () => {
       <Campaign />
       <Features />
 
-      {/* Wrap lazy-loaded components in Suspense */}
-      <Suspense fallback={<div>Loading...</div>}>
+   
         <CustomerReview />
         <Brand />
         <BlogEvents />
-      </Suspense>
+  
     </div>
   );
 };
