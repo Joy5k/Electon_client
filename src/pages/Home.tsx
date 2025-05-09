@@ -4,6 +4,7 @@ import Features from '../components/features/Features';
 import PopularProduct from '../components/popularProduct/PopularProduct';
 import { useGetSingleProductQuery } from '../redux/features/admin/productManagementApi';
 import { Link, useNavigate } from 'react-router-dom';
+import LazyLoad from "react-lazyload";
 import CategorySlider from '../components/catergorySlider/categorySlider';
 import BlogEvents from '../components/BlogEvents/BlogEvents';
 import Brand from '../components/brand/Brand';
@@ -47,9 +48,9 @@ const HomePage = () => {
           </div>
         </div>
         <div className='flex-1 py-12'>
-         
+          <LazyLoad>
             <img className='bg-transparent w-full h-fit' src="https://i.ibb.co.com/5hDf7dP0/banner.png" alt="Banner Image" />
-          
+          </LazyLoad>
         </div>
       </div>
 
