@@ -34,7 +34,7 @@ const DashboardContent: React.FC<DashboardContentProps> = ({ activePage }) => {
       decoded?.role==="seller" && <>
       {activePage === 'Overview' && <div><SellerOverview></SellerOverview></div>}
       {activePage === 'My-Products' && <div><MyProducts></MyProducts></div>}
-      {activePage === 'Sells' && <div className="w-full md:w-10/12 lg:w-11/12"><SoldProduct></SoldProduct></div>}
+      {activePage === 'Sells' && <div ><SoldProduct></SoldProduct></div>}
       {activePage === 'Seller-overview' && <div><SellerOverview></SellerOverview></div>}
       {activePage === 'Upload' && <div><UploadProduct></UploadProduct></div>}
         </>
