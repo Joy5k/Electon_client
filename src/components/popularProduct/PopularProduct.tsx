@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { FaBagShopping } from "react-icons/fa6";
+import { FaHeart, FaRegHeart } from "react-icons/fa";
 import { useAllProductsQuery } from "../../redux/features/admin/productManagementApi";
 import { AppDispatch, RootState } from "../../redux/store";
 import { useDispatch } from "react-redux";
@@ -10,52 +10,58 @@ import { toast } from "sonner";
 import { useCreateBookingMutation } from "../../redux/features/bookingManagement/bookingManagement";
 import { useAppSelector } from "../../redux/hooks";
 import Spinner from "../Spinner/Spinner";
-
+import { FaBagShopping } from "react-icons/fa6";
 
 const PopularProduct = () => {
   const dispatch = useDispatch<AppDispatch>();
   const searchTerm = useAppSelector((state: RootState) => state.wishlist.searchTerm);
   
-  const [queryText,seQueryText]=useState<string>("")
+  const [queryText, setQueryText] = useState<string>("");
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [selectedProduct, setSelectedProduct] = useState<IProduct | null>(null);
   const [quantity, setQuantity] = useState<number>(1);
-  const [seeMore,setSeeMore]=useState<boolean>(false)
+  const [seeMore, setSeeMore] = useState<boolean>(false);
   const [selectedColor, setSelectedColor] = useState<string>("");
+  const [wishlistItems, setWishlistItems] = useState<string[]>([]);
   
-  const [addToCart,{isLoading:bookingLoader}]=useCreateBookingMutation()
-  const{data,isLoading}=useAllProductsQuery({searchTerm:queryText})
+  const [addToCart, {isLoading: bookingLoader}] = useCreateBookingMutation();
+  const {data, isLoading} = useAllProductsQuery({searchTerm: queryText});
   const products: IProduct[] = data?.data ?? [];
 
-useEffect(()=>{
-  seQueryText(searchTerm)
-  
-},[searchTerm])
+  useEffect(() => {
+    setQueryText(searchTerm);
+  }, [searchTerm]);
 
   const handleAddToWishlist = (product: IProduct) => {
-    const bookingProduct={
+    const bookingProduct = {
       ...product,
-      productId:product._id,
-      userSelectedQuantity:quantity,
-      productColor:selectedColor?selectedColor: products?.[0]?.color?.[0] 
-    }
+      productId: product._id,
+      userSelectedQuantity: quantity,
+      productColor: selectedColor ? selectedColor : products?.[0]?.color?.[0] 
+    };
     dispatch(addToWishlist(bookingProduct));
-    setIsModalOpen(false)
-    toast.success("Product added wishlist successfully")
+    setIsModalOpen(false);
+    setWishlistItems([...wishlistItems, product._id ?? ""]);
+    toast.success("Product added to wishlist successfully");
   };
 
-  const  handleAddToCart=async(product:IProduct)=>{
-    const bookingProduct={
+  const isInWishlist = (productId: string) => {
+    return wishlistItems.includes(productId);
+  };
+
+  const handleAddToCart = async (product: IProduct) => {
+    const bookingProduct = {
       ...product,
-      productId:product._id,
-      userSelectedQuantity:quantity
+      productId: product._id,
+      userSelectedQuantity: quantity,
+      productColor: selectedColor ? selectedColor : products?.[0]?.color?.[0]
+    };
+    const res = await addToCart(bookingProduct).unwrap();
+    if (res.success) {
+      toast.success(`${product.title} added to cart successfully`);
+      closeModal();
     }
-    const res=await addToCart(bookingProduct).unwrap()
-    if(res.success){
-        toast.success(`${product.title} is added successfully`)
-        closeModal()
-    }
-}
+  };
 
   const increaseQuantity = () => {
     setQuantity(prevQuantity => prevQuantity + 1);
@@ -64,9 +70,9 @@ useEffect(()=>{
   const decreaseQuantity = () => {
     if (quantity > 1) {
       setQuantity(prevQuantity => prevQuantity - 1);
-      
     }
   };
+
   const openModal = (product: IProduct) => {
     setSelectedProduct(product);
     setIsModalOpen(true);
@@ -75,110 +81,133 @@ useEffect(()=>{
   const closeModal = () => {
     setIsModalOpen(false);
     setSelectedProduct(null);
+    setQuantity(1);
+    setSelectedColor("");
   };
 
   if (!data) {
     return <p>Loading products...</p>;
   }
   
-const handleProductQueryButton=(query:string)=>{
-  seQueryText(query)
-}
+  const handleProductQueryButton = (query: string) => {
+    setQueryText(query);
+  };
 
-if(isLoading){
-  return <Spinner></Spinner>
-}
-
-  return (
-    <div className="p-4  border-b-2 border-dashed border-gray-800">
-      <div className="flex flex-col md:flex-row justify-between items-center ">
-        <div>
-          <h2 className="text-4xl text-primary font-bold my-10">Popular Products</h2>
-        </div>
-        <div>
-          <button onClick={()=>handleProductQueryButton("desktop")} className="text-md p-2 rounded-full border border-gray-500 hover:bg-gray-800 hover:text-primary m-3">Desktop</button>
-          <button onClick={()=>handleProductQueryButton("laptop")} className="text-md p-2 rounded-full border border-gray-500 hover:bg-gray-800 hover:text-primary m-3">Laptops</button>
-          <button onClick={()=>handleProductQueryButton("camera")} className="text-md p-2 rounded-full border border-gray-500 hover:bg-gray-800 hover:text-primary m-3">Cameras</button>
-          <button onClick={()=>handleProductQueryButton("")} className="text-md p-2 rounded-full border border-gray-500 hover:bg-gray-800 hover:text-primary m-3">All Items</button>
-        </div>
-      </div>
-{/* appearing all products according to the user condition */}
-  {
-    seeMore && <div>
-         {
-   products.length >0 ? 
-   <div>
-       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 my-10  gap-y-3">
-      {products.map((product) => (
-          <div key={product._id} className="bg-black border border-gray-800 p-4 rounded-md w-64 mx-auto mb-4">
-            <div>
-              <Link to={`/product/${product._id}`} > 
-              <img src={product.image ? product.image : "https://cdn-icons-png.flaticon.com/512/1554/1554590.png"} className="w-60 h-60 rounded-sm" alt="popular_image" />
-              </Link>
-            </div>
-            <div className="text-md mt-10 flex justify-between items-center mr-4">
-              <div>
-                <Link to={`/product/${product._id}`} className="text-gray-300 text-xl font-semibold hover:text-primary mb-4 hover:underline">{product.title}</Link>
-                <p className="mt-2 text-primary font-semibold">Price: ${product.price}</p>
-              </div>
-              <button
-                className="hover:border hover:rounded-full hover:p-2 p-2 hover:border-primary"
-                onClick={() => openModal(product)}
-              >
-                <FaBagShopping className="text-3xl text-primary hover:text-white bg-transparent" />
-              </button>
-            </div>
-          </div>
-        ))}
-       
-      </div> 
-   </div>:<h2 className="text-3xl text-primary font-semibold text-center my-10">No Product Found</h2>
-     }
-    </div>
+  if (isLoading) {
+    return <Spinner></Spinner>;
   }
 
+  return (
+    <div className="p-4 border-b-2 border-dashed border-gray-800">
+      {/* Header Section */}
+      <div className="flex flex-col md:flex-row justify-between items-center mb-10">
+        <div>
+          <h2 className="text-3xl md:text-4xl text-primary font-bold">Popular Products</h2>
+        </div>
+        <div className="flex flex-wrap justify-center gap-2 mt-4 md:mt-0">
+          <button 
+            onClick={() => handleProductQueryButton("desktop")} 
+            className="text-sm px-4 py-2 rounded-full border border-gray-500 hover:bg-gray-800 hover:text-primary transition-colors"
+          >
+            Desktop
+          </button>
+          <button 
+            onClick={() => handleProductQueryButton("laptop")} 
+            className="text-sm px-4 py-2 rounded-full border border-gray-500 hover:bg-gray-800 hover:text-primary transition-colors"
+          >
+            Laptops
+          </button>
+          <button 
+            onClick={() => handleProductQueryButton("camera")} 
+            className="text-sm px-4 py-2 rounded-full border border-gray-500 hover:bg-gray-800 hover:text-primary transition-colors"
+          >
+            Cameras
+          </button>
+          <button 
+            onClick={() => handleProductQueryButton("")} 
+            className="text-sm px-4 py-2 rounded-full border border-gray-500 hover:bg-gray-800 hover:text-primary transition-colors"
+          >
+            All Items
+          </button>
+        </div>
+      </div>
 
-     {
-     !seeMore && 
-     <div>
-        {
-          products.length >=0 ?  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 my-10 gap-y-3">
-          {
-            products.slice(0,8).map((product) => (
-              <div key={product._id} className="bg-black border border-gray-800 p-4 rounded-md w-64 mx-auto">
-                <div>
-                  <Link to={`/product/${product._id}`} > 
-                  <img src={product.image} className="w-60 h-60 rounded-sm" alt="popular_image" />
+      {/* Products Grid */}
+      <div className="mb-12">
+        {products.length > 0 ? (
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            {(seeMore ? products : products.slice(0, 8)).map((product) => (
+              <div 
+                key={product._id} 
+                className="group relative bg-black rounded-lg overflow-hidden shadow-lg hover:shadow-xl hover:shadow-primary/20 transition-all duration-300"
+              >
+                {/* Product Image */}
+                <div className="relative h-48 w-full overflow-hidden">
+                  <Link to={`/product/${product._id}`} className="block h-full w-full">
+                    <img 
+                      src={product.image || "https://cdn-icons-png.flaticon.com/512/1554/1554590.png"} 
+                      className="w-full h-full object-contain p-4 bg-gray-900 transition-transform duration-500 group-hover:scale-105" 
+                      alt={product.title} 
+                    />
                   </Link>
-                </div>
-                <div className="text-md mt-10 flex justify-between items-center mr-4">
-                  <div>
-                    <Link to={`/product/${product._id}`} className="text-gray-300 text-xl font-semibold hover:text-primary mb-4 hover:underline">{product.title}</Link>
-                    <p className="mt-2 text-primary font-semibold">Price: ${product.price}</p>
-                  </div>
+                  
+                  {/* Wishlist Button */}
                   <button
-                    className="hover:border hover:rounded-full hover:p-2 p-2 hover:border-primary"
-                    onClick={() => openModal(product)}
+                    onClick={() => handleAddToWishlist(product)}
+                    className="absolute top-3 right-3 p-2 bg-black/50 rounded-full backdrop-blur-sm hover:bg-primary transition-colors"
                   >
-                    <FaBagShopping className="text-3xl text-primary hover:text-white bg-transparent" />
+                    {isInWishlist(product._id ?? "") ? (
+                      <FaHeart className="text-red-500 text-lg bg-transparent" />
+                    ) : (
+                      <FaRegHeart className="text-white text-lg hover:text-red-500 bg-transparent" />
+                    )}
                   </button>
                 </div>
+              <div className="border-t border-gray-700 mx-4"></div>
+                {/* Product Info */}
+                <div className="p-4 bg-gray-900">
+                  <div className="flex justify-between items-center bg-transparent">
+                    <div className="w-4/5 bg-gray-900">
+                      <Link 
+                        to={`/product/${product._id}`} 
+                        className="text-white text-md font-semibold hover:text-primary line-clamp-1 bg-gray-900"
+                      >
+                        {product.title}
+                      </Link>
+                      <p className="text-primary font-bold mt-1 bg-gray-900">${product.price}</p>
+                    </div>
+                    <button
+                      onClick={() => openModal(product)}
+                      className="p-2 bg-primary hover:bg-primary-dark rounded-full transition-colors"
+                    >
+                      <FaBagShopping className="text-white text-lg bg-transparent" />
+                    </button>
+                  </div>
+                </div>
               </div>
-            ))
-          }
-        </div> :<h2 className="text-3xl text-primary font-semibold text-center my-10">No Product Found</h2>
-        }
-     </div>
-     }
-     {
-      products.length>0  && <div className="mx-auto flex justify-center md:justify-start md:ml-6 ">
-      <button onClick={()=>setSeeMore(!seeMore)} className="underline text-blue-400 hover:text-primary">{seeMore===true ?"See less":"See more"}</button>
-    </div>
-     }
-      {/* Modal */}
-      {isModalOpen && selectedProduct && (
-  <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 overflow-y-auto">
-    <div className="bg-black p-4 sm:p-8 rounded-lg  max-w-xs sm:max-w-md md:max-w-3xl w-full mx-2 sm:mx-4 my-8 overflow-hidden">
+            ))}
+          </div>
+        ) : (
+          <h2 className="text-3xl text-primary font-semibold text-center my-10">No Products Found</h2>
+        )}
+      </div>
+
+      {/* Show More/Less Button */}
+      {products.length > 8 && (
+        <div className="flex justify-center mt-8 mb-12">
+          <button 
+            onClick={() => setSeeMore(!seeMore)} 
+            className="px-8 py-3 bg-primary hover:bg-primary-dark rounded-full text-white font-medium transition-colors shadow-lg hover:shadow-primary/30"
+          >
+            {seeMore ? "Show Less" : "Show More"}
+          </button>
+        </div>
+      )}
+
+      {/* Product Modal */}
+       {isModalOpen && selectedProduct && (
+  <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 overflow-y-auto ">
+    <div className="bg-black p-4 sm:p-8 rounded-lg  max-w-xs sm:max-w-md md:max-w-3xl w-full mx-2 sm:mx-4 my-8 overflow-hidden border border-gray-600">
       <div className="flex justify-end">
         <button
           className="px-4 py-2 text-2xl font-bold text-gray-500 rounded-md mb-5"
@@ -275,7 +304,6 @@ if(isLoading){
     </div>
   </div>
 )}
-
     </div>
   );
 };

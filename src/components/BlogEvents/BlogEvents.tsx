@@ -8,10 +8,11 @@ const BlogEvents=()=>{
     const month = dateObj.toLocaleString('default', { month: 'short' }); // Gets the month in short form (e.g., Jan)
     const year = dateObj.getFullYear(); // Gets the year
     
-    const formattedDate = `${day}-${month}-${year}`;    return (
+    const formattedDate = `${day}-${month}-${year}`;  
+      return (
         <div>
             <h4 className='text-3xl font-bold mx-8 mb-6'>Blog & Events</h4>
-        <div className='flex flex-col md:flex-row lg:flex-row justify-center'>
+        <div className='flex flex-col md:flex-row lg:flex-row justify-evenly'>
             {/* cart1 */}
             <div className='flex flex-col md:flex-row justify-center border border-gray-500 w-fit md:w-[500px] p-4 rounded-lg gap-4 m-3'>
                 <img className='w-full md:w-52 h-fit md:h-44 rounded-lg' src={"https://i.ibb.co.com/G63tgBf/Blog-3.jpg"
